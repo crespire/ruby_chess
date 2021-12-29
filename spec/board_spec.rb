@@ -15,9 +15,7 @@ describe Board do
 
     it 'array is 8x8' do
       board = init.instance_variable_get(:@board)
-      expect(board.length).to eq(8)
-
-      expect(board[7].length).to eq(8)
+      expect(board.flatten.length).to eq(64)
     end
   end
 end
