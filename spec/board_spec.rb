@@ -17,5 +17,12 @@ describe Board do
       board = init.instance_variable_get(:@board)
       expect(board.flatten.length).to eq(64)
     end
+
+    it 'holds cell objects' do
+      board = init.instance_variable_get(:@board)
+      board.flatten.each do |cell|
+        expect(cell).to be_a(Cell)
+      end
+    end
   end
 end

@@ -2,8 +2,10 @@
 
 # lib/board.rb
 
+require_relative 'cell'
+
 class Board
   def initialize
-    @board = Array.new(8) { Array.new(8, nil) }
+    @board = Array.new(8) { Array.new(8, Cell.new) }
   end
 end
