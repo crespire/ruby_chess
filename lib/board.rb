@@ -49,28 +49,23 @@ class Board
 
   def make_fen
     fen = []
-
-    pieces = []
-    @board.each_with_index do |rank, i|
-      rank.each do |cell|
-        pieces << cell.to_s
-      end
-      pieces << '/' unless i + 1 == rank.length
-    end
-
-    parsed = []
-    pieces.chunk { |el| el.is_a?(String) }.each do |str, chunk|
-      to_add = str ? chunk.join('') : chunk.sum
-      parsed << to_add
-    end
-
-    fen << parsed.join('')
-    fen << @active
-    fen << @castle
-    fen << @passant
-    fen << @half
-    fen << @full
-
+    pieces = pieces_to_fen
+    fen << pieces << @active << @castle << @passant << @half << @full
     fen.join(' ')
+  end
+
+  private
+
+  def pieces_to_fen
+    strs = []
+    @board.each.with_index(1) do |rank, i|
+      rank.each { |cell| strs << cell.to_s }
+      strs << '/' unless i == rank.length
+    end
+    parsed = []
+    strs.chunk { |el| el.is_a?(String) }.each do |str, chunk|
+      parsed << push = str ? chunk.join('') : chunk.sum
+    end
+    parsed.join('')
   end
 end
