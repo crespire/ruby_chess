@@ -7,7 +7,10 @@ require_relative '../lib/board'
 
 describe Movement do
   context 'on initialize' do
-    xit 'stores a reference to the board data properly' do
+    let(:board) { Board.new }
+    board.make_board
+    subject(:init) { described_class.new(board.board) }
+    it 'stores a reference to the board data properly' do
     end
   end
 

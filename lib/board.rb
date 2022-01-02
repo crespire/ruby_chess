@@ -5,8 +5,10 @@
 require_relative 'cell'
 
 class Board
+  attr_reader :board, :active, :castle, :passant, :half, :full
+
   def initialize
-    @board = Array.new(8) { Array.new(8, nil) }
+    @data = Array.new(8) { Array.new(8, nil) }
     @active = nil
     @castle = nil
     @passant = nil
@@ -32,11 +34,11 @@ class Board
       rank.each_char do |piece|
         case piece
         when /[[:alpha:]]/
-          @board[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", piece)
+          @data[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", piece)
         when /[[:digit:]]/
           times = piece.to_i
           times.times do
-            @board[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", nil)
+            @data[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", nil)
             col_ind += 1
           end
           col_ind -= 1
@@ -59,7 +61,7 @@ class Board
 
   def pieces_to_fen
     strs = []
-    @board.each.with_index(1) do |rank, i|
+    @data.each.with_index(1) do |rank, i|
       rank.each { |cell| strs << cell.to_fen }
       strs << '/' unless i == rank.length
     end
