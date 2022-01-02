@@ -9,17 +9,17 @@ describe Board do
     subject(:init) { described_class.new }
 
     it 'creates an instance array to store data' do
-      board = init.instance_variable_get(:@board)
+      board = init.instance_variable_get(:@data)
       expect(board).to be_an(Array)
     end
 
     it 'array is 8x8' do
-      board = init.instance_variable_get(:@board)
+      board = init.instance_variable_get(:@data)
       expect(board.flatten.length).to eq(64)
     end
 
     it 'initializes to nil' do
-      board = init.instance_variable_get(:@board)
+      board = init.instance_variable_get(:@data)
       board.flatten.each do |cell|
         expect(cell).to be_nil
       end
@@ -50,12 +50,12 @@ describe Board do
       end
     end
 
-    context 'generates the correct board representation for the given input' do
+    context 'generates the correct board representation' do
       subject(:fen_test) { described_class.new }
 
-      it 'parses default starting position and generates the correct board' do
+      it 'for the default starting position' do
         fen_test.make_board
-        board = fen_test.instance_variable_get(:@board)
+        board = fen_test.instance_variable_get(:@data)
         active = fen_test.instance_variable_get(:@active)
         full = fen_test.instance_variable_get(:@full)
 
@@ -72,10 +72,10 @@ describe Board do
         expect(active).to eq('w')
       end
 
-      it 'parses notation with pieces moved correctly' do
+      it 'for a board with pieces moved correctly' do
         input = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2'
         fen_test.make_board(input)
-        board = fen_test.instance_variable_get(:@board)
+        board = fen_test.instance_variable_get(:@data)
         active = fen_test.instance_variable_get(:@active)
         full = fen_test.instance_variable_get(:@full)
 
@@ -119,19 +119,44 @@ describe Board do
 
   context 'coordinates conversions' do
     context '#arr_to_std_chess' do
+      subject(:coords) { described_class.new }
+
       it 'takes an array of 2 elements and returns the right chess notation' do
+        expect(coords.arr_to_std_chess([0, 0])).to eq('a8')
+        expect(coords.arr_to_std_chess([4, 4])).to eq('e4')
+        expect(coords.arr_to_std_chess([7, 7])).to eq('h1')
       end
 
       it 'returns nil if coordinates are out of range' do
+        expect(coords.arr_to_std_chess([8, 8])).to be_nil
       end
     end
 
     context '#std_chess_to_arr' do
+      subject(:coords) { described_class.new }
+
       it 'takes a string of Chess notation and returns the right array coordinates' do
+        coords.make_board
+
+        expect(coords.std_chess_to_arr('a8')).to eq([0, 0])
+        expect(coords.std_chess_to_arr('e4')).to eq([4, 4])
+        expect(coords.std_chess_to_arr('h1')).to eq([7, 7])
       end
 
       it 'returns nil if notation are out of range' do
+        expect(coords.std_chess_to_arr('j9')).to be_nil
       end
+    end
+  end
+
+  context '#cell' do
+    subject(:cells) { described_class.new }
+
+    it 'takes a string of Chess notation and returns the correct Cell object' do
+      cells.make_board
+      test_cell = cells.cell('a8')
+
+      expect(test_cell).to have_attributes(name: 'a8')
     end
   end
 end

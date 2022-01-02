@@ -57,6 +57,36 @@ class Board
     [pieces_to_fen, @active, @castle, @passant, @half, @full].join(' ')
   end
 
+  def arr_to_std_chess(input)
+    return nil unless input&.length == 2
+    return nil unless input&.reduce(:+)&.between?(0, 14)
+
+    letter = %w[a b c d e f g h]
+    number = %w[8 7 6 5 4 3 2 1]
+
+    alpha_i, num_i = input
+
+    "#{letter[alpha_i]}#{number[num_i]}"
+  end
+
+  def std_chess_to_arr(input)
+    coords = input.chars
+    return nil unless coords.length == 2
+    return nil unless ('a'..'h').include?(coords[0])
+    return nil unless (1..8).include?(coords[1].to_i)
+
+    lookup = Hash['a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7]
+
+    [lookup[coords[0]], 8 - coords[1].to_i]
+  end
+
+  def cell(input)
+    coords = std_chess_to_arr(input)
+    return coords if coords.nil?
+
+    @data[coords[0]][coords[1]]
+  end
+
   private
 
   def pieces_to_fen

@@ -28,7 +28,7 @@ describe Movement do
     subject(:horizontal) { described_class.new(board) }
 
     context 'when there are no other pieces on the board' do
-      it 'provides the correct list of movement options' do
+      xit 'provides the correct list of movement options' do
         board.make_board('r7/8/8/8/8/8/8/8 b - - 1 2')
 
       end
