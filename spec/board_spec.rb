@@ -116,4 +116,22 @@ describe Board do
       end
     end
   end
+
+  context 'coordinates conversions' do
+    context '#arr_to_std_chess' do
+      it 'takes an array of 2 elements and returns the right chess notation' do
+      end
+
+      it 'returns nil if coordinates are out of range' do
+      end
+    end
+
+    context '#std_chess_to_arr' do
+      it 'takes a string of Chess notation and returns the right array coordinates' do
+      end
+
+      it 'returns nil if notation are out of range' do
+      end
+    end
+  end
 end
