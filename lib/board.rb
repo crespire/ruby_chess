@@ -5,7 +5,7 @@
 require_relative 'cell'
 
 class Board
-  def initialize()
+  def initialize
     @board = Array.new(8) { Array.new(8, nil) }
     @active = nil
     @castle = nil
@@ -28,15 +28,18 @@ class Board
     pieces.each do |rank|
       col_ind = 0
       rank.each_char do |piece|
-        if piece.match?(/[[:alpha:]]/)
+        case piece
+        when /[[:alpha:]]/
           @board[rank_ind][col_ind] = Cell.new(piece, "#{col[col_ind]}#{8 - rank_ind}")
-        elsif piece.match?(/[[:digit:]]/)
+        when /[[:digit:]]/
           times = piece.to_i
-          times.times do |i|
+          times.times do
             @board[rank_ind][col_ind] = Cell.new(nil, "#{col[col_ind]}#{8 - rank_ind}")
             col_ind += 1
           end
           col_ind -= 1
+        else
+          raise ArgumentError, "Unexpected character in piece notation: #{pieces}"
         end
         col_ind += 1
       end

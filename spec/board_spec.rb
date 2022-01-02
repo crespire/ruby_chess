@@ -41,6 +41,15 @@ describe Board do
   end
 
   context '#make_board' do
+    context 'when there are unrecognized characters in the notation' do
+      subject(:fen_error) { described_class.new }
+
+      it 'raises an ArgumentError' do
+        input = 'rnbqkbnr/pp$ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2'
+        expect { fen_error.make_board(input) }.to raise_error(ArgumentError)
+      end
+    end
+
     context 'generates the correct board representation for the given input' do
       subject(:fen_test) { described_class.new }
 
