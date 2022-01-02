@@ -2,7 +2,7 @@
 
 # spec/board_spec.rb
 
-require_relative '../lib/board.rb'
+require_relative '../lib/board'
 
 describe Board do
   context 'on initialize' do
