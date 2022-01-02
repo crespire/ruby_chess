@@ -50,7 +50,7 @@ class Board
   def make_fen
     fen = []
     pieces = pieces_to_fen
-    fen << pieces << @active << @castle << @passant << @half << @full
+    fen.push(pieces, @active, @castle, @passant, @half, @full)
     fen.join(' ')
   end
 
