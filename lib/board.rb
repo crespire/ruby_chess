@@ -48,10 +48,7 @@ class Board
   end
 
   def make_fen
-    fen = []
-    pieces = pieces_to_fen
-    fen.push(pieces, @active, @castle, @passant, @half, @full)
-    fen.join(' ')
+    [pieces_to_fen, @active, @castle, @passant, @half, @full].join(' ')
   end
 
   private
@@ -64,7 +61,7 @@ class Board
     end
     parsed = []
     strs.chunk { |el| el.is_a?(String) }.each do |str, chunk|
-      parsed << push = str ? chunk.join('') : chunk.sum
+      parsed << (str ? chunk.join('') : chunk.sum)
     end
     parsed.join('')
   end
