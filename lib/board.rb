@@ -5,7 +5,7 @@
 require_relative 'cell'
 
 class Board
-  attr_reader :board, :active, :castle, :passant, :half, :full
+  attr_reader :data, :active, :castle, :passant, :half, :full
 
   def initialize
     @data = Array.new(8) { Array.new(8, nil) }

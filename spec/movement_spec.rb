@@ -8,9 +8,18 @@ require_relative '../lib/board'
 describe Movement do
   context 'on initialize' do
     let(:board) { Board.new }
-    board.make_board
-    subject(:init) { described_class.new(board.board) }
+    subject(:move_init) { described_class.new(board.data) }
+
     it 'stores a reference to the board data properly' do
+      board.make_board
+      board_data = move_init.instance_variable_get(:@board)
+
+      expect(board_data.flatten.length).to eq(64)
+      board_data.each do |rank|
+        rank.each do |cell|
+          expect(cell).to be_a(Cell)
+        end
+      end
     end
   end
 
