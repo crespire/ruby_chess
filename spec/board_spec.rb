@@ -115,6 +115,5 @@ describe Board do
         expect(fen).to eq(input)
       end
     end
-
   end
 end

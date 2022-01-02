@@ -8,14 +8,14 @@ require_relative '../lib/board'
 describe Movement do
   context 'on initialize' do
     let(:board) { Board.new }
-    subject(:move_init) { described_class.new(board.data) }
+    subject(:move_init) { described_class.new(board) }
 
-    it 'stores a reference to the board data properly' do
+    it 'stores a reference to the board properly' do
       board.make_board
-      board_data = move_init.instance_variable_get(:@board)
+      board_ref = move_init.instance_variable_get(:@board)
 
-      expect(board_data.flatten.length).to eq(64)
-      board_data.each do |rank|
+      expect(board_ref.data.flatten.length).to eq(64)
+      board_ref.data.each do |rank|
         rank.each do |cell|
           expect(cell).to be_a(Cell)
         end
@@ -24,8 +24,13 @@ describe Movement do
   end
 
   context '#horizontal_move' do
+    let(:board) { Board.new }
+    subject(:horizontal) { described_class.new(board) }
+
     context 'when there are no other pieces on the board' do
-      xit 'provides the correct list of movement options' do
+      it 'provides the correct list of movement options' do
+        board.make_board('r7/8/8/8/8/8/8/8 b - - 1 2')
+
       end
     end
 
