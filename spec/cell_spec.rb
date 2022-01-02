@@ -18,11 +18,11 @@ describe Cell do
   end
 
   context 'on piece initialize' do
-    subject(:cell_knight) { described_class.new('K', 'b1') }
+    subject(:cell_knight) { described_class.new('N', 'b1') }
 
     it 'stores the correct information' do
       expect(cell_knight.empty?).to be_falsey
-      expect(cell_knight.name).to be_truthy
+      expect(cell_knight.name).to eq('b1')
     end
   end
 end
