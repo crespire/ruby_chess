@@ -13,4 +13,8 @@ class Cell
   def empty?
     @content.nil?
   end
+
+  def to_s
+    @content.nil? ? 1 : @content
+  end
 end

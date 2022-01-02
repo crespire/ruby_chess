@@ -46,4 +46,8 @@ class Board
       rank_ind += 1
     end
   end
+
+  def make_fen
+    fen = ''
+  end
 end
