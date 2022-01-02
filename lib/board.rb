@@ -24,8 +24,6 @@ class Board
     @passant = parts[3]
     @half = parts[4].to_i
     @full = parts[5].to_i
-    cell_color = 0
-    colors = %w(white black)
 
     rank_ind = 0
     col = ('a'..'h').to_a
@@ -34,11 +32,11 @@ class Board
       rank.each_char do |piece|
         case piece
         when /[[:alpha:]]/
-          @board[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", colors[cell_color % 2], piece)
+          @board[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", piece)
         when /[[:digit:]]/
           times = piece.to_i
           times.times do
-            @board[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", colors[cell_color % 2], nil)
+            @board[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", nil)
             col_ind += 1
           end
           col_ind -= 1
