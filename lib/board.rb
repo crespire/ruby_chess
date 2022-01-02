@@ -59,7 +59,7 @@ class Board
   def pieces_to_fen
     strs = []
     @board.each.with_index(1) do |rank, i|
-      rank.each { |cell| strs << cell.to_s }
+      rank.each { |cell| strs << cell.to_fen }
       strs << '/' unless i == rank.length
     end
     parsed = []

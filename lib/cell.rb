@@ -14,7 +14,7 @@ class Cell
     @content.nil?
   end
 
-  def to_s
+  def to_fen
     @content.nil? ? 1 : @content
   end
 end
