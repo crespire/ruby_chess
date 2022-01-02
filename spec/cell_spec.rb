@@ -15,14 +15,19 @@ describe Cell do
     it 'has no name' do
       expect(cell.name).to be_nil
     end
+
+    it 'has no color' do
+      expect(cell.color).to be_nil
+    end
   end
 
   context 'on piece initialize' do
-    subject(:cell_knight) { described_class.new('N', 'b1') }
+    subject(:cell_knight) { described_class.new('b1', 'w', 'N') }
 
     it 'stores the correct information' do
       expect(cell_knight.empty?).to be_falsey
       expect(cell_knight.name).to eq('b1')
+      expect(cell_knight.color).to eq('w')
     end
   end
 end

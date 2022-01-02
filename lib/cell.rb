@@ -3,10 +3,11 @@
 # lib/cell.rb
 
 class Cell
-  attr_reader :content, :name
+  attr_reader :name, :color, :content
 
-  def initialize(piece = nil, name = nil)
+  def initialize(name = nil, color = nil, piece = nil)
     @name = name
+    @color = color
     @content = piece
   end
 

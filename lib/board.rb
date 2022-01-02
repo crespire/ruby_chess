@@ -16,12 +16,16 @@ class Board
 
   def make_board(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
     parts = fen.split(' ')
+    raise ArgumentError, "Invalid FEN provided: #{fen}" unless parts.length == 6
+
     pieces = parts[0].split('/')
     @active = parts[1]
     @castle = parts[2]
     @passant = parts[3]
     @half = parts[4].to_i
     @full = parts[5].to_i
+    cell_color = 0
+    colors = %w(white black)
 
     rank_ind = 0
     col = ('a'..'h').to_a
@@ -30,16 +34,16 @@ class Board
       rank.each_char do |piece|
         case piece
         when /[[:alpha:]]/
-          @board[rank_ind][col_ind] = Cell.new(piece, "#{col[col_ind]}#{8 - rank_ind}")
+          @board[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", colors[cell_color % 2], piece)
         when /[[:digit:]]/
           times = piece.to_i
           times.times do
-            @board[rank_ind][col_ind] = Cell.new(nil, "#{col[col_ind]}#{8 - rank_ind}")
+            @board[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", colors[cell_color % 2], nil)
             col_ind += 1
           end
           col_ind -= 1
         else
-          raise ArgumentError, "Unexpected character in piece notation: #{pieces}"
+          raise ArgumentError, "Unexpected character in piece notation: #{piece}"
         end
         col_ind += 1
       end
@@ -61,8 +65,8 @@ class Board
     end
     parsed = []
     strs.chunk { |el| el.is_a?(String) }.each do |str, chunk|
-      parsed << (str ? chunk.join('') : chunk.sum)
+      parsed << (str ? chunk.join : chunk.sum)
     end
-    parsed.join('')
+    parsed.join
   end
 end
