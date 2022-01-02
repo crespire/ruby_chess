@@ -45,8 +45,7 @@ describe Board do
       subject(:fen_test) { described_class.new }
 
       it 'parses default starting position and generates the correct board' do
-        input = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-        fen_test.make_board(input)
+        fen_test.make_board
         board = fen_test.instance_variable_get(:@board)
         active = fen_test.instance_variable_get(:@active)
         full = fen_test.instance_variable_get(:@full)

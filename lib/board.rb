@@ -5,7 +5,7 @@
 require_relative 'cell'
 
 class Board
-  def initialize(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+  def initialize()
     @board = Array.new(8) { Array.new(8, nil) }
     @active = nil
     @castle = nil
@@ -14,7 +14,7 @@ class Board
     @full = nil
   end
 
-  def make_board(fen)
+  def make_board(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
     parts = fen.split(' ')
     pieces = parts[0].split('/')
     @active = parts[1]
