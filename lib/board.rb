@@ -47,6 +47,8 @@ class Board
       end
       rank_ind += 1
     end
+
+    true
   end
 
   def make_fen
