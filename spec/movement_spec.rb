@@ -23,6 +23,23 @@ describe Movement do
     end
   end
 
+  context '#horizontal_move' do
+    context 'when there are no other pieces on the board' do
+      xit 'provides the correct list of movement options' do
+      end
+    end
+
+    context 'when there is a friendly piece on the path' do
+      xit 'returns the correct list of movement options' do 
+      end
+    end
+
+    context 'when there is an enemy piece on the path' do
+      xit 'returns the correct list of movement options including a capture' do
+      end
+    end
+  end
+
   context '#valid_moves' do
     context 'when provided a Cell with a Rook' do
       xit 'moves the piece in bounds as expected and returns true' do
