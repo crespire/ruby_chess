@@ -48,6 +48,29 @@ class Board
   end
 
   def make_fen
-    fen = ''
+    fen = []
+
+    pieces = []
+    @board.each_with_index do |rank, i|
+      rank.each do |cell|
+        pieces << cell.to_s
+      end
+      pieces << '/' unless i + 1 == rank.length
+    end
+
+    parsed = []
+    pieces.chunk { |el| el.is_a?(String) }.each do |str, chunk|
+      to_add = str ? chunk.join('') : chunk.sum
+      parsed << to_add
+    end
+
+    fen << parsed.join('')
+    fen << @active
+    fen << @castle
+    fen << @passant
+    fen << @half
+    fen << @full
+
+    fen.join(' ')
   end
 end

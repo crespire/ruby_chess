@@ -99,10 +99,22 @@ describe Board do
   context '#make_fen' do
     subject(:get_fen) { described_class.new }
 
-    it 'generates and outputs FEN notation from a given board state' do
-      get_fen.make_board
-      fen = get_fen.make_fen
-      expect(fen).to eq('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+    context 'on the starting position board' do
+      it 'generates the right FEN notation for the given board' do
+        get_fen.make_board
+        fen = get_fen.make_fen
+        expect(fen).to eq('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+      end
     end
+
+    context 'on a board with moves made' do
+      it 'generates the right FEN notation for the given board' do
+        input = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2'
+        get_fen.make_board(input)
+        fen = get_fen.make_fen
+        expect(fen).to eq(input)
+      end
+    end
+
   end
 end
