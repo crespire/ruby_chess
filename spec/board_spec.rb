@@ -139,6 +139,7 @@ describe Board do
         coords.make_board
 
         expect(coords.std_chess_to_arr('a8')).to eq([0, 0])
+        expect(coords.std_chess_to_arr('d4')).to eq([4, 3])
         expect(coords.std_chess_to_arr('e4')).to eq([4, 4])
         expect(coords.std_chess_to_arr('h1')).to eq([7, 7])
       end
@@ -155,8 +156,10 @@ describe Board do
     it 'takes a string of Chess notation and returns the correct Cell object' do
       cells.make_board
       test_cell = cells.cell('a8')
+      test_cell2 = cells.cell('d4')
 
       expect(test_cell).to have_attributes(name: 'a8')
+      expect(test_cell2).to have_attributes(name: 'd4')
     end
   end
 end
