@@ -10,7 +10,7 @@ class Movement
   def horizontal_move(cell)
     result = []
     col_chrs = ('a'..'h').to_a
-    piece = cell.content.downcase
+    piece = cell.content
     coord = cell.name.chars
     rank = coord[1]
     map = Hash['a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7]
@@ -32,5 +32,18 @@ class Movement
     end
 
     result.sort
+  end
+
+  private
+
+  def piece_offset(piece, direction)
+    offsets = {
+      'r': { 'h': 7, 'v': 7, 'd': 0, 'c': [0, 0] }
+      'q': { 'h': 7, 'v': 7, 'd': 7, 'c': [0, 0] }
+      'p': { 'h': 0, 'v': 1, 'd': 1, 'c': [2, 1] } # c for enpassant
+      'b': { 'h': 0, 'v': 0, 'd': 7, 'c': [0, 0] }
+      'k': { 'h': 1, 'v': 1, 'd': 1, 'c': [0, 0] }
+      'n': { 'h': 0, 'v': 0. 'd': 0, 'c': [2, 1] } # c for Knight L
+    }
   end
 end
