@@ -8,7 +8,6 @@ class Movement
   end
 
   def horizontal_move(cell)
-    p cell
     result = []
     col_chrs = ('a'..'h').to_a
     piece = cell.content.downcase

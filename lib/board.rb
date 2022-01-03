@@ -58,15 +58,12 @@ class Board
   end
 
   def arr_to_std_chess(input)
-    return nil unless input&.length == 2
-    return nil unless input&.reduce(:+)&.between?(0, 14)
+    return nil unless input.length == 2
+    return nil unless input.reduce(:+).between?(0, 14)
 
     letter = %w[a b c d e f g h]
-    number = %w[8 7 6 5 4 3 2 1]
-
-    alpha_i, num_i = input
-
-    "#{letter[alpha_i]}#{number[num_i]}"
+    rank, col = input
+    "#{letter[col]}#{8 - rank}"
   end
 
   def std_chess_to_arr(input)
@@ -76,7 +73,6 @@ class Board
     return nil unless (1..8).include?(coords[1].to_i)
 
     lookup = Hash['a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7]
-
     [8 - coords[1].to_i, lookup[coords[0]]]
   end
 
