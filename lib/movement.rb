@@ -27,8 +27,8 @@ class Movement
     (1..offset).to_a.each do |i|
       right = start + i
       left = start - i
-      result << "#{col_chrs[start + i]}#{rank}" if (1..8).include?(right)
-      result << "#{col_chrs[start + i]}#{rank}" if (1..8).include?(left)
+      result << "#{col_chrs[right]}#{rank}" if (0..7).include?(right)
+      result << "#{col_chrs[left]}#{rank}" if (0..7).include?(left)
     end
 
     result.sort
