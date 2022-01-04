@@ -63,7 +63,7 @@ describe Movement do
           cell = board.cell('a8')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[b8 c8 d8 e8 f8])
         end
-  
+
         it 'and the Rook starts on d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/3rB3/8/8/8 b - - 1 2')
           cell = board.cell('d4')
@@ -91,7 +91,6 @@ describe Movement do
           cell = board.cell('d4')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[e4])
         end
-
       end
     end
 
@@ -174,13 +173,13 @@ describe Movement do
         it 'and Rook starts on a8, returns the correct list of available moves' do
           board.make_board('r7/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
-          expect(rook_test.find_vertical_moves(cell)).to eq(%w[a7 a6 a5 a4 a3 a2 a1])
+          expect(rook_test.find_vertical_moves(cell)).to eq(%w[a1 a2 a3 a4 a5 a6 a7])
         end
 
-        xit 'and the Rook starts on d4, returns the correct list of available moves' do
+        it 'and the Rook starts on d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/3r4/8/8/8 b - - 1 2')
           cell = board.cell('d4')
-          expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(rook_test.find_vertical_moves(cell)).to eq(%w[d1 d2 d3 d5 d6 d7 d8])
         end
       end
 
@@ -204,7 +203,7 @@ describe Movement do
           cell = board.cell('a8')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
         end
-  
+
         xit 'and the Rook starts on d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/3rB3/8/8/8 b - - 1 2')
           cell = board.cell('d4')
@@ -232,7 +231,6 @@ describe Movement do
           cell = board.cell('d4')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
         end
-
       end
     end
 
@@ -240,16 +238,16 @@ describe Movement do
       subject(:king_test) { described_class.new(board) }
 
       context 'on an empty board' do
-        xit 'and King starts on a8, returns the correct list of available moves' do
+        it 'and King starts on a8, returns the correct list of available moves' do
           board.make_board('k7/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
-          expect(king_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(king_test.find_vertical_moves(cell)).to eq(%w[a7])
         end
 
-        xit 'and the King starts on d4, returns the correct list of available moves' do
+        it 'and the King starts on d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/3k4/8/8/8 b - - 1 2')
           cell = board.cell('d4')
-          expect(king_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(king_test.find_vertical_moves(cell)).to eq(%w[d3 d5])
         end
       end
 

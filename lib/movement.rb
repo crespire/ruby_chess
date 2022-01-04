@@ -23,6 +23,22 @@ class Movement
     result.sort
   end
 
+  def find_vertical_moves(cell)
+    rank_map = Hash['8', 0, '7', 1, '6', 2, '5', 3, '4', 4, '3', 5, '2', 6, '1', 7]
+
+    piece = cell.content
+    coord = cell.name.chars
+    x = coord[0]
+    y = rank_map[coord[1]]
+    offset = piece_offset(piece, 'v')
+
+    north = path(piece, x, y, offset, 'n')
+    south = path(piece, x, y, offset, 's')
+    result = north.union(south)
+
+    result.sort
+  end
+
   private
 
   def piece_offset(piece, direction)
@@ -41,7 +57,7 @@ class Movement
   def path(piece, x, y, offset, direction)
     result = []
     cols = ('a'..'h').to_a
-    ranks = ('8'..'1').to_a
+    ranks = ('1'..'8').to_a.reverse
     case direction
     when 'e', 'w'
       result = path_ew(piece, x, y, offset, cols, direction)
@@ -70,7 +86,7 @@ class Movement
     operation = direction == 's' ? Proc.new { |start, off| start + off } : Proc.new { |start, off| start - off }
     result = []
     (1..offset).to_a.each do |i|
-      ind = operation.call(x, i)
+      ind = operation.call(y, i)
       step = @board.cell("#{x}#{change_axis[ind]}") if (0..7).include?(ind)
       result << step.to_s if step && (step.empty? || step.capture?(piece))
       break unless step && step.empty? && step.capture?(piece)
