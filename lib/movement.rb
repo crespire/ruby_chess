@@ -59,12 +59,13 @@ class Movement
     result = []
     cols = ('a'..'h').to_a
     ranks = ('1'..'8').to_a.reverse
+
     case direction
     when 'e', 'w'
-      result = path_ew(piece, x, y, offset, cols, direction)
+      result = path_cardinal(piece, x, y, offset, cols, direction)
 
     when 'n', 's'
-      result = path_ns(piece, x, y, offset, ranks, direction)
+      result = path_cardinal(piece, x, y, offset, ranks, direction)
     end
 
     result
@@ -94,5 +95,24 @@ class Movement
     end
 
     result
+  end
+
+  def path_cardinal(piece, x, y, offset, change_axis, direction)
+    proc_switch = ['s', 'e'].include?(direction) # if true, we are adding
+    string_switch = ['e', 'w'].include?(direction) # if true, x(change) y
+    operation = proc_switch ? Proc.new { |start, off| start + off } : Proc.new { |start, off| start - off }
+    string = string_switch ? Proc.new { |change, keep| "#{change_axis[change]}#{keep}" } : Proc.new { |change, keep| "#{keep}#{change_axis[change]}" }
+    change_val = proc_switch ? x : y
+    keep = string_switch ? y : x
+    result = []
+    (1..offset).to_a.each do |i|
+      ind = operation.call(change_val, i)
+      step = @board.cell(string.call(ind, keep)) if (0..7).include?(ind)
+      result << step.to_s if step && (step.empty? || step.capture?(piece))
+      break unless step && step.empty? && step.capture?(piece)
+    end
+
+    result
+
   end
 end
