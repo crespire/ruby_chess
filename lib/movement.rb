@@ -21,9 +21,8 @@ class Movement
 
     east = path(piece, x, y, offset, 'e')
     west = path(piece, x, y, offset, 'w')
-    result = east.union(west)
 
-    result.sort
+    (east + west).uniq.sort
   end
 
   def find_vertical_moves(cell)
@@ -37,9 +36,8 @@ class Movement
 
     north = path(piece, x, y, offset, 'n')
     south = path(piece, x, y, offset, 's')
-    result = north.union(south)
 
-    result.sort
+    (north + south).uniq.sort
   end
 
   private
