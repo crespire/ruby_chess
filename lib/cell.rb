@@ -23,8 +23,10 @@ class Cell
   end
 
   def capture?(attacking)
-    attacking_color = attacking.ord < 91 ? 'w' : 'b'
-    piece_color = @content.ord < 91 ? 'w' : 'b'
-    attacking_color != piece_color
+    return true if empty?
+
+    atk_color = attacking.ord < 91 ? 'w' : 'b'
+    color = @content.ord < 91 ? 'w' : 'b'
+    atk_color != color
   end
 end

@@ -44,10 +44,16 @@ describe Movement do
       end
 
       context 'where there is a friendly piece on the path' do
-        xit 'when the Rook starts on a8, returns the correct list of movement options' do 
+        it 'when the Rook starts on a8, returns the correct list of movement options' do 
+          board.make_board('r4b2/8/8/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('a8')
+          expect(rook_test.horizontal_move(cell)).to eq(%w[b8 c8 d8 e8])
         end
   
-        xit 'when the Rook is on d4, provides the correct list of movement options' do
+        it 'when the Rook is on d4, provides the correct list of movement options' do
+          board.make_board('8/8/8/8/3rb3/8/8/8 b - - 1 2')
+          cell = board.cell('d4')
+          expect(rook_test.horizontal_move(cell)).to eq(%w[a4 b4 c4])
         end
       end
   

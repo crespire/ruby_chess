@@ -17,13 +17,17 @@ class Movement
     offset = piece_offset(piece, 'h')
 
     start = map[coord[0]]
+    right_cont = true
+    left_cont = true
     (1..offset).to_a.each do |i|
-      right_ind = start + i
-      left_ind = start - i
+      right_ind = right_cont ? start + i : nil
+      left_ind = left_cont ? start - i : nil
       right = (0..7).include?(right_ind) ? @board.cell("#{col_chrs[right_ind]}#{rank}") : false
       left = (0..7).include?(left_ind) ? @board.cell("#{col_chrs[left_ind]}#{rank}") : false
       result << right.to_s if right && (right.empty? || right.capture?(piece))
       result << left.to_s if left && (left.empty? || left.capture?(piece))
+      right_cont = right
+      left_cont = left
     end
 
     result.sort
