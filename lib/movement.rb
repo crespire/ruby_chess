@@ -8,6 +8,10 @@ class Movement
   end
 
   def horizontal_move(cell)
+    # Abstraction missing - Build a "Path" that is a ray from origin.
+    # So for horizontal, you do two rays, one east, one west.
+    # Ray stops on end_of_board or capture.
+    # Can use Rays for Vertical as well as horizontal.
     result = []
     col_chrs = ('a'..'h').to_a
     piece = cell.content
