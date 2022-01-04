@@ -65,4 +65,17 @@ class Movement
 
     result
   end
+
+  def path_ns(piece, x, y, offset, change_axis, direction)
+    operation = direction == 's' ? Proc.new { |start, off| start + off } : Proc.new { |start, off| start - off }
+    result = []
+    (1..offset).to_a.each do |i|
+      ind = operation.call(x, i)
+      step = @board.cell("#{x}#{change_axis[ind]}") if (0..7).include?(ind)
+      result << step.to_s if step && (step.empty? || step.capture?(piece))
+      break unless step && step.empty? && step.capture?(piece)
+    end
+
+    result
+  end
 end
