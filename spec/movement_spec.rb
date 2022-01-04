@@ -303,27 +303,17 @@ describe Movement do
     end
   end
 
+  ##
+  # Valid moves should combine all the axes that we make moves on. The test piece here should be a queen.
   context '#valid_moves works' do
-    context 'with a Rook' do
+    context 'with a Queen' do
       context 'on an empty board' do
-        xit 'and the Rook starts on c5, returns the correct list of available moves' do
+        xit 'and the Queen starts on c5, returns the correct list of available moves' do
         end
       end
 
       context 'on a board with mixed pieces in its path' do
-        xit 'and the Rook starts on c5, returns the correct list of available moves including eligible captures' do
-        end
-      end
-    end
-
-    context 'with a King' do
-      context 'on an empty board' do
-        xit 'and the King starts on c5, returns the correct list of available moves' do
-        end
-      end
-
-      context 'on a board with mixed pieces in its path' do
-        xit 'and the King starts on c5, returns the correct list of available moves including eligible captures' do
+        xit 'and the Queen starts on c5, returns the correct list of available moves including eligible captures' do
         end
       end
     end

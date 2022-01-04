@@ -7,6 +7,9 @@ class Movement
     @board = board
   end
 
+  def valid_moves(cell)
+  end
+
   def find_horizontal_moves(cell)
     col_map = Hash['a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7]
 
