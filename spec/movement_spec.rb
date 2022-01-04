@@ -64,6 +64,15 @@ describe Movement do
         xit 'when the Rook is on d4, provides the correct list of movement options' do
         end
       end
+
+      context 'when there are multiple enemy pieces on the path' do
+        xit 'when the Rook is on a8, returns the correct list with one capture only' do
+        end
+
+        xit 'when the Rook is on d4, returns the correct list with two captures on either side only' do
+          # Set up a board where the Rook has two enemies on each side. Should only capture the first enemy on each side.
+        end
+      end
     end
 
   context 'with a King' do

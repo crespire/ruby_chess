@@ -24,10 +24,14 @@ class Movement
       left_ind = left_cont ? start - i : nil
       right = (0..7).include?(right_ind) ? @board.cell("#{col_chrs[right_ind]}#{rank}") : false
       left = (0..7).include?(left_ind) ? @board.cell("#{col_chrs[left_ind]}#{rank}") : false
-      result << right.to_s if right && (right.empty? || right.capture?(piece))
-      result << left.to_s if left && (left.empty? || left.capture?(piece))
-      right_cont = right
-      left_cont = left
+      if right
+        right_cont = right.capture?(piece)
+        result << right.to_s if right.empty? || right_cont
+      end
+      if left
+        left_cont = left.capture?(piece)
+        result << left.to_s if left.empty? || left_cont
+      end
     end
 
     result.sort
