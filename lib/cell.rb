@@ -17,4 +17,14 @@ class Cell
   def to_fen
     @content.nil? ? 1 : @content
   end
+
+  def to_s
+    @name
+  end
+
+  def capture?(attacking)
+    attacking_color = attacking.ord < 91 ? 'w' : 'b'
+    piece_color = @content.ord < 91 ? 'w' : 'b'
+    attacking_color != piece_color
+  end
 end
