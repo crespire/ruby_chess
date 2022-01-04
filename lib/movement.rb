@@ -7,36 +7,18 @@ class Movement
     @board = board
   end
 
-  def horizontal_move(cell)
-    # Abstraction missing - Build a "Path" that is a ray from origin.
-    # So for horizontal, you do two rays, one east, one west.
-    # Ray stops on end_of_board or capture.
-    # Can use Rays for Vertical as well as horizontal.
-    result = []
-    col_chrs = ('a'..'h').to_a
+  def find_horizontal_moves(cell)
+    col_map = Hash['a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7]
+
     piece = cell.content
     coord = cell.name.chars
-    rank = coord[1]
-    map = Hash['a', 0, 'b', 1, 'c', 2, 'd', 3, 'e', 4, 'f', 5, 'g', 6, 'h', 7]
+    x = col_map[coord[0]]
+    y = coord[1]
     offset = piece_offset(piece, 'h')
 
-    start = map[coord[0]]
-    right_cont = true
-    left_cont = true
-    (1..offset).to_a.each do |i|
-      right_ind = right_cont ? start + i : nil
-      left_ind = left_cont ? start - i : nil
-      right = (0..7).include?(right_ind) ? @board.cell("#{col_chrs[right_ind]}#{rank}") : false
-      left = (0..7).include?(left_ind) ? @board.cell("#{col_chrs[left_ind]}#{rank}") : false
-      if right
-        right_cont = right.capture?(piece)
-        result << right.to_s if right.empty? || right_cont
-      end
-      if left
-        left_cont = left.capture?(piece)
-        result << left.to_s if left.empty? || left_cont
-      end
-    end
+    east = path(piece, x, y, offset, 'e')
+    west = path(piece, x, y, offset, 'w')
+    result = east.union(west)
 
     result.sort
   end
@@ -54,5 +36,33 @@ class Movement
     }
 
     offsets[piece.downcase][direction]
+  end
+
+  def path(piece, x, y, offset, direction)
+    result = []
+    cols = ('a'..'h').to_a
+    ranks = ('8'..'1').to_a
+    case direction
+    when 'e', 'w'
+      result = path_ew(piece, x, y, offset, cols, direction)
+
+    when 'n', 's'
+      result = path_ns(piece, x, y, offset, ranks, direction)
+    end
+
+    result
+  end
+
+  def path_ew(piece, x, y, offset, change_axis, direction)
+    operation = direction == 'e' ? Proc.new { |start, off| start + off } : Proc.new { |start, off| start - off }
+    result = []
+    (1..offset).to_a.each do |i|
+      ind = operation.call(x, i)
+      step = @board.cell("#{change_axis[ind]}#{y}") if (0..7).include?(ind)
+      result << step.to_s if step && (step.empty? || step.capture?(piece))
+      break unless step && step.empty? && step.capture?(piece)
+    end
+
+    result
   end
 end
