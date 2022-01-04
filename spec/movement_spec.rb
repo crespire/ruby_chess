@@ -64,7 +64,7 @@ describe Movement do
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[b8 c8 d8 e8 f8])
         end
 
-        it 'and the Rook starts on d4, returns the correct list of available moves' do
+        it 'and the Rook starts on d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/8/8/3rB3/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[a4 b4 c4 e4])
@@ -184,52 +184,52 @@ describe Movement do
       end
 
       context 'where there is a friendly piece on the path' do
-        xit 'and the Rook starts on a8, returns the correct list of available moves' do 
-          board.make_board('r4b2/8/8/8/8/8/8/8 b - - 1 2')
+        it 'and the Rook starts on a8, returns the correct list of available moves' do 
+          board.make_board('r7/8/8/b7/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
-          expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(rook_test.find_vertical_moves(cell)).to eq(%w[a6 a7])
         end
 
-        xit 'and the Rook starts on d4, returns the correct list of available moves' do
-          board.make_board('8/8/8/8/3rb3/8/8/8 b - - 1 2')
+        it 'and the Rook starts on d4, returns the correct list of available moves' do
+          board.make_board('8/3k4/8/8/3r4/8/3n4/8 b - - 1 2')
           cell = board.cell('d4')
-          expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(rook_test.find_vertical_moves(cell)).to eq(%w[d3 d5 d6])
         end
       end
 
       context 'where there is an enemy piece on the path' do
-        xit 'and the Rook starts on a8, returns the correct list of available moves including a capture' do
-          board.make_board('r4B2/8/8/8/8/8/8/8 b - - 1 2')
+        it 'and the Rook starts on a8, returns the correct list of available moves including a capture' do
+          board.make_board('r7/8/8/8/B7/8/8/8 b - - 1 2')
           cell = board.cell('a8')
-          expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(rook_test.find_vertical_moves(cell)).to eq(%w[a4 a5 a6 a7])
         end
 
-        xit 'and the Rook starts on d4, returns the correct list of available moves' do
-          board.make_board('8/8/8/8/3rB3/8/8/8 b - - 1 2')
+        it 'and the Rook starts on d4, returns the correct list of available moves including both captures' do
+          board.make_board('8/8/8/3N4/3r4/8/8/3B4 b - - 1 2')
           cell = board.cell('d4')
-          expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(rook_test.find_vertical_moves(cell)).to eq(%w[d1 d2 d3 d5])
         end
       end
 
       context 'when there are multiple enemy pieces on the path' do
-        xit 'and the Rook starts on a8, returns the correct list of available moves including a capture' do
-          board.make_board('r4BN1/8/8/8/8/8/8/8 b - - 1 2')
+        it 'and the Rook starts on a8, returns the correct list of available moves including a capture' do
+          board.make_board('r7/8/8/8/P7/N7/8/8 b - - 1 2')
           cell = board.cell('a8')
-          expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(rook_test.find_vertical_moves(cell)).to eq(%w[a4 a5 a6 a7])
         end
 
-        xit 'and the Rook starts on d4, returns the correct list of available moves including both captures' do
-          board.make_board('8/8/8/8/1RPrBN2/8/8/8 b - - 1 2')
+        it 'and the Rook starts on d4, returns the correct list of available moves including both captures' do
+          board.make_board('8/3P4/3N4/8/3r4/8/3P4/3B4 b - - 1 2')
           cell = board.cell('d4')
-          expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(rook_test.find_vertical_moves(cell)).to eq(%w[d2 d3 d5 d6])
         end
       end
 
       context 'when there is a friendly on one side, and an enemy on the other' do
-        xit 'and the Rook starts on d4, returns the correct list of available moves including a capture' do
-          board.make_board('8/8/8/8/2prBN2/8/8/8 b - - 1 2')
+        it 'and the Rook starts on d4, returns the correct list of available moves including a capture' do
+          board.make_board('8/3B4/3p4/8/3r4/8/3N4/3B4 b - - 1 2')
           cell = board.cell('d4')
-          expect(rook_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(rook_test.find_vertical_moves(cell)).to eq(%w[d2 d3 d5])
         end
       end
     end
@@ -298,6 +298,32 @@ describe Movement do
           board.make_board('8/8/8/8/2pkP3/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[])
+        end
+      end
+    end
+  end
+
+  context '#valid_moves works' do
+    context 'with a Rook' do
+      context 'on an empty board' do
+        xit 'and the Rook starts on c5, returns the correct list of available moves' do
+        end
+      end
+
+      context 'on a board with mixed pieces in its path' do
+        xit 'and the Rook starts on c5, returns the correct list of available moves including eligible captures' do
+        end
+      end
+    end
+
+    context 'with a King' do
+      context 'on an empty board' do
+        xit 'and the King starts on c5, returns the correct list of available moves' do
+        end
+      end
+
+      context 'on a board with mixed pieces in its path' do
+        xit 'and the King starts on c5, returns the correct list of available moves including eligible captures' do
         end
       end
     end
