@@ -40,18 +40,21 @@ class Movement
   end
 
   def find_knight_moves(cell)
+    return nil unless %w[n N].include?(cell.occupant)
+
+
   end
 
   private
 
   def piece_offset(piece, direction)
     offsets = {
-      'r' => { 'h' => 7, 'v' => 7, 'd' => 0, 'c' => 0 },
-      'q' => { 'h' => 7, 'v' => 7, 'd' => 7, 'c' => 0 },
-      'p' => { 'h' => 0, 'v' => 1, 'd' => 1, 'c' => 0 },
-      'b' => { 'h' => 0, 'v' => 0, 'd' => 7, 'c' => 0 },
-      'k' => { 'h' => 1, 'v' => 1, 'd' => 1, 'c' => 0 },
-      'n' => { 'h' => 0, 'v' => 0, 'd' => 0, 'c' => [2, 1] } # c for Knight L
+      'r' => { 'h' => 7, 'v' => 7, 'd' => 0 },
+      'q' => { 'h' => 7, 'v' => 7, 'd' => 7 },
+      'p' => { 'h' => 0, 'v' => 1, 'd' => 1 },
+      'b' => { 'h' => 0, 'v' => 0, 'd' => 7 },
+      'k' => { 'h' => 1, 'v' => 1, 'd' => 1 },
+      'n' => { 'h' => 0, 'v' => 0, 'd' => 0 }
     }
     offsets[piece.downcase][direction]
   end

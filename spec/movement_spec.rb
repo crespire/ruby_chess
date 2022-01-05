@@ -380,7 +380,7 @@ describe Movement do
     subject(:knight_test) { described_class.new(board) }
 
     it 'returns nil when a given piece is not a knight' do
-      board.make_board('n7/8/8/8/8/8/8/8 b - - 1 2')
+      board.make_board('b7/8/8/8/8/8/8/8 b - - 1 2')
       cell = board.cell('a8')
       expect(knight_test.find_knight_moves(cell)).to be_nil
     end
