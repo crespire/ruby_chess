@@ -123,10 +123,12 @@ describe Board do
 
       it 'takes an array of 2 elements and returns the right chess notation' do
         expect(coords.arr_to_std_chess([0, 0])).to eq('a8')
+        expect(coords.arr_to_std_chess([0, 1])).to eq('b8')
         expect(coords.arr_to_std_chess([4, 3])).to eq('d4')
         expect(coords.arr_to_std_chess([3, 3])).to eq('d5')
         expect(coords.arr_to_std_chess([4, 4])).to eq('e4')
         expect(coords.arr_to_std_chess([5, 2])).to eq('c3')
+        expect(coords.arr_to_std_chess([7, 1])).to eq('b1')
         expect(coords.arr_to_std_chess([7, 7])).to eq('h1')
       end
 
@@ -142,6 +144,7 @@ describe Board do
         coords.make_board
 
         expect(coords.std_chess_to_arr('a8')).to eq([0, 0])
+        expect(coords.std_chess_to_arr('b8')).to eq([0, 1])
         expect(coords.std_chess_to_arr('d4')).to eq([4, 3])
         expect(coords.std_chess_to_arr('d5')).to eq([3, 3])
         expect(coords.std_chess_to_arr('e4')).to eq([4, 4])

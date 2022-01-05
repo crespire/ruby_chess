@@ -30,10 +30,10 @@ describe Movement do
       subject(:rook_test) { described_class.new(board) }
 
       context 'on an empty board' do
-        it 'and Rook starts on a8, returns the correct list of available moves' do
-          board.make_board('r7/8/8/8/8/8/8/8 b - - 1 2')
-          cell = board.cell('a8')
-          expect(rook_test.find_horizontal_moves(cell)).to eq(%w[b8 c8 d8 e8 f8 g8 h8])
+        it 'and Rook starts on b8, returns the correct list of available moves' do
+          board.make_board('1r6/8/8/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('b8')
+          expect(rook_test.find_horizontal_moves(cell)).to eq(%w[a8 c8 d8 e8 f8 g8 h8])
         end
 
         it 'and the Rook starts on d4, returns the correct list of available moves' do
