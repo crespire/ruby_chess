@@ -252,52 +252,52 @@ describe Movement do
       end
 
       context 'where there is a friendly piece on the path' do
-        xit 'and the King starts on a8, returns the correct list of available moves' do
-          board.make_board('kn6/8/8/8/8/8/8/8 b - - 1 2')
+        it 'and the King starts on a8, returns the correct list of available moves' do
+          board.make_board('k7/n7/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[])
         end
 
-        xit 'and the King starts on d4, returns the correct list of available moves' do
-          board.make_board('8/8/8/8/2nkp3/8/8/8 b - - 1 2')
+        it 'and the King starts on d4, returns the correct list of available moves' do
+          board.make_board('8/8/8/3p4/3k4/3q4/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[])
         end
       end
 
       context 'where there is an enemy piece on the path' do
-        xit 'and the King starts on a8, returns the correct list of available moves including a capture' do
-          board.make_board('kN6/8/8/8/8/8/8/8 b - - 1 2')
+        it 'and the King starts on a8, returns the correct list of available moves including a capture' do
+          board.make_board('k7/N7/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
-          expect(king_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(king_test.find_vertical_moves(cell)).to eq(%w[a7])
         end
 
-        xit 'and the King starts on d4, returns the correct list of available moves including both captures' do
-          board.make_board('8/8/8/8/2PkP3/8/8/8 b - - 1 2')
+        it 'and the King starts on d4, returns the correct list of available moves including both captures' do
+          board.make_board('8/8/8/3P4/3k4/3P4/8/8 b - - 1 2')
           cell = board.cell('d4')
-          expect(king_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(king_test.find_vertical_moves(cell)).to eq(%w[d3 d5])
         end
       end
 
       context 'where there are multiple enemy pieces on the path' do
-        xit 'and the King starts on a8, returns the correct list of available moves including a capture' do
-          board.make_board('kNK5/8/8/8/8/8/8/8 b - - 1 2')
+        it 'and the King starts on a8, returns the correct list of available moves including a capture' do
+          board.make_board('k7/P7/P7/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
-          expect(king_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(king_test.find_vertical_moves(cell)).to eq(%w[a7])
         end
 
-        xit 'and the King starts on d4, returns the correct list of available moves including both captures' do
-          board.make_board('8/8/8/8/1PPkPP2/8/8/8 b - - 1 2')
+        it 'and the King starts on d4, returns the correct list of available moves including both captures' do
+          board.make_board('8/8/3P4/3P4/3k4/3P4/3P4/8 b - - 1 2')
           cell = board.cell('d4')
-          expect(king_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(king_test.find_vertical_moves(cell)).to eq(%w[d3 d5])
         end
       end
 
       context 'when there is a friendly on one side, and an enemy on the other' do
-        xit 'and the King starts on d4, returns the correct list of available moves including a capture' do
-          board.make_board('8/8/8/8/2pkP3/8/8/8 b - - 1 2')
+        it 'and the King starts on d4, returns the correct list of available moves including a capture' do
+          board.make_board('8/8/8/3p4/3k4/3P4/8/8 b - - 1 2')
           cell = board.cell('d4')
-          expect(king_test.find_vertical_moves(cell)).to eq(%w[])
+          expect(king_test.find_vertical_moves(cell)).to eq(%w[d3])
         end
       end
     end

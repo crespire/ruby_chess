@@ -70,9 +70,8 @@ class Movement
   end
 
   def path_cardinal(piece, x, y, offset, change_axis, direction)
-    adding = ['e', 's'].include?(direction) # if true, we are adding
-    operation = adding ? proc { |change, i| change + i } : proc { |change, i| change - i }
-    keep_rank = ['e', 'w'].include?(direction) # if true, x(change) y
+    operation = %w[e s].include?(direction) ? proc { |change, i| change + i } : proc { |change, i| change - i }
+    keep_rank = %w[e w].include?(direction)
     coords = keep_rank ? proc { |change, keep| "#{change_axis[change]}#{keep}" } : proc { |change, keep| "#{keep}#{change_axis[change]}" }
     change_val = keep_rank ? x : y
     keep_val = keep_rank ? y : x
