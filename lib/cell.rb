@@ -15,7 +15,7 @@ class Cell
   end
 
   def to_fen
-    @occupant.nil? ? 1 : @content
+    @occupant.nil? ? 1 : @occupant
   end
 
   def to_s
