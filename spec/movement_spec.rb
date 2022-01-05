@@ -303,6 +303,46 @@ describe Movement do
     end
   end
 
+  context '#find_diagonal_moves workds' do
+    let(:board) { Board.new }
+
+    context 'with a Bishop' do
+      subject(:bishop_test) { described_class.new(board) }
+
+      context 'on an empty board' do
+        xit 'and Bishop starts on a7, returns the correct list of available moves' do
+        end
+
+        xit 'and Bishop starts on d4, returns the correct list of availalbe moves' do
+        end
+      end
+
+      context 'where there is a friendly piece on the path' do
+        xit 'and the Bishop starts on a7, returns the correct list of available moves' do 
+        end
+
+        xit 'and the Bishop starts on d4, returns the correct list of available moves' do
+        end
+      end
+
+      context 'where there is an enemy piece on the path' do
+        xit 'and the Bishop starts on a7, returns the correct list of available moves inclusing a capture' do 
+        end
+
+        xit 'and the Bishop starts on d4, returns the correct list of available moves including both captures' do
+        end
+      end
+
+      context 'when there are multiple enemy pieces on the path' do
+        xit 'and the Bishop starts on a7, returns the correct list of available moves including a capture' do
+        end
+
+        xit 'and the Bishop starts on d4, returns the correct list of available moves including both captures' do
+        end
+      end
+    end
+  end
+
   ##
   # Valid moves should combine all the axes that we make moves on. The test piece here should be a queen.
   context '#valid_moves works' do
