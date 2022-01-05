@@ -317,34 +317,59 @@ describe Movement do
           expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
 
-        xit 'and the Bishop starts on d4, returns the correct list of availalbe moves' do
-          board.make_board('8/2b5/8/8/8/8/8/8 b - - 1 2')
-          cell = board.cell('c7')
-          expect(bishop_test.find_diagonal_moves(cell)).to eq(%w[b8 d6 e5 f4 g3 h2])
+        it 'and the Bishop starts on d4, returns the correct list of availalbe moves' do
+          board.make_board('8/8/8/8/3b4/8/8/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[a7 b6 c5 h8 g7 f6 e5 c3 b2 a1 e3 f2 g1].sort
+          expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
       end
 
       context 'where there is a friendly piece on the path' do
-        xit 'and the Bishop starts on a7, returns the correct list of available moves' do 
+        it 'and the Bishop starts on c7, returns the correct list of available moves' do 
+          board.make_board('1n6/2b5/8/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('c7')
+          eligible = %w[a5 b6 d8 d6 e5 f4 g3 h2].sort
+          expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
 
-        xit 'and the Bishop starts on d4, returns the correct list of available moves' do
+        it 'and the Bishop starts on d4, returns the correct list of available moves' do
+          board.make_board('8/8/1p3p1/8/3b4/8/1n7/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[c5 e5 c3 e3 f2 g1].sort
+          expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
       end
 
       context 'where there is an enemy piece on the path' do
-        xit 'and the Bishop starts on a7, returns the correct list of available moves inclusing a capture' do 
+        it 'and the Bishop starts on c7, returns the correct list of available moves including a capture' do 
+          board.make_board('1N6/2b5/8/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('c7')
+          eligible = %w[a5 b6 b8 d8 d6 e5 f4 g3 h2].sort
+          expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
 
-        xit 'and the Bishop starts on d4, returns the correct list of available moves including both captures' do
+        it 'and the Bishop starts on d4, returns the correct list of available moves including both captures' do
+          board.make_board('8/8/1P7/8/3b4/8/1n3P2/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[c5 h8 b6 g7 f6 e5 c3 e3 f2].sort
+          expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
       end
 
       context 'when there are multiple enemy pieces on the path' do
-        xit 'and the Bishop starts on a7, returns the correct list of available moves including a capture' do
+        it 'and the Bishop starts on c7, returns the correct list of available moves including a capture' do
+          board.make_board('1N6/2b5/8/4P3/5B2/8/8/8 b - - 1 2')
+          cell = board.cell('c7')
+          eligible = %w[a5 b6 b8 d8 d6 e5].sort
+          expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
 
-        xit 'and the Bishop starts on d4, returns the correct list of available moves including both captures' do
+        it 'and the Bishop starts on d4, returns the correct list of available moves including both captures' do
+          board.make_board('8/8/1P7/8/3b4/8/1n3P2/6N1 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[c5 h8 b6 g7 f6 e5 c3 e3 f2].sort
+          expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
       end
     end

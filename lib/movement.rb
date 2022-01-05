@@ -66,6 +66,8 @@ class Movement
   end
 
   def path_cardinal(cell, offset, direction)
+    return [] if offset.zero?
+
     # std_chess_to_arr returns [rank, col] indicies
     # x dimension is rank, y dimention is col
     operation = %w[e s].include?(direction) ? proc { |change, i| change + i } : proc { |change, i| change - i }
@@ -89,6 +91,7 @@ class Movement
   end
 
   def path_ordinal(cell, offset, direction)
+    return [] if offset.zero?
     # std_chess_to_arr returns [rank, col] indicies
     # x dimension is rank, y dimention is col
 
