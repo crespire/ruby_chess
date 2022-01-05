@@ -63,56 +63,27 @@ class Movement
     case direction
     when 'e', 'w'
       result = path_cardinal(piece, x, y, offset, cols, direction)
-
     when 'n', 's'
       result = path_cardinal(piece, x, y, offset, ranks, direction)
     end
-
-    result
-  end
-
-  def path_ew(piece, x, y, offset, change_axis, direction)
-    operation = direction == 'e' ? Proc.new { |start, off| start + off } : Proc.new { |start, off| start - off }
-    result = []
-    (1..offset).to_a.each do |i|
-      ind = operation.call(x, i)
-      step = @board.cell("#{change_axis[ind]}#{y}") if (0..7).include?(ind)
-      result << step.to_s if step && (step.empty? || step.capture?(piece))
-      break unless step && step.empty? && step.capture?(piece)
-    end
-
-    result
-  end
-
-  def path_ns(piece, x, y, offset, change_axis, direction)
-    operation = direction == 's' ? Proc.new { |start, off| start + off } : Proc.new { |start, off| start - off }
-    result = []
-    (1..offset).to_a.each do |i|
-      ind = operation.call(y, i)
-      step = @board.cell("#{x}#{change_axis[ind]}") if (0..7).include?(ind)
-      result << step.to_s if step && (step.empty? || step.capture?(piece))
-      break unless step && step.empty? && step.capture?(piece)
-    end
-
     result
   end
 
   def path_cardinal(piece, x, y, offset, change_axis, direction)
-    proc_switch = ['s', 'e'].include?(direction) # if true, we are adding
-    string_switch = ['e', 'w'].include?(direction) # if true, x(change) y
-    operation = proc_switch ? Proc.new { |start, off| start + off } : Proc.new { |start, off| start - off }
-    string = string_switch ? Proc.new { |change, keep| "#{change_axis[change]}#{keep}" } : Proc.new { |change, keep| "#{keep}#{change_axis[change]}" }
-    change_val = proc_switch ? x : y
-    keep = string_switch ? y : x
+    adding = ['e', 's'].include?(direction) # if true, we are adding
+    operation = adding ? proc { |change, i| change + i } : proc { |change, i| change - i }
+    keep_rank = ['e', 'w'].include?(direction) # if true, x(change) y
+    coords = keep_rank ? proc { |change, keep| "#{change_axis[change]}#{keep}" } : proc { |change, keep| "#{keep}#{change_axis[change]}" }
+    change_val = keep_rank ? x : y
+    keep_val = keep_rank ? y : x
     result = []
     (1..offset).to_a.each do |i|
       ind = operation.call(change_val, i)
-      step = @board.cell(string.call(ind, keep)) if (0..7).include?(ind)
+      step = @board.cell(coords.call(ind, keep_val)) if (0..7).include?(ind)
       result << step.to_s if step && (step.empty? || step.capture?(piece))
       break unless step && step.empty? && step.capture?(piece)
     end
 
     result
-
   end
 end
