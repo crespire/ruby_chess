@@ -23,20 +23,20 @@ describe Movement do
     end
   end
 
-  context '#find_horizontal_moves works' do
+  context '#find_horizontal_moves' do
     let(:board) { Board.new }
 
-    context 'with a Rook' do
+    context 'with a Rook as input' do
       subject(:rook_test) { described_class.new(board) }
 
       context 'on an empty board' do
-        it 'and Rook starts on b8, returns the correct list of available moves' do
+        it 'starting at b8, returns the correct list of available moves' do
           board.make_board('1r6/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('b8')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[a8 c8 d8 e8 f8 g8 h8])
         end
 
-        it 'and the Rook starts on d4, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/3r4/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[a4 b4 c4 e4 f4 g4 h4])
@@ -44,13 +44,13 @@ describe Movement do
       end
 
       context 'where there is a friendly piece on the path' do
-        it 'and the Rook starts on a8, returns the correct list of available moves' do 
+        it 'starting at a8, returns the correct list of available moves' do 
           board.make_board('r4b2/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[b8 c8 d8 e8])
         end
 
-        it 'and the Rook starts on d4, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/3rb3/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[a4 b4 c4])
@@ -58,13 +58,13 @@ describe Movement do
       end
 
       context 'where there is an enemy piece on the path' do
-        it 'and the Rook starts on a8, returns the correct list of available moves including a capture' do
+        it 'starting at a8, returns the correct list of available moves including a capture' do
           board.make_board('r4B2/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[b8 c8 d8 e8 xf8])
         end
 
-        it 'and the Rook starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/8/8/3rB3/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[a4 b4 c4 xe4])
@@ -72,13 +72,13 @@ describe Movement do
       end
 
       context 'when there are multiple enemy pieces on the path' do
-        it 'and the Rook starts on a8, returns the correct list of available moves including a capture' do
+        it 'starting at a8, returns the correct list of available moves including a capture' do
           board.make_board('r4BN1/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[b8 c8 d8 e8 xf8])
         end
 
-        it 'and the Rook starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/8/8/1RPrBN2/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[xc4 xe4])
@@ -86,7 +86,7 @@ describe Movement do
       end
 
       context 'when there is a friendly on one side, and an enemy on the other' do
-        it 'and the Rook starts on d4, returns the correct list of available moves including a capture' do
+        it 'starting at d4, returns the correct list of available moves including a capture' do
           board.make_board('8/8/8/8/2prBN2/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_horizontal_moves(cell)).to eq(%w[xe4])
@@ -94,17 +94,17 @@ describe Movement do
       end
     end
 
-    context 'with a King' do
+    context 'with a King as input' do
       subject(:king_test) { described_class.new(board) }
 
       context 'on an empty board' do
-        it 'and King starts on a8, returns the correct list of available moves' do
+        it 'starting at a8, returns the correct list of available moves' do
           board.make_board('k7/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(king_test.find_horizontal_moves(cell)).to eq(%w[b8])
         end
 
-        it 'and the King starts on d4, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/3k4/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_horizontal_moves(cell)).to eq(%w[c4 e4])
@@ -112,13 +112,13 @@ describe Movement do
       end
 
       context 'where there is a friendly piece on the path' do
-        it 'and the King starts on a8, returns the correct list of available moves' do
+        it 'starting at a8, returns the correct list of available moves' do
           board.make_board('kn6/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(king_test.find_horizontal_moves(cell)).to eq(%w[])
         end
 
-        it 'and the King starts on d4, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/2nkp3/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_horizontal_moves(cell)).to eq(%w[])
@@ -126,13 +126,13 @@ describe Movement do
       end
 
       context 'where there is an enemy piece on the path' do
-        it 'and the King starts on a8, returns the correct list of available moves including a capture' do
+        it 'starting at a8, returns the correct list of available moves including a capture' do
           board.make_board('kN6/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(king_test.find_horizontal_moves(cell)).to eq(%w[xb8])
         end
 
-        it 'and the King starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/8/8/2PkP3/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_horizontal_moves(cell)).to eq(%w[xc4 xe4])
@@ -140,13 +140,13 @@ describe Movement do
       end
 
       context 'where there are multiple enemy pieces on the path' do
-        it 'and the King starts on a8, returns the correct list of available moves including a capture' do
+        it 'starting at a8, returns the correct list of available moves including a capture' do
           board.make_board('kNK5/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(king_test.find_horizontal_moves(cell)).to eq(%w[xb8])
         end
 
-        it 'and the King starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/8/8/1PPkPP2/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_horizontal_moves(cell)).to eq(%w[xc4 xe4])
@@ -154,7 +154,7 @@ describe Movement do
       end
 
       context 'when there is a friendly on one side, and an enemy on the other' do
-        it 'and the King starts on d4, returns the correct list of available moves including a capture' do
+        it 'starting at d4, returns the correct list of available moves including a capture' do
           board.make_board('8/8/8/8/2pkP3/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_horizontal_moves(cell)).to eq(%w[xe4])
@@ -163,20 +163,20 @@ describe Movement do
     end
   end
 
-  context '#find_vertical_moves works' do
+  context '#find_vertical_moves' do
     let(:board) { Board.new }
 
-    context 'with a Rook' do
+    context 'with a Rook as input' do
       subject(:rook_test) { described_class.new(board) }
 
       context 'on an empty board' do
-        it 'and Rook starts on a8, returns the correct list of available moves' do
+        it 'starting at a8, returns the correct list of available moves' do
           board.make_board('r7/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[a1 a2 a3 a4 a5 a6 a7])
         end
 
-        it 'and the Rook starts on d4, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/3r4/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[d1 d2 d3 d5 d6 d7 d8])
@@ -184,13 +184,13 @@ describe Movement do
       end
 
       context 'where there is a friendly piece on the path' do
-        it 'and the Rook starts on a8, returns the correct list of available moves' do 
+        it 'starting at a8, returns the correct list of available moves' do 
           board.make_board('r7/8/8/b7/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[a6 a7])
         end
 
-        it 'and the Rook starts on d4, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
           board.make_board('8/3k4/8/8/3r4/8/3n4/8 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[d3 d5 d6])
@@ -198,13 +198,13 @@ describe Movement do
       end
 
       context 'where there is an enemy piece on the path' do
-        it 'and the Rook starts on a8, returns the correct list of available moves including a capture' do
+        it 'starting at a8, returns the correct list of available moves including a capture' do
           board.make_board('r7/8/8/8/B7/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[a5 a6 a7 xa4])
         end
 
-        it 'and the Rook starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/8/3N4/3r4/8/8/3B4 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[d2 d3 xd1 xd5])
@@ -212,13 +212,13 @@ describe Movement do
       end
 
       context 'when there are multiple enemy pieces on the path' do
-        it 'and the Rook starts on a8, returns the correct list of available moves including a capture' do
+        it 'starting at a8, returns the correct list of available moves including a capture' do
           board.make_board('r7/8/8/8/P7/N7/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[a5 a6 a7 xa4])
         end
 
-        it 'and the Rook starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/3P4/3N4/8/3r4/8/3P4/3B4 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[d3 d5 xd2 xd6])
@@ -226,7 +226,7 @@ describe Movement do
       end
 
       context 'when there is a friendly on one side, and an enemy on the other' do
-        it 'and the Rook starts on d4, returns the correct list of available moves including a capture' do
+        it 'starting at d4, returns the correct list of available moves including a capture' do
           board.make_board('8/3B4/3p4/8/3r4/8/3N4/3B4 b - - 1 2')
           cell = board.cell('d4')
           expect(rook_test.find_vertical_moves(cell)).to eq(%w[d3 d5 xd2])
@@ -234,17 +234,17 @@ describe Movement do
       end
     end
 
-    context 'with a King' do
+    context 'with a King as input' do
       subject(:king_test) { described_class.new(board) }
 
       context 'on an empty board' do
-        it 'and King starts on a8, returns the correct list of available moves' do
+        it 'starting at a8, returns the correct list of available moves' do
           board.make_board('k7/8/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[a7])
         end
 
-        it 'and the King starts on d4, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
           board.make_board('8/8/8/8/3k4/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[d3 d5])
@@ -252,13 +252,13 @@ describe Movement do
       end
 
       context 'where there is a friendly piece on the path' do
-        it 'and the King starts on a8, returns the correct list of available moves' do
+        it 'starting at a8, returns the correct list of available moves' do
           board.make_board('k7/n7/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[])
         end
 
-        it 'and the King starts on d4, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
           board.make_board('8/8/8/3p4/3k4/3q4/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[])
@@ -266,13 +266,13 @@ describe Movement do
       end
 
       context 'where there is an enemy piece on the path' do
-        it 'and the King starts on a8, returns the correct list of available moves including a capture' do
+        it 'starting at a8, returns the correct list of available moves including a capture' do
           board.make_board('k7/N7/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[xa7])
         end
 
-        it 'and the King starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/8/3P4/3k4/3P4/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[xd3 xd5])
@@ -280,13 +280,13 @@ describe Movement do
       end
 
       context 'where there are multiple enemy pieces on the path' do
-        it 'and the King starts on a8, returns the correct list of available moves including a capture' do
+        it 'starting at a8, returns the correct list of available moves including a capture' do
           board.make_board('k7/P7/P7/8/8/8/8/8 b - - 1 2')
           cell = board.cell('a8')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[xa7])
         end
 
-        it 'and the King starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/3P4/3P4/3k4/3P4/3P4/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[xd3 xd5])
@@ -294,7 +294,7 @@ describe Movement do
       end
 
       context 'when there is a friendly on one side, and an enemy on the other' do
-        it 'and the King starts on d4, returns the correct list of available moves including a capture' do
+        it 'starting at d4, returns the correct list of available moves including a capture' do
           board.make_board('8/8/8/3p4/3k4/3P4/8/8 b - - 1 2')
           cell = board.cell('d4')
           expect(king_test.find_vertical_moves(cell)).to eq(%w[xd3])
@@ -303,21 +303,21 @@ describe Movement do
     end
   end
 
-  context '#find_diagonal_moves works' do
+  context '#find_diagonal_moves' do
     let(:board) { Board.new }
 
-    context 'with a Bishop' do
+    context 'with a Bishop as input' do
       subject(:bishop_test) { described_class.new(board) }
 
       context 'on an empty board' do
-        it 'and the Bishop starts on c7, returns the correct list of available moves' do
+        it 'starting at c7, returns the correct list of available moves' do
           board.make_board('8/2b5/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('c7')
           eligible = %w[a5 b6 d8 b8 d6 e5 f4 g3 h2].sort
           expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
 
-        it 'and the Bishop starts on d4, returns the correct list of availalbe moves' do
+        it 'starting at d4, returns the correct list of availalbe moves' do
           board.make_board('8/8/8/8/3b4/8/8/8 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[a7 b6 c5 h8 g7 f6 e5 c3 b2 a1 e3 f2 g1].sort
@@ -326,14 +326,14 @@ describe Movement do
       end
 
       context 'where there is a friendly piece on the path' do
-        it 'and the Bishop starts on c7, returns the correct list of available moves' do 
+        it 'starting at c7, returns the correct list of available moves' do 
           board.make_board('1n6/2b5/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('c7')
           eligible = %w[a5 b6 d8 d6 e5 f4 g3 h2].sort
           expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
 
-        it 'and the Bishop starts on d4, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
           board.make_board('8/8/1p3p1/8/3b4/8/1n7/8 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[c5 e5 c3 e3 f2 g1].sort
@@ -342,14 +342,14 @@ describe Movement do
       end
 
       context 'where there is an enemy piece on the path' do
-        it 'and the Bishop starts on c7, returns the correct list of available moves including a capture' do 
+        it 'starting at c7, returns the correct list of available moves including a capture' do 
           board.make_board('1N6/2b5/8/8/8/8/8/8 b - - 1 2')
           cell = board.cell('c7')
           eligible = %w[a5 b6 xb8 d8 d6 e5 f4 g3 h2].sort
           expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
 
-        it 'and the Bishop starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/1P7/8/3b4/8/1n3P2/8 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[c5 h8 xb6 g7 f6 e5 c3 e3 xf2].sort
@@ -358,14 +358,14 @@ describe Movement do
       end
 
       context 'when there are multiple enemy pieces on the path' do
-        it 'and the Bishop starts on c7, returns the correct list of available moves including a capture' do
+        it 'starting at c7, returns the correct list of available moves including a capture' do
           board.make_board('1N6/2b5/8/4P3/5B2/8/8/8 b - - 1 2')
           cell = board.cell('c7')
           eligible = %w[a5 b6 xb8 d8 d6 xe5].sort
           expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
 
-        it 'and the Bishop starts on d4, returns the correct list of available moves including both captures' do
+        it 'starting at d4, returns the correct list of available moves including both captures' do
           board.make_board('8/8/1P7/8/3b4/8/1n3P2/6N1 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[c5 h8 xb6 g7 f6 e5 c3 e3 xf2].sort
@@ -375,39 +375,39 @@ describe Movement do
     end
   end
 
-  context '#find_knight_moves works' do
+  context '#find_knight_moves' do
     let(:board) { Board.new }
     subject(:knight_test) { described_class.new(board) }
 
-    it 'and returns nil when a given piece is not a knight' do
+    it 'returns nil when a given piece is not a knight' do
       board.make_board('n7/8/8/8/8/8/8/8 b - - 1 2')
       cell = board.cell('a8')
       expect(knight_test.find_knight_moves(cell)).to be_nil
     end
 
-    xit 'on an empty board with the Knight on d4, returns the correct list of available moves' do
+    xit 'on an empty board starting at d4, returns the correct list of available moves' do
     end
 
-    xit 'on a board where there are other peices with the Knight on d4, returns the correct list of available moves including possible captures' do
+    xit 'on a board where there are other peices starting at d4, returns the correct list of available moves including possible captures' do
     end
   end
 
   ##
   # Valid moves should combine all the axes that we make moves on. The test piece here should be a queen.
-  xcontext '#valid_moves works' do
-    context 'with a Queen' do
+  xcontext '#valid_moves' do
+    context 'with a Queen as input' do
       context 'on an empty board' do
-        it 'and the Queen starts on c5, returns the correct list of available moves' do
+        it 'starting at c5, returns the correct list of available moves' do
         end
       end
 
       context 'on a board with mixed pieces in its path' do
-        it 'and the Queen starts on c5, returns the correct list of available moves including eligible captures' do
+        it 'starting at c5, returns the correct list of available moves including eligible captures' do
         end
       end
     end
 
-    context 'with a Knight' do
+    context 'with a Knight as input' do
     end
   end
 end
