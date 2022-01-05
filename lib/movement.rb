@@ -40,6 +40,9 @@ class Movement
     (north + south).uniq.sort
   end
 
+  def find_diagonal_moves(cell)
+  end
+
   private
 
   def piece_offset(piece, direction)
@@ -84,5 +87,11 @@ class Movement
     end
 
     result
+  end
+
+  def path_ordinal_main
+  end
+
+  def path_ordinal_alt
   end
 end
