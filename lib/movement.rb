@@ -42,7 +42,12 @@ class Movement
   def find_knight_moves(cell)
     return nil unless %w[n N].include?(cell.occupant)
 
+    n = knight(cell, 2, [-1, 1])
+    e = knight(cell, [-1, 1], 2)
+    s = knight(cell, -2, [-1, 1])
+    w = knight(cell, [-1, 1], -2)
 
+    (n + e + s + w).uniq.sort
   end
 
   private
@@ -125,5 +130,8 @@ class Movement
     when 'sw'
       proc { |x, y, i| [x + i, y - i] }
     end
+  end
+
+  def knight(cell, rank, file)
   end
 end
