@@ -78,7 +78,7 @@ class Board
 
   def cell(input)
     coords = std_chess_to_arr(input)
-    return coords if coords.nil?
+    return nil if coords.nil?
 
     @data[coords[0]][coords[1]]
   end
