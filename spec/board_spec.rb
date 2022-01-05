@@ -60,13 +60,13 @@ describe Board do
         full = fen_test.instance_variable_get(:@full)
 
         expect(board[0][0].name).to eq('a8')
-        expect(board[0][0].content).to eq('r')
+        expect(board[0][0].occupant).to eq('r')
         expect(board[2][0].name).to eq('a6')
-        expect(board[2][0].content).to be_nil
+        expect(board[2][0].occupant).to be_nil
         expect(board[4][3].name).to eq('d4')
-        expect(board[4][3].content).to be_nil
+        expect(board[4][3].occupant).to be_nil
         expect(board[7][6].name).to eq('g1')
-        expect(board[7][6].content).to eq('N')
+        expect(board[7][6].occupant).to eq('N')
 
         expect(full).to eq(1)
         expect(active).to eq('w')
@@ -82,11 +82,11 @@ describe Board do
         expect(board[3][1].name).to eq('b5')
         expect(board[3][1]).to be_empty
         expect(board[3][2].name).to eq('c5')
-        expect(board[3][2].content).to eq('p')
+        expect(board[3][2].occupant).to eq('p')
         expect(board[4][3].name).to eq('d4')
         expect(board[4][3]).to be_empty
         expect(board[4][4].name).to eq('e4')
-        expect(board[4][4].content).to eq('P')
+        expect(board[4][4].occupant).to eq('P')
         expect(board[4][5].name).to eq('f4')
         expect(board[4][5]).to be_empty
 
