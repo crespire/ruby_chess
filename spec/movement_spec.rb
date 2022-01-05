@@ -310,10 +310,17 @@ describe Movement do
       subject(:bishop_test) { described_class.new(board) }
 
       context 'on an empty board' do
-        xit 'and the Bishop starts on a7, returns the correct list of available moves' do
+        it 'and the Bishop starts on c7, returns the correct list of available moves' do
+          board.make_board('8/2b5/8/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('c7')
+          eligible = %w[a5 b6 d8 b8 d6 e5 f4 g3 h2].sort
+          expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
         end
 
         xit 'and the Bishop starts on d4, returns the correct list of availalbe moves' do
+          board.make_board('8/2b5/8/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('c7')
+          expect(bishop_test.find_diagonal_moves(cell)).to eq(%w[b8 d6 e5 f4 g3 h2])
         end
       end
 
