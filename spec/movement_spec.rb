@@ -303,17 +303,17 @@ describe Movement do
     end
   end
 
-  context '#find_diagonal_moves workds' do
+  context '#find_diagonal_moves works' do
     let(:board) { Board.new }
 
     context 'with a Bishop' do
       subject(:bishop_test) { described_class.new(board) }
 
       context 'on an empty board' do
-        xit 'and Bishop starts on a7, returns the correct list of available moves' do
+        xit 'and the Bishop starts on a7, returns the correct list of available moves' do
         end
 
-        xit 'and Bishop starts on d4, returns the correct list of availalbe moves' do
+        xit 'and the Bishop starts on d4, returns the correct list of availalbe moves' do
         end
       end
 
