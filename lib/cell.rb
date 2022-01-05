@@ -3,19 +3,19 @@
 # lib/cell.rb
 
 class Cell
-  attr_reader :name, :content
+  attr_reader :name, :occupant
 
   def initialize(name = nil, piece = nil)
     @name = name
-    @content = piece
+    @occupant = piece
   end
 
   def empty?
-    @content.nil?
+    @occupant.nil?
   end
 
   def to_fen
-    @content.nil? ? 1 : @content
+    @occupant.nil? ? 1 : @content
   end
 
   def to_s
@@ -26,7 +26,7 @@ class Cell
     return true if empty?
 
     atk_color = attacking.ord < 91 ? 'w' : 'b'
-    color = @content.ord < 91 ? 'w' : 'b'
+    color = @occupant.ord < 91 ? 'w' : 'b'
     atk_color != color
   end
 end

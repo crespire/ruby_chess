@@ -11,7 +11,7 @@ class Movement
   end
 
   def find_horizontal_moves(cell)
-    offset = piece_offset(cell.content, 'h')
+    offset = piece_offset(cell.occupant, 'h')
 
     east = path(cell, offset, 'e')
     west = path(cell, offset, 'w')
@@ -20,7 +20,7 @@ class Movement
   end
 
   def find_vertical_moves(cell)
-    offset = piece_offset(cell.content, 'v')
+    offset = piece_offset(cell.occupant, 'v')
 
     north = path(cell, offset, 'n')
     south = path(cell, offset, 's')
@@ -29,7 +29,7 @@ class Movement
   end
 
   def find_diagonal_moves(cell)
-    offset = piece_offset(cell.content, 'd')
+    offset = piece_offset(cell.occupant, 'd')
 
     se = path(cell, offset, 'se')
     nw = path(cell, offset, 'nw')
@@ -73,7 +73,7 @@ class Movement
     operation = %w[e s].include?(direction) ? proc { |change, i| change + i } : proc { |change, i| change - i }
     keep_rank = %w[e w].include?(direction)
 
-    piece = cell.content
+    piece = cell.occupant
     rank, col = @board.std_chess_to_arr(cell.name)
     keep_ind = keep_rank ? rank : col
     change_ind = keep_rank ? col : rank
@@ -96,7 +96,7 @@ class Movement
     # x dimension is rank, y dimention is col
 
     operation = ordinal_proc(direction)
-    piece = cell.content
+    piece = cell.occupant
     rank_ind, col_ind = @board.std_chess_to_arr(cell.name)
 
     result = []
