@@ -375,14 +375,20 @@ describe Movement do
     end
   end
 
-  xcontext '#find_knight_moves works' do
+  context '#find_knight_moves works' do
+    let(:board) { Board.new }
+    subject(:knight_test) { described_class.new(board) }
+
     it 'and returns nil when a given piece is not a knight' do
+      board.make_board('n7/8/8/8/8/8/8/8 b - - 1 2')
+      cell = board.cell('a8')
+      expect(knight_test.find_knight_moves(cell)).to be_nil
     end
 
-    it 'on an empty board with the Knight on d4, returns the correct list of available moves' do
+    xit 'on an empty board with the Knight on d4, returns the correct list of available moves' do
     end
 
-    it 'on a board where there are other peices with the Knight on d4, returns the correct list of available moves including possible captures' do
+    xit 'on a board where there are other peices with the Knight on d4, returns the correct list of available moves including possible captures' do
     end
   end
 

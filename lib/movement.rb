@@ -39,6 +39,9 @@ class Movement
     (se + nw + ne + sw).uniq.sort
   end
 
+  def find_knight_moves(cell)
+  end
+
   private
 
   def piece_offset(piece, direction)

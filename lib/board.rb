@@ -59,6 +59,7 @@ class Board
 
   def arr_to_std_chess(input)
     return nil unless input.length == 2
+    return nil unless input.all? { |i| i.between?(0, 7) }
 
     letter = %w[a b c d e f g h]
     rank, col = input
