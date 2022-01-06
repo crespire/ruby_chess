@@ -133,5 +133,31 @@ class Movement
   end
 
   def knight(cell, rank, file)
+    start = @board.std_chess_to_arr(cell.name)
+
+    if rank.is_a?(Array)
+      next_refs = [
+        [start[1] + rank[0], start[0] + file],
+        [start[1] + rank[1], start[0] + file]
+        ]
+    else
+      next_refs = [
+        [start[1] + rank, start[0] + file[0]],
+        [start[1] + rank, start[0] + file[1]]
+      ]
+    end
+
+    result = []
+    next_refs.each do |arr|
+      next if arr.any?(&:negative?)
+
+      next_ref = @board.arr_to_std_chess(arr)
+      step = @board.cell(next_ref) if next_ref
+      cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
+      result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
+      break unless step && step.empty? && step.capture?(piece)
+    end
+
+    result
   end
 end
