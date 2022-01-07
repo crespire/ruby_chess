@@ -50,6 +50,17 @@ class Movement
     (n + e + s + w).uniq.sort
   end
 
+  def find_pawn_moves(cell)
+    return nil unless %w[p P].include?(cell.occupant)
+
+    rank_dir = cell.occupant.ord < 91 ? -1 : 1 # Check color, if white, N only, else S only.
+    start_rank_ind = rank_dir.negative? ? 6 : 1
+
+    result = pawn(cell, rank_dir, start_rank_ind)
+
+    result.sort
+  end
+
   private
 
   def piece_offset(piece, direction)
@@ -146,6 +157,40 @@ class Movement
       step = @board.cell(next_ref) if next_ref
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
+    end
+
+    result
+  end
+
+  def pawn(cell, rank_dir, home_rank)
+    color = rank_dir.positive? ? 'w' : 'b'
+    piece = cell.occupant
+
+    start = @board.std_chess_to_arr(cell.name)
+    double_fwd = start[0] == home_rank
+    offset = rank_dir
+
+    result = []
+    next_refs = double_fwd ? [[start[0] + offset, start[1]], [start[0] + (offset * 2), start[1]]] : [[start[0] + rank_dir, start[1]]]
+    next_refs.each do |arr|
+      next if arr.any?(&:negative?)
+
+      next_ref = @board.arr_to_std_chess(arr)
+      step = @board.cell(next_ref) if next_ref
+      result << step.to_s if step && step.empty?
+      break unless step && step.empty?
+    end
+
+    # Add diagonals, only eligible if there is a capture available
+    next_refs = [[start[0] + rank_dir, start[1] - 1], [start[0] + rank_dir, start[1] + 1]]
+    next_refs.each do |arr|
+      next if arr.any?(&:negative?)
+
+      next_ref = @board.arr_to_std_chess(arr)
+      step = @board
+      step = @board.cell(next_ref) if next_ref
+      cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
+      result << (cap + step.to_s) if step && !step.empty? && step.capture?(piece)
     end
 
     result

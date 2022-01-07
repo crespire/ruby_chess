@@ -407,6 +407,47 @@ describe Movement do
     end
   end
 
+  context '#find_pawn_moves' do
+    let(:board) { Board.new }
+    subject(:pawn_test) { described_class.new(board) }
+
+    context 'with a black Pawn' do
+      context 'on an empty board' do
+        it 'starting at c7, returns the correct list of available moves, including the double forward move' do
+          board.make_board('8/2p5/8/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('c7')
+          eligible = %w[c6 c5].sort
+          expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+        end
+
+        it 'starting at c6, returns the correct list of available moves' do
+          board.make_board('8/8/2p5/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('c6')
+          eligible = %w[c5].sort
+          expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+        end
+      end
+    end
+
+    context 'with a white Pawn' do
+      context 'on an empty board' do
+        it 'starting at c2, returns the correct list of available moves, including the double forward move' do
+          board.make_board('8/8/8/8/8/8/2P5/8 b - - 1 2')
+          cell = board.cell('c2')
+          eligible = %w[c3 c4].sort
+          expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+        end
+
+        it 'starting at c3, returns the correct list of available moves' do
+          board.make_board('8/8/8/8/8/2P5/8/8 b - - 1 2')
+          cell = board.cell('c3')
+          eligible = %w[c4].sort
+          expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+        end
+      end
+    end
+  end
+
   ##
   # Valid moves should combine all the axes that we make moves on. The test piece here should be a queen.
   xcontext '#valid_moves' do
