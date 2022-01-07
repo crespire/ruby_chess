@@ -163,7 +163,6 @@ class Movement
   end
 
   def pawn(cell, rank_dir, home_rank)
-    color = rank_dir.positive? ? 'w' : 'b'
     piece = cell.occupant
 
     start = @board.std_chess_to_arr(cell.name)
