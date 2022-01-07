@@ -427,6 +427,37 @@ describe Movement do
           expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
         end
       end
+
+      context 'on a board with a friendly' do
+        it 'starting at c7, returns the correct list of available moves when full blocked' do
+          board.make_board('8/2p5/2p5/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('c7')
+          eligible = %w[].sort
+          expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+        end
+
+        it 'starting at c7, returns the correct list of available moves when only one square blocked' do
+          board.make_board('8/2p5/8/2p5/8/8/8/8 b - - 1 2')
+          cell = board.cell('c7')
+          eligible = %w[c6].sort
+          expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+        end
+      end
+
+      context 'on a board with other pieces' do
+        context 'starting at c7' do
+          it 'returns the correct list of available moves when fully blocked with a capture available' do
+          end
+
+          it 'returns the correct list of available moves when only one sqaure is blocked and a capture is available' do
+          end
+        end
+
+        context 'starting at c5' do
+          it 'returns the correct list of available moves when fully blocked with a capture available' do
+          end
+        end
+      end
     end
 
     context 'with a white Pawn' do
@@ -442,6 +473,22 @@ describe Movement do
           board.make_board('8/8/8/8/8/2P5/8/8 b - - 1 2')
           cell = board.cell('c3')
           eligible = %w[c4].sort
+          expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+        end
+      end
+
+      context 'on a board with a friendly' do
+        it 'starting at c2, returns the correct list of available moves when fully blocked' do
+          board.make_board('8/8/8/8/8/2P5/2P5/8 b - - 1 2')
+          cell = board.cell('c2')
+          eligible = %w[].sort
+          expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+        end
+
+        it 'starting at c2, returns the correct list of available moves when only one square blocked' do
+          board.make_board('8/8/8/8/2P5/8/2P5/8 b - - 1 2')
+          cell = board.cell('c2')
+          eligible = %w[c3].sort
           expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
         end
       end

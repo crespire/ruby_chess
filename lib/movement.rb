@@ -169,7 +169,7 @@ class Movement
     double_fwd = start[0] == home_rank
 
     result = []
-    next_refs = double_fwd ? [[start[0] + rank_offset, start[1]], [start[0] + (rank_offset * 2), start[1]]] : [[start[0] + rank_dir, start[1]]]
+    next_refs = double_fwd ? [[start[0] + rank_offset, start[1]], [start[0] + (rank_offset * 2), start[1]]] : [[start[0] + rank_offset, start[1]]]
     next_refs.each do |arr|
       next if arr.any?(&:negative?)
 
@@ -179,7 +179,7 @@ class Movement
       break unless step && step.empty?
     end
 
-    # Add diagonals, only eligible if there is a capture available
+    # Check diagonals, only eligible if there is a capture available
     next_refs = [[start[0] + rank_offset, start[1] - 1], [start[0] + rank_offset, start[1] + 1]]
     next_refs.each do |arr|
       next if arr.any?(&:negative?)
