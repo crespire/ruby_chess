@@ -162,12 +162,11 @@ class Movement
     result
   end
 
-  def pawn(cell, rank_dir, home_rank)
+  def pawn(cell, offset, home_rank)
     piece = cell.occupant
 
     start = @board.std_chess_to_arr(cell.name)
     double_fwd = start[0] == home_rank
-    offset = rank_dir
 
     result = []
     next_refs = double_fwd ? [[start[0] + offset, start[1]], [start[0] + (offset * 2), start[1]]] : [[start[0] + rank_dir, start[1]]]
