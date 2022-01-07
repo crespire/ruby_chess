@@ -187,7 +187,6 @@ class Movement
       next if arr.any?(&:negative?)
 
       next_ref = @board.arr_to_std_chess(arr)
-      step = @board
       step = @board.cell(next_ref) if next_ref
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && !step.empty? && step.capture?(piece)
