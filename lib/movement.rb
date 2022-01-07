@@ -53,7 +53,7 @@ class Movement
   def find_pawn_moves(cell)
     return nil unless %w[p P].include?(cell.occupant)
 
-    rank_dir = cell.occupant.ord < 91 ? -1 : 1 # Check color, if white, N only, else S only.
+    rank_dir = cell.occupant.ord < 91 ? -1 : 1 # Check color, if white, N, else S.
     start_rank_ind = rank_dir.negative? ? 6 : 1
 
     result = pawn(cell, rank_dir, start_rank_ind)
@@ -181,7 +181,7 @@ class Movement
     end
 
     # Add diagonals, only eligible if there is a capture available
-    next_refs = [[start[0] + rank_dir, start[1] - 1], [start[0] + rank_dir, start[1] + 1]]
+    next_refs = [[start[0] + offset, start[1] - 1], [start[0] + offset, start[1] + 1]]
     next_refs.each do |arr|
       next if arr.any?(&:negative?)
 
