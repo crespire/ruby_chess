@@ -134,18 +134,9 @@ class Movement
 
   def knight(cell, rank, file)
     start = @board.std_chess_to_arr(cell.name)
+    piece = cell.occupant
 
-    if rank.is_a?(Array)
-      next_refs = [
-        [start[1] + rank[0], start[0] + file],
-        [start[1] + rank[1], start[0] + file]
-        ]
-    else
-      next_refs = [
-        [start[1] + rank, start[0] + file[0]],
-        [start[1] + rank, start[0] + file[1]]
-      ]
-    end
+    next_refs = rank.is_a?(Array) ? [[start[0] + rank[0], start[1] + file], [start[0] + rank[1], start[1] + file]] : [[start[0] + rank, start[1] + file[0]],[start[0] + rank, start[1] + file[1]]]
 
     result = []
     next_refs.each do |arr|
@@ -155,7 +146,6 @@ class Movement
       step = @board.cell(next_ref) if next_ref
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
-      break unless step && step.empty? && step.capture?(piece)
     end
 
     result
