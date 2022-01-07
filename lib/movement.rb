@@ -162,14 +162,14 @@ class Movement
     result
   end
 
-  def pawn(cell, offset, home_rank)
+  def pawn(cell, rank_offset, home_rank)
     piece = cell.occupant
 
     start = @board.std_chess_to_arr(cell.name)
     double_fwd = start[0] == home_rank
 
     result = []
-    next_refs = double_fwd ? [[start[0] + offset, start[1]], [start[0] + (offset * 2), start[1]]] : [[start[0] + rank_dir, start[1]]]
+    next_refs = double_fwd ? [[start[0] + rank_offset, start[1]], [start[0] + (rank_offset * 2), start[1]]] : [[start[0] + rank_dir, start[1]]]
     next_refs.each do |arr|
       next if arr.any?(&:negative?)
 
@@ -180,7 +180,7 @@ class Movement
     end
 
     # Add diagonals, only eligible if there is a capture available
-    next_refs = [[start[0] + offset, start[1] - 1], [start[0] + offset, start[1] + 1]]
+    next_refs = [[start[0] + rank_offset, start[1] - 1], [start[0] + rank_offset, start[1] + 1]]
     next_refs.each do |arr|
       next if arr.any?(&:negative?)
 
