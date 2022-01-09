@@ -447,14 +447,26 @@ describe Movement do
       context 'on a board with other pieces' do
         context 'starting at c7' do
           it 'returns the correct list of available moves when fully blocked with a capture available' do
+            board.make_board('8/2p5/1Pp5/8/8/8/8/8 b - - 1 2')
+            cell = board.cell('c7')
+            eligible = %w[xb6].sort
+            expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
           end
 
           it 'returns the correct list of available moves when only one sqaure is blocked and a capture is available' do
+            board.make_board('8/2p5/3P4/2p5/8/8/8/8 b - - 1 2')
+            cell = board.cell('c7')
+            eligible = %w[c6 xd6].sort
+            expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
           end
         end
 
         context 'starting at c5' do
           it 'returns the correct list of available moves when fully blocked with a capture available' do
+            board.make_board('8/8/8/2p5/1PpP4/8/8/8 b - - 1 2')
+            cell = board.cell('c5')
+            eligible = %w[xb4 xd4].sort
+            expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
           end
         end
       end
@@ -490,6 +502,33 @@ describe Movement do
           cell = board.cell('c2')
           eligible = %w[c3].sort
           expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+        end
+      end
+
+      context 'on a board with other pieces' do
+        context 'starting at c3' do
+          it 'returns the correct list of available moves when fully blocked with a capture available' do
+            board.make_board('8/8/8/8/2Pp4/2P5/8/8 b - - 1 2')
+            cell = board.cell('c3')
+            eligible = %w[xd4].sort
+            expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+          end
+
+          it 'returns the correct list of available moves when only one sqaure is blocked and a capture is available' do
+            board.make_board('8/8/8/2N5/3p4/2P5/8/8 b - - 1 2')
+            cell = board.cell('c3')
+            eligible = %w[c4 xd4].sort
+            expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+          end
+        end
+
+        context 'starting at c4' do
+          it 'returns the correct list of available moves when fully blocked with a capture available' do
+            board.make_board('8/8/8/1pPp4/2P5/8/8/8 b - - 1 2')
+            cell = board.cell('c4')
+            eligible = %w[xb5 xd5].sort
+            expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+          end
         end
       end
     end
