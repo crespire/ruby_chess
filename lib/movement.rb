@@ -40,6 +40,7 @@ class Movement
   end
 
   def find_knight_moves(cell)
+    return nil if cell.empty?
     return nil unless %w[n N].include?(cell.occupant)
 
     n = knight(cell, 2, [-1, 1])
@@ -51,6 +52,7 @@ class Movement
   end
 
   def find_pawn_moves(cell)
+    return nil if cell.empty?
     return nil unless %w[p P].include?(cell.occupant)
 
     rank_dir = cell.occupant.ord < 91 ? -1 : 1 # Check color, if white, N, else S.
