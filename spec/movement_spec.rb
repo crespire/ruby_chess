@@ -534,6 +534,22 @@ describe Movement do
     end
   end
 
+  context '#find_king_moves' do
+    context 'on a board with an enemy Rook' do
+      it 'starting on c4, returns the correct list of available moves that prevents a king from self-checking in the vertical axis' do
+        # k on e6, R on f2"
+      end
+
+      it 'starting on c4, returns the correct list of available moves that prevents a king from self-checking in the horizontal axis' do
+        # k on e6, R on g5
+      end
+
+      it 'starting on c4, returns the correct list of available moves that prevents a king from self-checking in the diagonal axis' do
+        # k on e6, B on f3
+      end
+    end
+  end
+
   ##
   # Valid moves should combine all the axes that we make moves on. The test piece here should be a queen.
   xcontext '#valid_moves' do
