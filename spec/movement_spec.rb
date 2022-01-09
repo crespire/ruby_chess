@@ -535,17 +535,36 @@ describe Movement do
   end
 
   context '#find_king_moves' do
+    let(:board) { Board.new }
+    subject(:k_selfcheck_test) { described_class.new(board) }
+
     context 'on a board with an enemy Rook' do
-      it 'starting on c4, returns the correct list of available moves that prevents a king from self-checking in the vertical axis' do
-        # k on e6, R on f2"
+      xit 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the vertical axis' do
+        board.make_board('8/8/4k3/8/8/8/5R2/8 b - - 1 2')
+        cell = board.cell('e6')
+        eligible = %w[e7 d7 d6 d5 e5].sort
+        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
       end
 
-      it 'starting on c4, returns the correct list of available moves that prevents a king from self-checking in the horizontal axis' do
-        # k on e6, R on g5
+      xit 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the horizontal axis' do
+        board.make_board('8/8/4k3/8/6R1/8/8/8 b - - 1 2')
+        cell = board.cell('e6')
+        eligible = %w[d6 f6 d7 e7 f7].sort
+        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
       end
 
-      it 'starting on c4, returns the correct list of available moves that prevents a king from self-checking in the diagonal axis' do
-        # k on e6, B on f3
+      xit 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the diagonal axis' do
+        board.make_board('8/8/4k3/8/8/5B2/8/8 b - - 1 2')
+        cell = board.cell('e6')
+        eligible = %w[d7 e7 f7 d6 f6 e5 f5].sort
+        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
+      end
+
+      xit 'starting on e6, returns correct list of available moves that prevents a king from self-checking in multiple axis' do
+        board.make_board('8/8/4k3/8/5R2/5B2/8/8 b - - 1 2')
+        cell = board.cell('e6')
+        eligible = %w[d7 e7 d6 e5].sort
+        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
       end
     end
   end
