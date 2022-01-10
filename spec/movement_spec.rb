@@ -668,13 +668,54 @@ describe Movement do
   end
 
   context '#valid_moves' do
+    let(:board) { Board.new }
+    subject(:valid_moves_test) { described_class.new(board) }
+
     context 'when provided a Queen' do
+      context 'on an empty board' do
+        it 'starting at d4, returns the correct list of available moves' do
+          board.make_board('8/8/8/8/3q4/8/8/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[d8 d7 d6 d5 d3 d2 d1 a4 b4 c4 e4 f4 g4 h4 e5 f6 g7 h8 c3 b2 a1 c5 b6 a7 e3 f2 g1].sort
+          expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+        end
+      end
+
+      context 'on a board with mixed pieces in its path' do
+        it 'starting at d4, returns the correct list of available moves including eligible captures' do
+          board.make_board('8/3p5/8/8/3qn3/8/3P1P2/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[d6 d5 d3 xd2 a4 b4 c4 e5 f6 g7 h8 c3 b2 a1 c5 b6 a7 e3 xf2].sort
+          expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+        end
+      end
     end
 
     context 'when provided a King' do
-    end
+      context 'when there is a friendly on one side, and an enemy on the other' do
+        it 'starting at d4, returns the correct list of available moves including two capture' do
+          board.make_board('8/8/8/8/2pkP3/2N5/8/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[c5 e5 xc3 d3 e3].sort
+          expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+        end
+      end
 
-    context 'when provided a Pawn' do
+      context 'when there are a limited set of moves' do
+        it 'correctly shows moves that prevent self-checking' do
+          board.make_board('8/8/8/2k5/3R4/2B6/8/4K3 b - - 1 2')
+          cell = board.cell('c5')
+          eligible = %w[b6 c6 b5].sort
+          expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+        end
+
+        it 'correctly shows moves that prevent self-checking' do
+          board.make_board('8/8/8/8/2pkP3/3B4/8/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[c3 xd3 e3 c5 e5].sort
+          expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+        end
+      end
     end
   end
 end

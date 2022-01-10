@@ -8,82 +8,90 @@ class Movement
   end
 
   def valid_moves(cell)
+    return nil if cell.empty?
+
+    case cell.occupant
+    when 'k', 'K'
+      find_king_moves(cell)
+    else
+      find_all_moves(cell)
+    end
   end
 
-  def find_all_moves(cell)
+  def find_all_moves(cell, board = @board)
     return nil if cell.empty?
 
     case cell.occupant
     when 'p', 'P'
-      find_pawn_moves(cell)
+      find_pawn_moves(cell, board)
     when 'n', 'N'
-      find_knight_moves(cell)
+      find_knight_moves(cell, board)
     else
-      vert = find_vertical_moves(cell)
-      hori = find_horizontal_moves(cell)
-      diag = find_diagonal_moves(cell)
+      vert = find_vertical_moves(cell, board)
+      hori = find_horizontal_moves(cell, board)
+      diag = find_diagonal_moves(cell, board)
       (vert + hori + diag).uniq.sort
     end
   end
 
-  def find_horizontal_moves(cell)
+  def find_horizontal_moves(cell, board = @board)
     return nil if cell.empty?
 
     offset = piece_offset(cell.occupant, 'h')
-    east = path(cell, offset, 'e')
-    west = path(cell, offset, 'w')
+    east = path(cell, offset, 'e', board)
+    west = path(cell, offset, 'w', board)
     (east + west).uniq.sort
   end
 
-  def find_vertical_moves(cell)
+  def find_vertical_moves(cell, board = @board)
     return nil if cell.empty?
 
     offset = piece_offset(cell.occupant, 'v')
-    north = path(cell, offset, 'n')
-    south = path(cell, offset, 's')
+    north = path(cell, offset, 'n', board)
+    south = path(cell, offset, 's', board)
     (north + south).uniq.sort
   end
 
-  def find_diagonal_moves(cell)
+  def find_diagonal_moves(cell, board = @board)
     return nil if cell.empty?
 
     offset = piece_offset(cell.occupant, 'd')
-    se = path(cell, offset, 'se')
-    nw = path(cell, offset, 'nw')
-    ne = path(cell, offset, 'ne')
-    sw = path(cell, offset, 'sw')
+    se = path(cell, offset, 'se', board)
+    nw = path(cell, offset, 'nw', board)
+    ne = path(cell, offset, 'ne', board)
+    sw = path(cell, offset, 'sw', board)
     (se + nw + ne + sw).uniq.sort
   end
 
-  def find_knight_moves(cell)
+  def find_knight_moves(cell, board = @board)
     return nil if cell.empty?
     return nil unless %w[n N].include?(cell.occupant)
 
-    n = knight(cell, 2, [-1, 1])
-    e = knight(cell, [-1, 1], 2)
-    s = knight(cell, -2, [-1, 1])
-    w = knight(cell, [-1, 1], -2)
+    n = knight(cell, 2, [-1, 1], board)
+    e = knight(cell, [-1, 1], 2, board)
+    s = knight(cell, -2, [-1, 1], board)
+    w = knight(cell, [-1, 1], -2, board)
 
     (n + e + s + w).uniq.sort
   end
 
-  def find_pawn_moves(cell)
+  def find_pawn_moves(cell, board = @board)
     return nil if cell.empty?
     return nil unless %w[p P].include?(cell.occupant)
 
+    moves = board.equal?(@board)
     rank_dir = cell.occupant.ord < 91 ? -1 : 1 # Check color, if white, N, else S.
     start_rank_ind = rank_dir.negative? ? 6 : 1
-    result = pawn(cell, rank_dir, start_rank_ind)
+    result = moves ? pawn_moves(cell, rank_dir, start_rank_ind, board) : pawn_captures(cell, rank_dir, board)
     result.sort
   end
 
-  def find_king_moves(cell)
+  def find_king_moves(cell, board = @board)
     return nil if cell.empty?
     return nil unless %w[k K].include?(cell.occupant)
 
-    moves = find_all_moves(cell)
+    moves = find_all_moves(cell, board)
     threats = threat_map(cell)
-
     moves.reject! { |move| threats.include?(move.gsub('x', '')) }
   end
 
@@ -101,24 +109,24 @@ class Movement
     offsets[piece.downcase][direction]
   end
 
-  def path(cell, offset, direction)
+  def path(cell, offset, direction, board = @board)
     result = []
     case direction
     when 'e', 'w', 'n', 's'
-      result = path_cardinal(cell, offset, direction)
+      result = path_cardinal(cell, offset, direction, board)
     when 'se', 'nw', 'ne', 'sw'
-      result = path_ordinal(cell, offset, direction)
+      result = path_ordinal(cell, offset, direction, board)
     end
     result
   end
 
-  def path_cardinal(cell, offset, direction)
+  def path_cardinal(cell, offset, direction, board = @board)
     return [] if offset.zero?
 
     operation = %w[e s].include?(direction) ? proc { |change, i| change + i } : proc { |change, i| change - i }
     keep_rank = %w[e w].include?(direction)
     piece = cell.occupant
-    rank, file = @board.std_chess_to_arr(cell.name)
+    rank, file = board.std_chess_to_arr(cell.name)
     keep_ind = keep_rank ? rank : file
     change_ind = keep_rank ? file : rank
 
@@ -127,7 +135,7 @@ class Movement
     (1..offset).to_a.each do |i|
       new_ind = operation.call(change_ind, i)
       arr = keep_rank ? [keep_ind, new_ind] : [new_ind, keep_ind]
-      step = @board.cell(@board.arr_to_std_chess(arr)) if new_ind.between?(0, 7)
+      step = board.cell(board.arr_to_std_chess(arr)) if new_ind.between?(0, 7)
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
       break unless step && step.empty? && !step.capture?(piece)
@@ -135,20 +143,20 @@ class Movement
     result
   end
 
-  def path_ordinal(cell, offset, direction)
+  def path_ordinal(cell, offset, direction, board = @board)
     return [] if offset.zero?
 
     operation = ordinal_proc(direction)
     piece = cell.occupant
-    rank_ind, file_ind = @board.std_chess_to_arr(cell.name)
+    rank_ind, file_ind = board.std_chess_to_arr(cell.name)
 
     result = []
     (1..offset).to_a.each do |i|
       next_ind = operation.call(rank_ind, file_ind, i)
       next if next_ind.any?(&:negative?)
 
-      next_ref = @board.arr_to_std_chess(next_ind)
-      step = @board.cell(next_ref) if next_ref
+      next_ref = board.arr_to_std_chess(next_ind)
+      step = board.cell(next_ref) if next_ref
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
       break unless step && step.empty? && !step.capture?(piece)
@@ -169,18 +177,16 @@ class Movement
     end
   end
 
-  def knight(cell, rank, file)
-    start = @board.std_chess_to_arr(cell.name)
+  def knight(cell, rank, file, board = @board)
+    start = board.std_chess_to_arr(cell.name)
     piece = cell.occupant
-
     next_refs = rank.is_a?(Array) ? [[start[0] + rank[0], start[1] + file], [start[0] + rank[1], start[1] + file]] : [[start[0] + rank, start[1] + file[0]],[start[0] + rank, start[1] + file[1]]]
-
     result = []
     next_refs.each do |arr|
       next if arr.any?(&:negative?)
 
-      next_ref = @board.arr_to_std_chess(arr)
-      step = @board.cell(next_ref) if next_ref
+      next_ref = board.arr_to_std_chess(arr)
+      step = board.cell(next_ref) if next_ref
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
     end
@@ -188,19 +194,17 @@ class Movement
     result
   end
 
-  def pawn(cell, rank_offset, home_rank)
+  def pawn_moves(cell, rank_offset, home_rank, board = @board)
     piece = cell.occupant
-
-    start = @board.std_chess_to_arr(cell.name)
+    start = board.std_chess_to_arr(cell.name)
     double_fwd = start[0] == home_rank
-
     result = []
     next_refs = double_fwd ? [[start[0] + rank_offset, start[1]], [start[0] + (rank_offset * 2), start[1]]] : [[start[0] + rank_offset, start[1]]]
     next_refs.each do |arr|
       next if arr.any?(&:negative?)
 
-      next_ref = @board.arr_to_std_chess(arr)
-      step = @board.cell(next_ref) if next_ref
+      next_ref = board.arr_to_std_chess(arr)
+      step = board.cell(next_ref) if next_ref
       result << step.to_s if step && step.empty?
       break unless step && step.empty?
     end
@@ -210,8 +214,8 @@ class Movement
     next_refs.each do |arr|
       next if arr.any?(&:negative?)
 
-      next_ref = @board.arr_to_std_chess(arr)
-      step = @board.cell(next_ref) if next_ref
+      next_ref = board.arr_to_std_chess(arr)
+      step = board.cell(next_ref) if next_ref
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && !step.empty? && step.capture?(piece)
     end
@@ -219,16 +223,30 @@ class Movement
     result
   end
 
+  def pawn_captures(cell, rank_offset, board = @board)
+    start = board.std_chess_to_arr(cell.name)
+    result = []
+    next_refs = [[start[0] + rank_offset, start[1] - 1], [start[0] + rank_offset, start[1] + 1]]
+    next_refs.each do |arr|
+      next if arr.any?(&:negative?)
+
+      next_ref = board.arr_to_std_chess(arr)
+      step = board.cell(next_ref) if next_ref
+      result << step.to_s if step
+    end
+    result
+  end
+
   def threat_map(cell)
     current_piece = cell.occupant
+    empty_board = Board.new
     threats = []
     @board.data.each do |rank|
       rank.each do |threat_cell|
         next if threat_cell.empty? || !threat_cell.capture?(current_piece)
 
-        current_threats = find_all_moves(threat_cell)
-
-        current_threats.map! { |name| name.gsub('x', '') }
+        empty_board.make_board('8/8/8/8/8/8/8/8 w - - 1 2')
+        current_threats = find_all_moves(threat_cell, empty_board)
         threats = (threats + current_threats).uniq
       end
     end
