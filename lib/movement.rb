@@ -86,6 +86,8 @@ class Movement
     vert = find_vertical_moves(cell)
     hori = find_horizontal_moves(cell)
     diag = find_diagonal_moves(cell)
+    moves = (vert + hori + diag).uniq
+    moves.map! { |name| name.gsub!('x', '') }
     threats = threat_map(cell)
 
     ((vert + hori + diag).uniq - threats).sort
@@ -234,7 +236,7 @@ class Movement
         next if threat_cell.empty? || !threat_cell.capture?(current_piece)
 
         current_threats = find_moves(threat_cell)
-        current_threats.map { |name| name.gsub!('x', '') }
+        current_threats.map! { |name| name.gsub!('x', '') }
         threats = (threats + current_threats).uniq
       end
     end

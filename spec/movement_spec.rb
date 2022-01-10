@@ -585,8 +585,12 @@ describe Movement do
         end
       end
 
-      xcontext 'on a board with mixed pieces in its path' do
-        it 'starting at c5, returns the correct list of available moves including eligible captures' do
+      context 'on a board with mixed pieces in its path' do
+        it 'starting at d4, returns the correct list of available moves including eligible captures' do
+          board.make_board('8/3p5/8/8/3qn3/8/3P1P2/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[d6 d5 d3 xd2 a4 b4 c4 e5 f6 g7 h8 c3 b2 a1 c5 b6 a7 e3 xf2].sort
+          expect(moves_test.find_all_moves(cell)).to eq(eligible)
         end
       end
     end
