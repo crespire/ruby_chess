@@ -534,43 +534,6 @@ describe Movement do
     end
   end
 
-  xcontext '#find_king_moves' do
-    let(:board) { Board.new }
-    subject(:k_selfcheck_test) { described_class.new(board) }
-
-    context 'on a board with an enemy Rook' do
-      it 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the vertical axis' do
-        board.make_board('8/8/4k3/8/8/8/5R2/8 b - - 1 2')
-        cell = board.cell('e6')
-        eligible = %w[e7 d7 d6 d5 e5].sort
-        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
-      end
-
-      xit 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the horizontal axis' do
-        board.make_board('8/8/4k3/8/6R1/8/8/8 b - - 1 2')
-        cell = board.cell('e6')
-        eligible = %w[d6 f6 d7 e7 f7].sort
-        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
-      end
-
-      xit 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the diagonal axis' do
-        board.make_board('8/8/4k3/8/8/5B2/8/8 b - - 1 2')
-        cell = board.cell('e6')
-        eligible = %w[d7 e7 f7 d6 f6 e5 f5].sort
-        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
-      end
-
-      xit 'starting on e6, returns correct list of available moves that prevents a king from self-checking in multiple axis' do
-        board.make_board('8/8/4k3/8/5R2/5B2/8/8 b - - 1 2')
-        cell = board.cell('e6')
-        eligible = %w[d7 e7 d6 e5].sort
-        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
-      end
-    end
-  end
-
-  ##
-  # Valid moves should combine all the axes that we make moves on. The test piece here should be a queen.
   context '#find_all_moves' do
     let(:board) { Board.new }
     subject(:moves_test) { described_class.new(board) }
@@ -615,10 +578,103 @@ describe Movement do
       end
     end
 
-    xcontext 'with a Pawn as input' do
+    context 'with a Pawn as input' do
+      context 'when the Pawn is black' do
+        context 'on an empty board' do
+          it 'starting at c7, returns the correct list of available moves, including the double forward move' do
+            board.make_board('8/2p5/8/8/8/8/8/8 b - - 1 2')
+            cell = board.cell('c7')
+            eligible = %w[c6 c5].sort
+            expect(moves_test.find_all_moves(cell)).to eq(eligible)
+          end
+        end
+
+        context 'on a board with other pieces' do
+          it 'starting at c7, returns the correct list of available moves when only one sqaure is blocked and a capture is available' do
+            board.make_board('8/2p5/3P4/2p5/8/8/8/8 b - - 1 2')
+            cell = board.cell('c7')
+            eligible = %w[c6 xd6].sort
+            expect(moves_test.find_all_moves(cell)).to eq(eligible)
+          end
+        end
+      end
+
+      context 'when the Pawn is white' do
+        context 'on an empty board' do
+          it 'starting at c2, returns the correct list of available moves, including the double forward move' do
+            board.make_board('8/8/8/8/8/8/2P5/8 b - - 1 2')
+            cell = board.cell('c2')
+            eligible = %w[c3 c4].sort
+            expect(moves_test.find_all_moves(cell)).to eq(eligible)
+          end
+        end
+
+        context 'on a board with other pieces' do
+          it 'starting at c3, returns the correct list of available moves when only one sqaure is blocked and a capture is available' do
+            board.make_board('8/8/8/2N5/3p4/2P5/8/8 b - - 1 2')
+            cell = board.cell('c3')
+            eligible = %w[c4 xd4].sort
+            expect(moves_test.find_all_moves(cell)).to eq(eligible)
+          end
+        end
+      end
     end
 
-    xcontext 'with a King as input' do
+    context 'with a King as input' do
+      context 'when there is a friendly on one side, and an enemy on the other' do
+        it 'starting at d4, returns the correct list of available moves including a capture' do
+          board.make_board('8/8/8/8/2pkP3/2N6/8/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[c5 d5 e5 xe4 xc3 d3 e3].sort
+          expect(moves_test.find_all_moves(cell)).to eq(eligible)
+        end
+      end
+    end
+  end
+
+  context '#find_king_moves' do
+    let(:board) { Board.new }
+    subject(:k_selfcheck_test) { described_class.new(board) }
+
+    context 'on a board with an enemy Rook' do
+      it 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the vertical axis' do
+        board.make_board('8/8/4k3/8/8/8/5R2/8 b - - 1 2')
+        cell = board.cell('e6')
+        eligible = %w[e7 d7 d6 d5 e5].sort
+        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
+      end
+
+      it 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the horizontal axis' do
+        board.make_board('8/8/4k3/6R1/8/8/8/8 b - - 1 2')
+        cell = board.cell('e6')
+        eligible = %w[d6 f6 d7 e7 f7].sort
+        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
+      end
+
+      it 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the diagonal axis' do
+        board.make_board('8/8/4k3/8/8/5B2/8/8 b - - 1 2')
+        cell = board.cell('e6')
+        eligible = %w[d7 e7 f7 d6 f6 e5 f5].sort
+        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
+      end
+
+      it 'starting on e6, returns correct list of available moves that prevents a king from self-checking in multiple axis' do
+        board.make_board('8/8/4k3/8/5R2/5B2/8/8 b - - 1 2')
+        cell = board.cell('e6')
+        eligible = %w[d7 e7 d6 e5].sort
+        expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
+      end
+    end
+  end
+
+  context '#valid_moves' do
+    context 'when provided a Queen' do
+    end
+
+    context 'when provided a King' do
+    end
+
+    context 'when provided a Pawn' do
     end
   end
 end

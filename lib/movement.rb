@@ -222,12 +222,13 @@ class Movement
   def threat_map(cell)
     current_piece = cell.occupant
     threats = []
-    @board.each do |rank|
+    @board.data.each do |rank|
       rank.each do |threat_cell|
         next if threat_cell.empty? || !threat_cell.capture?(current_piece)
 
-        current_threats = find_moves(threat_cell)
-        current_threats.map! { |name| name.gsub!('x', '') }
+        current_threats = find_all_moves(threat_cell)
+
+        current_threats.map! { |name| name.gsub('x', '') }
         threats = (threats + current_threats).uniq
       end
     end
