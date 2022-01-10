@@ -534,7 +534,7 @@ describe Movement do
     end
   end
 
-  context '#find_king_moves' do
+  xcontext '#find_king_moves' do
     let(:board) { Board.new }
     subject(:k_selfcheck_test) { described_class.new(board) }
 
