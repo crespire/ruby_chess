@@ -84,7 +84,7 @@ class Movement
     moves = find_all_moves(cell)
     threats = threat_map(cell)
 
-    moves.delete_if { |move| threats.include?(move.gsub('x', '')) }
+    moves.reject! { |move| threats.include?(move.gsub('x', '')) }
   end
 
   private
