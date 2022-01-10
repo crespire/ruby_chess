@@ -18,8 +18,6 @@ class Movement
       find_pawn_moves(cell)
     when 'n', 'N'
       find_knight_moves(cell)
-    when 'k', 'K'
-      find_king_moves(cell)
     else
       vert = find_vertical_moves(cell)
       hori = find_horizontal_moves(cell)
@@ -83,17 +81,10 @@ class Movement
     return nil if cell.empty?
     return nil unless %w[k K].include?(cell.occupant)
 
-    vert = find_vertical_moves(cell)
-    hori = find_horizontal_moves(cell)
-    diag = find_diagonal_moves(cell)
-    moves = (vert + hori + diag).uniq
-    moves.map! { |name| name.gsub!('x', '') }
+    moves = find_all_moves(cell)
     threats = threat_map(cell)
 
-    ((vert + hori + diag).uniq - threats).sort
-    # How do we handle cases where a king can capture a piece, but that move puts it in check?
-    # I think we should compare all straight up moves, regardless of capture from the threat map.
-    # After that, we can re-flag the captures the king can make.
+    moves.delete_if { |move| threats.include?(move.gsub('x', '')) }
   end
 
   private
