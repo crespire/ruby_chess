@@ -3,7 +3,8 @@
 # lib/cell.rb
 
 class Cell
-  attr_reader :name, :occupant
+  attr_reader :name
+  attr_accessor :occupant
 
   def initialize(name = nil, piece = nil)
     @name = name

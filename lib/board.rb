@@ -83,6 +83,13 @@ class Board
     @data[coords[0]][coords[1]]
   end
 
+  def update_location(origin, destination)
+    from = cell(origin)
+    to = cell(destination)
+    to.occupant = from.occupant.dup
+    from.occupant = nil
+  end
+
   private
 
   def pieces_to_fen

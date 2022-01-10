@@ -170,4 +170,15 @@ describe Board do
       expect(test_cell2).to have_attributes(name: 'd4')
     end
   end
+
+  context '#update_location' do
+    subject(:update_loc) { described_class.new }
+
+    it 'moves an occupant from the given origin to the given destination' do
+      update_loc.make_board
+      from = update_loc.cell('a7')
+      to = update_loc.cell('a6')
+      expect { update_loc.update_location('a7', 'a6') }.to change { to.occupant }.from(nil).to('p')
+    end
+  end
 end
