@@ -571,7 +571,10 @@ describe Movement do
 
   ##
   # Valid moves should combine all the axes that we make moves on. The test piece here should be a queen.
-  xcontext '#find_moves' do
+  context '#find_moves' do
+    let(:board) { Board.new }
+    subject(:moves_test) { described_class.new(board) }
+
     context 'with a Queen as input' do
       context 'on an empty board' do
         it 'starting at c5, returns the correct list of available moves' do
@@ -584,10 +587,13 @@ describe Movement do
       end
     end
 
-    context 'with a Knight as input' do
+    xcontext 'with a Knight as input' do
     end
 
-    context 'with a King as input' do
+    xcontext 'with a Pawn as input' do
+    end
+
+    xcontext 'with a King as input' do
     end
   end
 end
