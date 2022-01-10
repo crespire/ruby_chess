@@ -83,7 +83,9 @@ class Board
     @data[coords[0]][coords[1]]
   end
 
-  def update_location(origin, destination)
+  def update_loc(origin, destination)
+    return nil if origin.nil? || destination.nil?
+
     from = cell(origin)
     to = cell(destination)
     to.occupant = from.occupant.dup
