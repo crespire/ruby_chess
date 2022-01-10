@@ -79,10 +79,10 @@ class Movement
     return nil if cell.empty?
     return nil unless %w[p P].include?(cell.occupant)
 
-    moves = board.equal?(@board)
+    gen_moves = board.equal?(@board)
     rank_dir = cell.occupant.ord < 91 ? -1 : 1 # Check color, if white, N, else S.
     start_rank_ind = rank_dir.negative? ? 6 : 1
-    result = moves ? pawn_moves(cell, rank_dir, start_rank_ind, board) : pawn_captures(cell, rank_dir, board)
+    result = gen_moves ? pawn_moves(cell, rank_dir, start_rank_ind, board) : pawn_captures(cell, rank_dir, board)
     result.sort
   end
 
