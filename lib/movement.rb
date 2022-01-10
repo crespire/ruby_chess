@@ -10,6 +10,24 @@ class Movement
   def valid_moves(cell)
   end
 
+  def find_all_moves(cell)
+    return nil if cell.empty?
+
+    case cell.occupant
+    when 'p', 'P'
+      find_pawn_moves(cell)
+    when 'n', 'N'
+      find_knight_moves(cell)
+    when 'k', 'K'
+      find_king_moves(cell)
+    else
+      vert = find_vertical_moves(cell)
+      hori = find_horizontal_moves(cell)
+      diag = find_diagonal_moves(cell)
+      (vert + hori + diag).uniq.sort
+    end
+  end
+
   def find_horizontal_moves(cell)
     return nil if cell.empty?
 
@@ -37,24 +55,6 @@ class Movement
     ne = path(cell, offset, 'ne')
     sw = path(cell, offset, 'sw')
     (se + nw + ne + sw).uniq.sort
-  end
-
-  def find_moves(cell)
-    return nil if cell.empty?
-
-    case cell.occupant
-    when 'p', 'P'
-      find_pawn_moves(cell)
-    when 'n', 'N'
-      find_knight_moves(cell)
-    when 'k', 'K'
-      find_king_moves(cell)
-    else
-      vert = find_vertical_moves(cell)
-      hori = find_horizontal_moves(cell)
-      diag = find_diagonal_moves(cell)
-      (vert + hori + diag).uniq.sort
-    end
   end
 
   def find_knight_moves(cell)

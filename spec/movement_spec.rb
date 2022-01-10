@@ -571,17 +571,21 @@ describe Movement do
 
   ##
   # Valid moves should combine all the axes that we make moves on. The test piece here should be a queen.
-  context '#find_moves' do
+  context '#find_all_moves' do
     let(:board) { Board.new }
     subject(:moves_test) { described_class.new(board) }
 
     context 'with a Queen as input' do
       context 'on an empty board' do
-        it 'starting at c5, returns the correct list of available moves' do
+        it 'starting at d4, returns the correct list of available moves' do
+          board.make_board('8/8/8/8/3q4/8/8/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[d8 d7 d6 d5 d3 d2 d1 a4 b4 c4 e4 f4 g4 h4 e5 f6 g7 h8 c3 b2 a1 c5 b6 a7 e3 f2 g1].sort
+          expect(moves_test.find_knight_moves(cell)).to eq(eligible)
         end
       end
 
-      context 'on a board with mixed pieces in its path' do
+      xcontext 'on a board with mixed pieces in its path' do
         it 'starting at c5, returns the correct list of available moves including eligible captures' do
         end
       end
