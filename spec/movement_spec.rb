@@ -539,7 +539,7 @@ describe Movement do
     subject(:k_selfcheck_test) { described_class.new(board) }
 
     context 'on a board with an enemy Rook' do
-      xit 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the vertical axis' do
+      it 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the vertical axis' do
         board.make_board('8/8/4k3/8/8/8/5R2/8 b - - 1 2')
         cell = board.cell('e6')
         eligible = %w[e7 d7 d6 d5 e5].sort
@@ -571,7 +571,7 @@ describe Movement do
 
   ##
   # Valid moves should combine all the axes that we make moves on. The test piece here should be a queen.
-  xcontext '#valid_moves' do
+  xcontext '#find_moves' do
     context 'with a Queen as input' do
       context 'on an empty board' do
         it 'starting at c5, returns the correct list of available moves' do
@@ -585,6 +585,9 @@ describe Movement do
     end
 
     context 'with a Knight as input' do
+    end
+
+    context 'with a King as input' do
     end
   end
 end

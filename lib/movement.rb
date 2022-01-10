@@ -39,6 +39,24 @@ class Movement
     (se + nw + ne + sw).uniq.sort
   end
 
+  def find_moves(cell)
+    return nil if cell.empty?
+
+    case cell.occupant
+    when 'p', 'P'
+      find_pawn_moves(cell)
+    when 'n', 'N'
+      find_knight_moves(cell)
+    when 'k', 'K'
+      find_king_moves(cell)
+    else
+      vert = find_vertical_moves(cell)
+      hori = find_horizontal_moves(cell)
+      diag = find_diagonal_moves(cell)
+      (vert + hori + diag).uniq.sort
+    end
+  end
+
   def find_knight_moves(cell)
     return nil if cell.empty?
     return nil unless %w[n N].include?(cell.occupant)
@@ -57,10 +75,23 @@ class Movement
 
     rank_dir = cell.occupant.ord < 91 ? -1 : 1 # Check color, if white, N, else S.
     start_rank_ind = rank_dir.negative? ? 6 : 1
-
     result = pawn(cell, rank_dir, start_rank_ind)
-
     result.sort
+  end
+
+  def find_king_moves(cell)
+    return nil if cell.empty?
+    return nil unless %w[k K].include?(cell.occupant)
+
+    vert = find_vertical_moves(cell)
+    hori = find_horizontal_moves(cell)
+    diag = find_diagonal_moves(cell)
+    threats = threat_map(cell)
+
+    ((vert + hori + diag).uniq - threats).sort
+    # How do we handle cases where a king can capture a piece, but that move puts it in check?
+    # I think we should compare all straight up moves, regardless of capture from the threat map.
+    # After that, we can re-flag the captures the king can make.
   end
 
   private
@@ -193,5 +224,18 @@ class Movement
     end
 
     result
+  end
+
+  def threat_map(cell)
+    # current_piece = cell.occupant
+    # threats = []
+    # @board.each do |rank|
+    #   rank.each do |threat_cell|
+    #     next if threat_cell.empty? || !threat_cell.capture?(current_piece)
+    #     current_threats = find_moves(threat_cell)
+    #     current_threats.map { |name| name.gsub!('x', '') }
+    #     threats = (threats + current_threats).uniq
+    #   end
+    # end
   end
 end
