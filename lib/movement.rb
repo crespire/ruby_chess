@@ -137,7 +137,7 @@ class Movement
       step = @board.cell(@board.arr_to_std_chess(arr)) if new_ind.between?(0, 7)
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
-      break unless step && step.empty? && step.capture?(piece)
+      break unless step && step.empty? && !step.capture?(piece)
     end
     result
   end
@@ -158,7 +158,7 @@ class Movement
       step = @board.cell(next_ref) if next_ref
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
-      break unless step && step.empty? && step.capture?(piece)
+      break unless step && step.empty? && !step.capture?(piece)
     end
     result
   end

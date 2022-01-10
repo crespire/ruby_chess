@@ -23,7 +23,7 @@ class Cell
   end
 
   def capture?(attacking)
-    return true if empty?
+    return nil if empty?
 
     atk_color = attacking.ord < 91 ? 'w' : 'b'
     color = @occupant.ord < 91 ? 'w' : 'b'

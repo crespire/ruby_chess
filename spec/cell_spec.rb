@@ -16,9 +16,9 @@ describe Cell do
       expect(cell.name).to be_nil
     end
 
-    it 'returns true for capture?' do
-      expect(cell.capture?('N')).to be_truthy
-      expect(cell.capture?('n')).to be_truthy
+    it 'returns nil for capture? as cell is empty' do
+      expect(cell.capture?('N')).to be_nil
+      expect(cell.capture?('n')).to be_nil
     end
   end
 
