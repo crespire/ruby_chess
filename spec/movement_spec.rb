@@ -595,7 +595,24 @@ describe Movement do
       end
     end
 
-    xcontext 'with a Knight as input' do
+    context 'with a Knight as input' do
+      context 'on an empty board' do
+        it 'starting at b6, returns the correct list of available moves' do
+          board.make_board('8/8/1n6/8/8/8/8/8 b - - 1 2')
+          cell = board.cell('b6')
+          eligible = %w[a8 c8 d7 d5 c4 a4].sort
+          expect(moves_test.find_all_moves(cell)).to eq(eligible)
+        end
+      end
+
+      context 'on a board with mixed pieces in its path' do
+        it 'starting at d4, returns the correct list of available moves including eligible captures' do
+          board.make_board('8/8/3pp3/8/3n4/8/2P5/8 b - - 1 2')
+          cell = board.cell('d4')
+          eligible = %w[xc2 e2 b3 b5 c6 f5 f3].sort
+          expect(moves_test.find_all_moves(cell)).to eq(eligible)
+        end
+      end
     end
 
     xcontext 'with a Pawn as input' do
