@@ -23,22 +23,29 @@ class Display
     @board = board
   end
 
-  def show_board(board = @board)
+  def show_board(board: @board, moves: [])
     color_track = 0
     cols = ('a'..'h').to_a
     print '  '
     cols.each { |char| print " #{char} " }
     print "\n"
+    moves.map! { |move| move.gsub('x', '') }
 
     rank_ind = 8
     board.data.each do |rank|
       print "#{rank_ind} "
       rank.each do |cell|
-        print colorize_cell_bg(" #{PIECE_LOOKUP[cell.to_display]} ", color_track.even?)
+        if moves.include?(cell.name) && cell.empty?
+          print colorize_cell_bg(' • ', color_track.even?)
+        elsif moves.include?(cell.name) && !cell.empty?
+          print colorize_cell_bg_capture(" #{PIECE_LOOKUP[cell.to_display]} ")
+        else
+          print colorize_cell_bg(" #{PIECE_LOOKUP[cell.to_display]} ", color_track.even?)
+        end
         color_track += 1
       end
-      rank_ind -= 1
       print "\n"
+      rank_ind -= 1
       color_track += 1
     end
     print "\n"
@@ -48,6 +55,10 @@ class Display
 
   def colorize_cell_bg(text, white)
     white ? "\e[100m#{text}\e[0m" : "\e[0m#{text}\e[0m"
+  end
+
+  def colorize_cell_bg_capture(text)
+    "\e[41m#{text}\e[0m"
   end
 end
 
