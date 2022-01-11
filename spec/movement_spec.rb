@@ -334,7 +334,7 @@ describe Movement do
         end
 
         it 'starting at d4, returns the correct list of available moves' do
-          board.make_board('8/8/1p3p1/8/3b4/8/1n7/8 b - - 1 2')
+          board.make_board('8/8/1p3p1/8/3b4/8/1n6/8 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[c5 e5 c3 e3 f2 g1].sort
           expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
@@ -350,7 +350,7 @@ describe Movement do
         end
 
         it 'starting at d4, returns the correct list of available moves including both captures' do
-          board.make_board('8/8/1P7/8/3b4/8/1n3P2/8 b - - 1 2')
+          board.make_board('8/8/1P6/8/3b4/8/1n3P2/8 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[c5 h8 xb6 g7 f6 e5 c3 e3 xf2].sort
           expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
@@ -366,7 +366,7 @@ describe Movement do
         end
 
         it 'starting at d4, returns the correct list of available moves including both captures' do
-          board.make_board('8/8/1P7/8/3b4/8/1n3P2/6N1 b - - 1 2')
+          board.make_board('8/8/1P6/8/3b4/8/1n3P2/6N1 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[c5 h8 xb6 g7 f6 e5 c3 e3 xf2].sort
           expect(bishop_test.find_diagonal_moves(cell)).to eq(eligible)
@@ -550,7 +550,7 @@ describe Movement do
 
       context 'on a board with mixed pieces in its path' do
         it 'starting at d4, returns the correct list of available moves including eligible captures' do
-          board.make_board('8/3p5/8/8/3qn3/8/3P1P2/8 b - - 1 2')
+          board.make_board('8/3p4/8/8/3qn3/8/3P1P2/8 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[d6 d5 d3 xd2 a4 b4 c4 e5 f6 g7 h8 c3 b2 a1 c5 b6 a7 e3 xf2].sort
           expect(moves_test.find_all_moves(cell)).to eq(eligible)
@@ -623,7 +623,7 @@ describe Movement do
     context 'with a King as input' do
       context 'when there is a friendly on one side, and an enemy on the other' do
         it 'starting at d4, returns the correct list of available moves including a capture' do
-          board.make_board('8/8/8/8/2pkP3/2N6/8/8 b - - 1 2')
+          board.make_board('8/8/8/8/2pkP3/2N5/8/8 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[c5 d5 e5 xe4 xc3 d3 e3].sort
           expect(moves_test.find_all_moves(cell)).to eq(eligible)
@@ -683,7 +683,7 @@ describe Movement do
 
       context 'on a board with mixed pieces in its path' do
         it 'starting at d4, returns the correct list of available moves including eligible captures' do
-          board.make_board('8/3p5/8/8/3qn3/8/3P1P2/8 b - - 1 2')
+          board.make_board('8/3p4/8/8/3qn3/8/3P1P2/8 b - - 1 2')
           cell = board.cell('d4')
           eligible = %w[d6 d5 d3 xd2 a4 b4 c4 e5 f6 g7 h8 c3 b2 a1 c5 b6 a7 e3 xf2].sort
           expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
@@ -703,7 +703,7 @@ describe Movement do
 
       context 'when there are a limited set of moves' do
         it 'correctly shows moves that prevent self-checking' do
-          board.make_board('8/8/8/2k5/3R4/2B6/8/4K3 b - - 1 2')
+          board.make_board('8/8/8/2k5/3R4/2B5/8/4K3 b - - 1 2')
           cell = board.cell('c5')
           eligible = %w[b6 c6 b5].sort
           expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
@@ -715,6 +715,15 @@ describe Movement do
           eligible = %w[c3 xd3 e3 c5 e5].sort
           expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
         end
+      end
+    end
+
+    context 'prevents moves that result in a self-check' do
+      it 'correctly shows moves that prevent self-checking when another piece is selected' do
+        board.make_board('8/8/8/4k3/4n3/8/4R3/K7 b - - 0 1')
+        cell = board.cell('e4')
+        eligible = %w[]
+        expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
       end
     end
   end

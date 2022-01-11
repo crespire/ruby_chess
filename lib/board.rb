@@ -46,7 +46,7 @@ class Board
           raise ArgumentError, "Unexpected character in piece notation: #{piece}"
         end
         col_ind += 1
-        raise ArgumentError, "Invalid FEN: Rank #{rank_ind + 1} has too many entries." unless @data[rank_ind].length == 8
+        raise ArgumentError, "Invalid FEN: Rank #{rank_ind + 1} does not have the correct amount of entries." unless @data[rank_ind].length == 8
       end
       rank_ind += 1
     end
