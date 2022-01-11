@@ -24,7 +24,7 @@ class Display
   end
 
   def show_board(board = @board)
-    display_track = 0
+    color_track = 0
     cols = ('a'..'h').to_a
     print '  '
     cols.each { |char| print " #{char} " }
@@ -34,12 +34,12 @@ class Display
     board.data.each do |rank|
       print "#{rank_ind} "
       rank.each do |cell|
-        print colorize_cell_bg(" #{PIECE_LOOKUP[cell.to_display]} ", display_track.even?)
-        display_track += 1
+        print colorize_cell_bg(" #{PIECE_LOOKUP[cell.to_display]} ", color_track.even?)
+        color_track += 1
       end
       rank_ind -= 1
       print "\n"
-      display_track += 1
+      color_track += 1
     end
     print "\n"
   end
