@@ -4,20 +4,38 @@
 
 class Movement
   attr_reader :passant_capture
+  attr_accessor :bking, :wking
+
+  EMPTY_FEN = '8/8/8/8/8/8/8/8 w - - 1 2'
 
   def initialize(board = nil)
     @board = board
     @passant_capture = nil
+    @bking = 'e8'
+    @wking = 'e1'
   end
 
   def valid_moves(cell)
     return nil if cell.empty?
+    empty_board = Board.new
 
     case cell.occupant
     when 'k', 'K'
       find_king_moves(cell)
     else
-      find_all_moves(cell)
+      moves = find_all_moves(cell)
+      king = cell.occupant.ord < 91 ? @wking : @bking
+      nme_atkrs = can_attack_king(@board.cell(king)) # Identify pieces that could attack the king
+      nme_atkrs.each do |nme_cell|
+        # For each enemy attacker, find the path from their current to the king
+        # This path should include all squares to the king.
+        # Once you have the path, check the intersections for the current piece in terms of moves
+        # Valid moves are the intersctions, otherwise there should be no available moves
+        p nme_cell
+        empty_board.make_board(EMPTY_FEN)
+        threats = find_all_moves(nme_cell, empty_board)
+      end
+      moves
     end
   end
 
@@ -243,6 +261,8 @@ class Movement
   end
 
   def threat_map(cell)
+    return [] if cell.occupant.nil?
+
     current_piece = cell.occupant
     empty_board = Board.new
     threats = []
@@ -250,11 +270,33 @@ class Movement
       rank.each do |threat_cell|
         next if threat_cell.empty? || !threat_cell.capture?(current_piece)
 
-        empty_board.make_board('8/8/8/8/8/8/8/8 w - - 1 2')
+        empty_board.make_board(EMPTY_FEN)
         current_threats = find_all_moves(threat_cell, empty_board)
         threats = (threats + current_threats).uniq
       end
     end
     threats
+  end
+
+  def can_attack_king(king_cell)
+    empty_board = Board.new
+    threats = []
+    @board.data.each do |rank|
+      rank.each do |cell|
+        next if cell.empty?
+
+        empty_board.make_board(EMPTY_FEN)
+        current_threats = find_all_moves(cell, empty_board)
+        threats << cell if current_threats.include?(king_cell.name)
+      end
+    end
+    threats
+  end
+
+  def vector(start, finish)
+    # From the starting cell, get the piece
+    # Following the rules for the piece, travel to the king.
+    # Return list of moves, including the start and finish.
+    # ie, return (start + [moves between] + finish)
   end
 end
