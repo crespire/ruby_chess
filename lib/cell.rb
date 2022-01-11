@@ -19,6 +19,10 @@ class Cell
     @occupant.nil? ? 1 : @occupant
   end
 
+  def to_display
+    @occupant.nil? ? ' ' : @occupant
+  end
+
   def to_s
     @name
   end
