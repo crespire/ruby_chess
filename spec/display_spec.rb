@@ -37,5 +37,12 @@ describe Display do
       display.show_board(moves: eligible)
       expect { display.show_board(moves: eligible) }.to output.to_stdout
     end
+
+    it 'displays the board, with captures and valid moves indicated' do
+      board.make_board('8/1k6/2p5/3q4/8/8/4R1B1/K7 b - - 0 1')
+      eligible = %w[d8 d7 d6 d4 d3 d2 d1 e6 f7 g8 e5 f5 g5 h5 e4 f3 xg2 c4 b3 a2 a5 b5 c5].sort
+      display.show_board(moves: eligible)
+      expect { display.show_board(moves: eligible) }.to output.to_stdout
+    end
   end
 end

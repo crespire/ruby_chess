@@ -36,7 +36,7 @@ class Display
       print "#{rank_ind} "
       rank.each do |cell|
         if moves.include?(cell.name) && cell.empty?
-          print colorize_cell_bg(' • ', color_track.even?)
+          print colorize_cell_bg("\e[31m ◇ \e[0m", color_track.even?)
         elsif moves.include?(cell.name) && !cell.empty?
           print colorize_cell_bg_capture(" #{PIECE_LOOKUP[cell.to_display]} ")
         else
