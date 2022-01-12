@@ -780,6 +780,15 @@ describe Movement do
 
     context 'when provided a Queen piece preventing a check' do
       context 'with other pieces on the board in a position to check' do
+        it 'correctly shows 0 moves as black should move the king to prevent a check-mate' do
+          board.make_board('8/1k6/2q5/2N5/8/8/4R1B1/K7 b - - 0 1')
+          valid_moves_test.bking = 'b7'
+          valid_moves_test.wking = 'a1'
+          cell = board.cell('c6')
+          eligible = %w[]
+          expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+        end
+
         it 'correctly shows only 2 moves as any other moves would result in a self-check' do
           board.make_board('8/8/8/3k4/4q3/8/6Q1/K7 b - - 0 1')
           valid_moves_test.bking = 'd5'
@@ -795,6 +804,15 @@ describe Movement do
           valid_moves_test.wking = 'a1'
           cell = board.cell('c6')
           eligible = %w[d5 e4 f3 xg2].sort
+          expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+        end
+
+        it 'correctly shows all moves as another friendly piece can prevent a self-check' do
+          board.make_board('8/1k6/2p5/3q4/8/8/4R1B1/K7 b - - 0 1')
+          valid_moves_test.bking = 'b7'
+          valid_moves_test.wking = 'a1'
+          cell = board.cell('d5')
+          eligible = %w[d8 d7 d6 d4 d3 d2 d1 e6 f7 g8 e5 f5 g5 h5 e4 f3 xg2 c4 b3 a2 a5 b5 c5].sort
           expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
         end
       end

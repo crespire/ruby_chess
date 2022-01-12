@@ -31,14 +31,18 @@ class Movement
       nme_atkrs.each do |nme_cell|
         # Find the path from the attacker's current cell to the king, mark all captures (regardless of side).
         # This path should include all squares to the king.
-        # If there are two captures, with the last capture being the king, this friendly piece is pinned.
+        # If the two captures are adjacent, then the piece is pinned.
         # When pinned, valid moves are the intersctions of moves and nme vector; otherwise,
         # there are no available moves without putting king in check.
-        # If there are more than two captures, then this piece can move freely.
+        # If captures are not adjacent, then this piece can move freely.
         nme_vector = vector(nme_cell.name, king)
-        last3 = nme_vector.last(3)
-        captures = last3.count { |el| el.start_with?('x') }
-        results = captures > 2 ? moves : (nme_vector & moves).sort
+        coord1, coord2 = nme_vector.last(2)
+        return [] if coord1.length < 3 || coord2.length < 3
+
+        file_mag = (coord1[1].ord - coord2[1].ord).abs
+        rank_mag = (coord1[2].ord - coord2[2].ord).abs
+        adjacent = (file_mag <= 1) && (rank_mag <= 1)
+        results = adjacent ? (nme_vector & moves).sort : moves
       end
       results.sort
     end
