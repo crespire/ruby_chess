@@ -815,6 +815,15 @@ describe Movement do
           eligible = %w[d8 d7 d6 d4 d3 d2 d1 e6 f7 g8 e5 f5 g5 h5 e4 f3 xg2 c4 b3 a2 a5 b5 c5].sort
           expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
         end
+
+        it 'correctly shows all moves as another friendly piece can prevent a self-check' do
+          board.make_board('8/1k6/2p5/8/8/5q2/4R1B1/K7 b - - 0 1')
+          valid_moves_test.bking = 'b7'
+          valid_moves_test.wking = 'a1'
+          cell = board.cell('f3')
+          eligible = %w[f1 f2 f4 f5 f6 f7 f8 a3 b3 c3 d3 e3 g3 h3 xe2 xg2 e4 d5 g4 h5].sort
+          expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+        end
       end
     end
   end
