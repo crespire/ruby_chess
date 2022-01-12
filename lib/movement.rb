@@ -17,25 +17,30 @@ class Movement
 
   def valid_moves(cell)
     return nil if cell.empty?
-    empty_board = Board.new
 
     case cell.occupant
     when 'k', 'K'
       find_king_moves(cell)
     else
       moves = find_all_moves(cell)
-      king = cell.occupant.ord < 91 ? @wking : @bking
-      nme_atkrs = can_attack_king(@board.cell(king)) # Identify pieces that could attack the king
+      king = cell.occupant.ord < 91 ? @wking : @bking # Find the friendly king
+      nme_atkrs = can_attack_king(@board.cell(king)) # Identify pieces that could attack the friendly
+      return moves if nme_atkrs.empty?
+
+      results = []
       nme_atkrs.each do |nme_cell|
-        # For each enemy attacker, find the path from their current to the king
+        # Find the path from the attacker's current cell to the king, mark all captures (regardless of side).
         # This path should include all squares to the king.
-        # Once you have the path, check the intersections for the current piece in terms of moves
-        # Valid moves are the intersctions, otherwise there should be no available moves
-        p nme_cell
-        empty_board.make_board(EMPTY_FEN)
-        threats = find_all_moves(nme_cell, empty_board)
+        # If there are two captures, with the last capture being the king, this friendly piece is pinned.
+        # When pinned, valid moves are the intersctions of moves and nme vector; otherwise,
+        # there are no available moves without putting king in check.
+        # If there are more than two captures, then this piece can move freely.
+        nme_vector = vector(nme_cell.name, king)
+        last3 = nme_vector.last(3)
+        captures = last3.count { |el| el.start_with?('x') }
+        results = captures > 2 ? moves : (nme_vector & moves).sort
       end
-      moves
+      results.sort
     end
   end
 
@@ -279,14 +284,17 @@ class Movement
   end
 
   def can_attack_king(king_cell)
+    return [] if king_cell.empty?
+
     empty_board = Board.new
     threats = []
     @board.data.each do |rank|
       rank.each do |cell|
-        next if cell.empty?
+        next if cell.empty? || !king_cell.capture?(cell.occupant)
 
         empty_board.make_board(EMPTY_FEN)
         current_threats = find_all_moves(cell, empty_board)
+        current_threats.map! { |el| el.gsub('x', '') }
         threats << cell if current_threats.include?(king_cell.name)
       end
     end
@@ -294,9 +302,27 @@ class Movement
   end
 
   def vector(start, finish)
-    # From the starting cell, get the piece
+    dir = vector_info(start, finish)
+    offset = 7
     # Following the rules for the piece, travel to the king.
-    # Return list of moves, including the start and finish.
-    # ie, return (start + [moves between] + finish)
+    result = path(@board.cell(start), offset, dir)
+    # Return list of moves, including the start and finish as captures
+    # We add the captures because the start should be a valid capture for the piece we're moving
+    # The last capture should be the king capture from the enemy piece.
+    result.unshift "x#{start}"
+    result << "x#{finish}"
+  end
+
+  def vector_info(start, finish)
+    s_letter = start.chars[0]
+    s_number = start.chars[1]
+    f_letter = finish.chars[0]
+    f_number = finish.chars[1]
+    south = s_number <=> f_number
+    east = s_letter <=> f_letter
+    ns = { 1 => 's', 0 => '', -1 => 'n' }
+    ew = { 1 => 'w', 0 => '', -1 => 'e' }
+    dir = [ns[south], ew[east]].compact
+    dir.join
   end
 end
