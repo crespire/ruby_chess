@@ -93,6 +93,25 @@ class Board
     from.occupant = nil
   end
 
+  def bking
+    find_piece('k').pop
+  end
+
+  def wking
+    find_piece('K').pop
+  end
+
+  def find_piece(piece)
+    coords = []
+    cols = ('a'..'h').to_a
+    @data.each.with_index(1) do |rank, rank_ind|
+      rank.each_with_index do |cell, file_ind|
+        coords << "#{cols[file_ind]}#{9 - rank_ind}" if piece == cell.occupant
+      end
+    end
+    coords.sort
+  end
+
   private
 
   def pieces_to_fen

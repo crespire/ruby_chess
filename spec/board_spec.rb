@@ -181,6 +181,35 @@ describe Board do
     end
   end
 
+  context '#find_piece' do
+    subject(:find) { described_class.new }
+
+    context 'from the starting position' do
+      before do
+        find.make_board
+      end
+
+      it 'correctly identifies the coordinates of the two White Bishops' do
+        results = find.find_piece('B')
+        expected = %w[c1 f1].sort
+        expect(results).to eq(expected)
+      end
+
+      it 'correctly identifies the coordinates of the two Black Bishops' do
+        results = find.find_piece('b')
+        expected = %w[c8 f8].sort
+        expect(results).to eq(expected)
+      end
+
+      it 'correctly identifies the coordinates of the eight Black pawns' do
+        results = find.find_piece('p')
+        expected = %w[a7 b7 c7 d7 e7 f7 g7 h7].sort
+        expect(results).to eq(expected)
+      end
+    end
+    
+  end
+
   context 'King location methods' do
     subject(:kings) { described_class.new }
 
