@@ -827,6 +827,12 @@ describe Movement do
         eligible = %w[]
         expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
       end
+
+      it 'when selecting a friendly pawn, correctly shows no available moves' do
+        cell = board.cell('g7')
+        eligible = %w[]
+        expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+      end
     end
   end
 end
