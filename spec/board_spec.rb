@@ -41,12 +41,20 @@ describe Board do
   end
 
   context '#make_board' do
-    context 'when there are unrecognized characters in the notation' do
+    context 'when there are errors in the FEN notation provided' do
       subject(:fen_error) { described_class.new }
 
-      it 'raises an ArgumentError' do
-        input = 'rnbqkbnr/pp$ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2'
-        expect { fen_error.make_board(input) }.to raise_error(ArgumentError)
+      it 'raises an ArgumentError when there are unrecognized characters in the notation' do
+        expect { fen_error.make_board('rnbqkbnr/pp$ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2') }.to raise_error(ArgumentError)
+      end
+
+      it 'raises an ArgumentError when there are the incorrect number of information sections in the FEN' do
+        expect { fen_error.make_board('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1') }.to raise_error(ArgumentError)
+      end
+
+      it 'raises an ArgumentError when there are the wrong number of ranks in the FEN provided' do
+        expect { fen_error.make_board('rnbqkbnr/pppppppp/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2') }.to raise_error(ArgumentError)
+        expect { fen_error.make_board('rnbqkbnr/pppppppp/8/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2') }.to raise_error(ArgumentError)
       end
     end
 
