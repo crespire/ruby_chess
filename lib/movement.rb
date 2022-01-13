@@ -11,8 +11,6 @@ class Movement
   def initialize(board = nil)
     @board = board
     @passant_capture = nil
-    @bking = 'e8'
-    @wking = 'e1'
   end
 
   def valid_moves(cell)
@@ -23,7 +21,7 @@ class Movement
       find_king_moves(cell)
     else
       moves = find_all_moves(cell)
-      king = cell.occupant.ord < 91 ? @wking : @bking # Find the friendly king
+      king = cell.occupant.ord < 91 ? @board.wking : @board.bking # Find the friendly king
       nme_atkrs = can_attack_king(@board.cell(king)) # Identify pieces that could attack the friendly
       return moves if nme_atkrs.empty?
 
