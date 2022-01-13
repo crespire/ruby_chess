@@ -824,6 +824,35 @@ describe Movement do
           eligible = %w[f1 f2 f4 f5 f6 f7 f8 a3 b3 c3 d3 e3 g3 h3 xe2 xg2 e4 d5 g4 h5].sort
           expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
         end
+
+        it 'correctly shows all moves as another friendly piece can prevent a self-check' do
+          board.make_board('8/1k6/8/3p4/8/5q2/4R1B1/K7 b - - 0 1')
+          valid_moves_test.bking = 'b7'
+          valid_moves_test.wking = 'a1'
+          cell = board.cell('f3')
+          eligible = %w[f1 f2 f4 f5 f6 f7 f8 a3 b3 c3 d3 e3 g3 h3 xe2 xg2 e4 g4 h5].sort
+          expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+        end
+      end
+    end
+
+    context 'when provided a black King in a check situation' do
+      before do
+        board.make_board('2Q3k1/6pp/5r1q/6N1/1P5P/6P1/5P2/6K1 b - - 0 1')
+        valid_moves_test.bking = 'g8'
+        valid_moves_test.wking = 'g1'
+      end
+
+      it 'when selecting the friendly Rook, correctly shows only one blocking move to prevent a check' do
+        cell = board.cell('f6')
+        eligible = %w[f8]
+        expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+      end
+
+      it 'when selecting the King, correctly shows only one blocking move to prevent a check' do
+        cell = board.cell('g8')
+        eligible = %w[]
+        expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
       end
     end
   end
