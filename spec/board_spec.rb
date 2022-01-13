@@ -180,4 +180,16 @@ describe Board do
       expect { move.update_loc('a7', 'a6') }.to change { to.occupant }.from(nil).to('p')
     end
   end
+
+  context 'King location methods' do
+    subject(:kings) { described_class.new }
+
+    it 'provides the correct locations for the Kings' do
+      kings.make_board
+      black = kings.bking
+      white = kings.wking
+      expect(black).to eq('e8')
+      expect(white).to eq('e1')
+    end
+  end
 end
