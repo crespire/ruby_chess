@@ -382,7 +382,7 @@ describe Movement do
     it 'returns nil when a given piece is not a knight' do
       board.make_board('b7/8/8/8/8/8/8/8 b - - 1 2')
       cell = board.cell('a8')
-      expect(knight_test.find_knight_moves(cell)).to be_nil
+      expect(knight_test.find_knight_moves(cell)).to eq([])
     end
 
     it 'on an empty board starting at a8, returns the correct list of available moves' do

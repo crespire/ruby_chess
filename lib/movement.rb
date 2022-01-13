@@ -14,7 +14,7 @@ class Movement
   end
 
   def valid_moves(cell)
-    return nil if cell.empty?
+    return [] if cell.empty?
 
     case cell.occupant
     when 'k', 'K'
@@ -22,32 +22,32 @@ class Movement
     else
       moves = find_all_moves(cell)
       king = cell.occupant.ord < 91 ? @board.wking : @board.bking # Find the friendly king
-      nme_atkrs = can_attack_king(@board.cell(king)) # Identify pieces that could attack the friendly
-      return moves if nme_atkrs.empty?
+      enemy_attackers = can_attack_king(@board.cell(king)) # Identify pieces that could attack the friendly
+      return moves if enemy_attackers.empty?
 
       results = []
-      nme_atkrs.each do |nme_cell|
+      enemy_attackers.each do |nme_cell|
         # Find the path from the attacker's current cell to the king, mark all captures (regardless of side).
         # This path should include all squares to the king.
         # If the two captures are adjacent, then the piece is pinned.
         # When pinned, valid moves are the intersctions of moves and nme vector; otherwise,
         # there are no available moves without putting king in check.
         # If captures are not adjacent, then this piece can move freely.
-        nme_vector = vector(nme_cell.name, king)
-        coord1, coord2 = nme_vector.last(2)
+        enemy_vector = vector(nme_cell.name, king)
+        coord1, coord2 = enemy_vector.last(2)
         return [] if coord1.length < 3 || coord2.length < 3
 
         file_mag = (coord1[1].ord - coord2[1].ord).abs
         rank_mag = (coord1[2].ord - coord2[2].ord).abs
         adjacent = (file_mag <= 1) && (rank_mag <= 1)
-        results = adjacent ? (nme_vector & moves).sort : moves
+        results = adjacent ? (enemy_vector & moves).sort : moves
       end
       results.sort
     end
   end
 
   def find_all_moves(cell, board = @board)
-    return nil if cell.empty?
+    return [] if cell.empty?
 
     case cell.occupant
     when 'p', 'P'
@@ -63,7 +63,7 @@ class Movement
   end
 
   def find_horizontal_moves(cell, board = @board)
-    return nil if cell.empty?
+    return [] if cell.empty?
 
     offset = piece_offset(cell.occupant, 'h')
     east = path(cell, offset, 'e', board)
@@ -72,7 +72,7 @@ class Movement
   end
 
   def find_vertical_moves(cell, board = @board)
-    return nil if cell.empty?
+    return [] if cell.empty?
 
     offset = piece_offset(cell.occupant, 'v')
     north = path(cell, offset, 'n', board)
@@ -81,7 +81,7 @@ class Movement
   end
 
   def find_diagonal_moves(cell, board = @board)
-    return nil if cell.empty?
+    return [] if cell.empty?
 
     offset = piece_offset(cell.occupant, 'd')
     se = path(cell, offset, 'se', board)
@@ -92,8 +92,8 @@ class Movement
   end
 
   def find_knight_moves(cell, board = @board)
-    return nil if cell.empty?
-    return nil unless %w[n N].include?(cell.occupant)
+    return [] if cell.empty?
+    return [] unless %w[n N].include?(cell.occupant)
 
     n = knight(cell, 2, [-1, 1], board)
     e = knight(cell, [-1, 1], 2, board)
@@ -104,19 +104,18 @@ class Movement
   end
 
   def find_pawn_moves(cell, board = @board)
-    return nil if cell.empty?
-    return nil unless %w[p P].include?(cell.occupant)
+    return [] if cell.empty?
+    return [] unless %w[p P].include?(cell.occupant)
 
-    gen_moves = board.equal?(@board)
     rank_dir = cell.occupant.ord < 91 ? -1 : 1 # Check color, if white, N, else S.
     start_rank_ind = rank_dir.negative? ? 6 : 1
-    result = gen_moves ? pawn_moves(cell, rank_dir, start_rank_ind, board) : pawn_captures(cell, rank_dir, board)
+    result = board.equal?(@board) ? pawn_moves(cell, rank_dir, start_rank_ind, board) : pawn_captures(cell, rank_dir, board)
     result.sort
   end
 
   def find_king_moves(cell, board = @board)
-    return nil if cell.empty?
-    return nil unless %w[k K].include?(cell.occupant)
+    return [] if cell.empty?
+    return [] unless %w[k K].include?(cell.occupant)
 
     moves = find_all_moves(cell, board)
     threats = threat_map(cell)
@@ -268,7 +267,7 @@ class Movement
   end
 
   def threat_map(cell)
-    return [] if cell.occupant.nil?
+    return [] if cell.empty?
 
     current_piece = cell.occupant
     empty_board = Board.new
@@ -306,22 +305,18 @@ class Movement
   def vector(start, finish)
     dir = vector_info(start, finish)
     offset = 7
-    # Following the rules for the piece, travel to the king.
     result = path(@board.cell(start), offset, dir)
-    # Return list of moves, including the start and finish as captures
-    # We add the captures because the start should be a valid capture for the piece we're moving
-    # The last capture should be the king capture from the enemy piece.
     result.unshift "x#{start}"
     result << "x#{finish}"
   end
 
   def vector_info(start, finish)
-    s_letter = start.chars[0]
-    s_number = start.chars[1]
-    f_letter = finish.chars[0]
-    f_number = finish.chars[1]
-    south = s_number <=> f_number
-    east = s_letter <=> f_letter
+    s_file = start.chars[0]
+    s_rank = start.chars[1]
+    f_file = finish.chars[0]
+    f_rank = finish.chars[1]
+    south = s_rank <=> f_rank
+    east = s_file <=> f_file
     ns = { 1 => 's', 0 => '', -1 => 'n' }
     ew = { 1 => 'w', 0 => '', -1 => 'e' }
     dir = [ns[south], ew[east]].compact
