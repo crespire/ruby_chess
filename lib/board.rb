@@ -9,11 +9,12 @@ class Board
 
   def initialize
     @data = Array.new(8) { Array.new(8, nil) }
-    @active = nil
-    @castle = nil
-    @passant = nil
-    @half = nil
-    @full = nil
+    @active = 'w'
+    @castle = '-'
+    @passant = '-'
+    @half = '0'
+    @full = '1'
+    @ply = 0
   end
 
   def make_board(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
@@ -87,10 +88,19 @@ class Board
   end
 
   def update_loc(origin, destination)
-    return nil if origin.nil? || destination.nil?
+    return nil if origin.empty? || destination.empty?
 
     from = cell(origin)
     to = cell(destination)
+    piece = from.occupant
+
+    # This should work for normal conditions.
+    # Will need to check en passant once I have that working.
+    increment_ply
+    %w[p P].include?(piece) ? reset_half : increment_half
+    to.empty? && @passant.empty? ? increment_half : reset_half
+    increment_full if piece.ord > 91
+
     to.occupant = from.occupant.dup
     from.occupant = nil
   end
@@ -115,6 +125,22 @@ class Board
   end
 
   private
+
+  def increment_full
+    @full += 1
+  end
+
+  def increment_ply
+    @ply += 1
+  end
+
+  def increment_half
+    @half += 1
+  end
+
+  def reset_half
+    @half = 0
+  end
 
   def pieces_to_fen
     strs = []
