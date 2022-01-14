@@ -304,6 +304,13 @@ describe Board do
         end
       end
     end
+
+    context 'on the given board' do
+      it 'resets the half move counter on a capture' do
+        move.make_board('1nbqkbnr/rppp1pp1/p2N4/4p2p/4P2P/8/PPPP1PP1/R1BQKBNR b KQk - 1 5')
+        expect { move.update_loc('f8', 'd6') }.to change { move.instance_variable_get(:@half) }.to(0)
+      end
+    end
   end
 
   context '#find_piece' do

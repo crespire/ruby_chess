@@ -40,6 +40,8 @@ class Movement
         file_mag = (coord1[1].ord - coord2[1].ord).abs
         rank_mag = (coord1[2].ord - coord2[2].ord).abs
         adjacent = (file_mag <= 1) && (rank_mag <= 1)
+
+        p moves, enemy_vector, file_mag, rank_mag, adjacent
         results = adjacent ? (enemy_vector & moves).sort : moves
       end
       results.sort

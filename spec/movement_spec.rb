@@ -834,5 +834,29 @@ describe Movement do
         expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
       end
     end
+
+    context 'when provided a black King in check by a white knight on d6' do
+      before do
+        board.make_board('1nbqkbnr/rppp1pp1/p2N4/4p2p/4P2P/8/PPPP1PP1/R1BQKBNR b KQk - 1 5')
+      end
+
+      it 'when selecting the King, correctly shows only one move' do
+        cell = board.cell('e8')
+        eligible = %w[e7]
+        expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+      end
+
+      it 'when selecting the pawn, correctly shows only one move' do
+        cell = board.cell('c7')
+        eligible = %w[xd6]
+        expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+      end
+
+      it 'when selecting the Bishop, correctly shows only one move' do
+        cell = board.cell('f8')
+        eligible = %w[xd6]
+        expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+      end
+    end
   end
 end

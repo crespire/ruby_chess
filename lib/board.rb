@@ -144,12 +144,12 @@ class Board
   def update_game_stats(piece, destination)
     update_active(piece)
     increment_ply
-    if destination.empty? || @passant == '-'
+    if destination.empty? && @passant == '-'
       %w[p P].include?(piece) ? reset_half : increment_half
     elsif !@passant == '-' && (destination.name == @passant)
       reset_half
     else
-      destination.capture?(piece) ? reset_half : increment_half
+      destination.capture?(piece) && !destination.empty? ? reset_half : increment_half
     end
     increment_full if piece.ord > 91
   end
