@@ -339,7 +339,6 @@ describe Board do
         expect(results).to eq(expected)
       end
     end
-    
   end
 
   context 'King location methods' do
