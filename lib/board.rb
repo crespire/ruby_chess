@@ -9,11 +9,11 @@ class Board
 
   def initialize
     @data = Array.new(8) { Array.new(8, nil) }
-    @active = 'w'
-    @castle = '-'
-    @passant = '-'
-    @half = '0'
-    @full = '1'
+    @active = nil
+    @castle = nil
+    @passant = nil
+    @half = nil
+    @full = nil
     @ply = 0
   end
 
@@ -94,12 +94,7 @@ class Board
     to = cell(destination)
     piece = from.occupant
 
-    # This should work for normal conditions.
-    # Will need to check en passant once I have that working.
-    increment_ply
-    %w[p P].include?(piece) ? reset_half : increment_half
-    to.empty? && @passant.empty? ? increment_half : reset_half
-    increment_full if piece.ord > 91
+    update_game_stats(piece, to.dup)
 
     to.occupant = from.occupant.dup
     from.occupant = nil
@@ -140,6 +135,23 @@ class Board
 
   def reset_half
     @half = 0
+  end
+
+  def update_active(piece)
+    @active = piece.ord < 91 ? 'b' : 'w'
+  end
+
+  def update_game_stats(piece, destination)
+    update_active(piece)
+    increment_ply
+    if destination.empty? || @passant == '-'
+      %w[p P].include?(piece) ? reset_half : increment_half
+    elsif !@passant == '-' && (destination.name == @passant)
+      reset_half
+    else
+      destination.capture?(piece) ? reset_half : increment_half
+    end
+    increment_full if piece.ord > 91
   end
 
   def pieces_to_fen
