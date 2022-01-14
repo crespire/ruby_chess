@@ -204,11 +204,11 @@ describe Board do
       end
 
       it 'does not increment the full move counter' do
-        expect { move.update_loc('a2', 'a4') }.to_not change { move.instance_variable_get(:@full) }
+        expect { move.update_loc('a2', 'a4') }.to_not(change { move.instance_variable_get(:@full) })
       end
 
       it 'resets the half move counter to 0' do
-        expect { move.update_loc('a2', 'a4') }.to_not change { move.instance_variable_get(:@half) }
+        expect { move.update_loc('a2', 'a4') }.to_not(change { move.instance_variable_get(:@half) })
       end
 
       it 'sets the active to black' do
@@ -230,7 +230,7 @@ describe Board do
       end
 
       it 'resets the half move counter to 0' do
-        expect { move.update_loc('a7', 'a6') }.to_not change { move.instance_variable_get(:@half) }
+        expect { move.update_loc('a7', 'a6') }.to_not(change { move.instance_variable_get(:@half) })
       end
 
       it 'sets the active to white' do
@@ -252,7 +252,7 @@ describe Board do
       end
 
       it 'does not increment the full move counter' do
-        expect { move.update_loc('b1', 'c3') }.to_not change { move.instance_variable_get(:@full) }
+        expect { move.update_loc('b1', 'c3') }.to_not(change { move.instance_variable_get(:@full) })
       end
     end
 
