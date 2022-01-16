@@ -23,7 +23,7 @@ class Movement
     else
       moves = find_all_moves(cell)
       king = cell.occupant.ord < 91 ? @board.wking : @board.bking # Find the friendly king
-      enemy_attackers = in_check?(@board.cell(king)) # Identify pieces that could attack the friendly
+      enemy_attackers = threatens?(@board.cell(king)) # Identify pieces that could attack the friendly
       # send message to castle manager if cell.occupant is a Rook to update status if required.
       return moves if enemy_attackers.empty? # not in check
 
@@ -36,6 +36,11 @@ class Movement
         # When pinned, valid moves are the intersctions of moves and nme vector; otherwise,
         # there are no available moves without putting king in check.
         # If captures are not adjacent, then this piece can move freely.
+
+        # How do we determine if a piece is pinned?
+        # If the piece is pinned, it means certain axis of movement is not allowed.
+        # That axis is the same as the attacking axis on the opposing piece we have identified.
+
         enemy_vector = vector(enemy_cell.name, king)
         coord1, coord2 = enemy_vector.last(2)
         return [] if coord1.length < 3 || coord2.length < 3
@@ -129,7 +134,7 @@ class Movement
     moves.reject { |move| threats.include?(move.gsub('x', '')) }
   end
 
-  def in_check?(king_cell)
+  def threatens?(king_cell)
     return [] if king_cell.empty?
 
     empty_board = Board.new
