@@ -152,6 +152,20 @@ class Movement
     threats
   end
 
+  def checks?(king_cell)
+    threats = []
+    @board.data.each do |rank|
+      rank.each do |cell|
+        next if cell.empty? || !king_cell.capture?(cell.occupant)
+
+        current_threats = find_all_moves(cell)
+        current_threats.map! { |el| el.gsub('x', '') }
+        threats << cell if current_threats.include?(king_cell.name)
+      end
+    end
+    threats
+  end
+
   private
 
   def piece_offset(piece, direction)
