@@ -44,4 +44,24 @@ describe Checkmate do
       expect(stale.stalemate?).to be true
     end
   end
+
+  context 'when provided a board in a checkmate situation' do
+    subject(:checkmate) { described_class.new(board) }
+
+    before do
+      board.make_board('4k3/1b2P3/4KN2/8/8/8/7p/8 b - - 1 1')
+    end
+
+    it 'returns true for checkmate' do
+      expect(checkmate.checkmate?).to be true
+    end
+
+    it 'returns true for check' do
+      expect(checkmate.check?).to be true
+    end
+
+    it 'returns true for stalemate' do
+      expect(checkmate.stalemate?).to be true
+    end
+  end
 end

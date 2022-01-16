@@ -26,12 +26,11 @@ class Checkmate
     return false unless check?
 
     # We are in a potential checkmate situation.
-    checked = @board.active == 'w' ? wking : bking
+    active_king = @board.active == 'w' ? wking : bking
     moves = 0
     @board.data.each do |rank|
       rank.each do |cell|
-        next if cell.empty?
-        next unless cell.capture?(checked.occupant)
+        next if cell.empty? || cell.capture?(active_king.occupant)
 
         moves += @movement.valid_moves(cell).length
       end
