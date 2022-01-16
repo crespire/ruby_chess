@@ -7,6 +7,6 @@ require_relative 'movement'
 class Checkmate
   def initialize(board)
     @board = board
-    move_manager = Movement.new(@board)
+    @movement = Movement.new(@board)
   end
 end

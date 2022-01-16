@@ -18,11 +18,13 @@ class Movement
 
     case cell.occupant
     when 'k', 'K'
+      # send message to castle manager to see if castle move is available
       find_king_moves(cell)
     else
       moves = find_all_moves(cell)
       king = cell.occupant.ord < 91 ? @board.wking : @board.bking # Find the friendly king
-      enemy_attackers = can_attack_king(@board.cell(king)) # Identify pieces that could attack the friendly
+      enemy_attackers = in_check?(@board.cell(king)) # Identify pieces that could attack the friendly
+      # send message to castle manager if cell.occupant is a Rook to update status if required.
       return moves if enemy_attackers.empty? # not in check
 
       results = []
@@ -124,6 +126,24 @@ class Movement
     moves = find_all_moves(cell, board)
     threats = threat_map(cell).sort
     moves.reject { |move| threats.include?(move.gsub('x', '')) }
+  end
+
+  def in_check?(king_cell)
+    return [] if king_cell.empty?
+
+    empty_board = Board.new
+    threats = []
+    @board.data.each do |rank|
+      rank.each do |cell|
+        next if cell.empty? || !king_cell.capture?(cell.occupant)
+
+        empty_board.make_board(EMPTY_FEN)
+        current_threats = find_all_moves(cell, empty_board)
+        current_threats.map! { |el| el.gsub('x', '') }
+        threats << cell if current_threats.include?(king_cell.name)
+      end
+    end
+    threats
   end
 
   private
@@ -283,24 +303,6 @@ class Movement
         empty_board.make_board(EMPTY_FEN)
         current_threats = find_all_moves(threat_cell, empty_board)
         threats = (threats + current_threats).uniq
-      end
-    end
-    threats
-  end
-
-  def can_attack_king(king_cell)
-    return [] if king_cell.empty?
-
-    empty_board = Board.new
-    threats = []
-    @board.data.each do |rank|
-      rank.each do |cell|
-        next if cell.empty? || !king_cell.capture?(cell.occupant)
-
-        empty_board.make_board(EMPTY_FEN)
-        current_threats = find_all_moves(cell, empty_board)
-        current_threats.map! { |el| el.gsub('x', '') }
-        threats << cell if current_threats.include?(king_cell.name)
       end
     end
     threats
