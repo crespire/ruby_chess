@@ -27,6 +27,7 @@ class Movement
       # send message to castle manager if cell.occupant is a Rook to update status if required.
       return moves if enemy_attackers.empty? # not in check
 
+      p moves, enemy_attackers
       results = []
       enemy_attackers.each do |enemy_cell|
         # Find the path from the attacker's current cell to the king, mark all captures (regardless of side).
