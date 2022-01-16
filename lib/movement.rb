@@ -27,7 +27,7 @@ class Movement
       # send message to castle manager if cell.occupant is a Rook to update status if required.
       return moves if enemy_attackers.empty? # not in check
 
-      p moves, enemy_attackers
+      puts "valid moves, enemy_attacks: #{enemy_attackers}"
       results = []
       enemy_attackers.each do |enemy_cell|
         # Find the path from the attacker's current cell to the king, mark all captures (regardless of side).
@@ -38,16 +38,16 @@ class Movement
         # If captures are not adjacent, then this piece can move freely.
         enemy_vector = vector(enemy_cell.name, king)
         coord1, coord2 = enemy_vector.last(2)
-
         return [] if coord1.length < 3 || coord2.length < 3
 
         file_mag = (coord1[1].ord - coord2[1].ord).abs
         rank_mag = (coord1[2].ord - coord2[2].ord).abs
         adjacent = (file_mag <= 1) && (rank_mag <= 1)
-        results = adjacent ? (enemy_vector & moves).sort : moves
+        interim = adjacent ? (enemy_vector & moves).sort : moves
 
         # Knights can't be blocked, so select capture only.
-        results.select! { |move| move.start_with?('x') } if %w[n N].include?(enemy_cell.occupant)
+        interim.select! { |move| move.start_with?('x') } if %w[n N].include?(enemy_cell.occupant)
+        results += interim
       end
       results.sort
     end
