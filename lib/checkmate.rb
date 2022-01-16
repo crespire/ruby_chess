@@ -15,8 +15,8 @@ class Checkmate
     wking = get_king(@board.wking)
     return nil if bking.empty? || wking.empty?
 
-    direct_attacks = @board.active == 'w' ? @movement.under_attack?(wking) : @movement.under_attack?(bking)
-    direct_attacks.length.positive?
+    threats = @board.active == 'w' ? @movement.checks?(wking) : @movement.checks?(bking)
+    threats.length.positive?
   end
 
   def checkmate?

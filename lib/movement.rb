@@ -23,7 +23,7 @@ class Movement
     else
       moves = find_all_moves(cell)
       king = cell.occupant.ord < 91 ? @board.wking : @board.bking # Find the friendly king
-      enemy_attackers = under_attack?(@board.cell(king)) # Identify pieces that could attack the friendly
+      enemy_attackers = threatens?(@board.cell(king)) # Identify pieces that could attack the friendly
       # send message to castle manager if cell.occupant is a Rook to update status if required.
       return moves if enemy_attackers.empty? # not in check
 
@@ -128,7 +128,7 @@ class Movement
     moves.reject { |move| threats.include?(move.gsub('x', '')) }
   end
 
-  def under_attack?(king_cell)
+  def threatens?(king_cell)
     return [] if king_cell.empty?
 
     empty_board = Board.new
@@ -139,6 +139,20 @@ class Movement
 
         empty_board.make_board(EMPTY_FEN)
         current_threats = find_all_moves(cell, empty_board)
+        current_threats.map! { |el| el.gsub('x', '') }
+        threats << cell if current_threats.include?(king_cell.name)
+      end
+    end
+    threats
+  end
+
+  def checks?(king_cell)
+    threats = []
+    @board.data.each do |rank|
+      rank.each do |cell|
+        next if cell.empty? || !king_cell.capture?(cell.occupant)
+
+        current_threats = find_all_moves(cell)
         current_threats.map! { |el| el.gsub('x', '') }
         threats << cell if current_threats.include?(king_cell.name)
       end
