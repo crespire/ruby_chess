@@ -61,7 +61,7 @@ describe Checkmate do
     end
 
     it 'returns true for stalemate' do
-      expect(checkmate.stalemate?).to be true
+      expect(checkmate.stalemate?).to be false
     end
   end
 
@@ -81,7 +81,7 @@ describe Checkmate do
     end
 
     it 'returns true for stalemate' do
-      expect(checkmate.stalemate?).to be true
+      expect(checkmate.stalemate?).to be false
     end
   end
 
@@ -101,7 +101,7 @@ describe Checkmate do
     end
 
     it 'returns true for stalemate' do
-      expect(checkmate.stalemate?).to be true
+      expect(checkmate.stalemate?).to be false
     end
   end
 end

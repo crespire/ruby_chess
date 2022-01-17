@@ -42,6 +42,7 @@ class Checkmate
     bking = get_king(@board.bking)
     wking = get_king(@board.wking)
     return nil if bking.empty? || wking.empty?
+    return false if checkmate?
 
     active_king = @board.active == 'w' ? wking : bking
     moves = 0
@@ -65,7 +66,7 @@ class Checkmate
     when reference
       king = reference
     else
-      'Something went wrong'
+      raise Error 'Something went wrong'
     end
 
     king
