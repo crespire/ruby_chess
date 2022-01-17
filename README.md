@@ -64,16 +64,18 @@ After work on `Checkmate` is completed, I should work to ensure the move counter
 
 **Valid Moves refactor**
 
+While working on the Checkmate class, I ran into some issues where my `valid_moves` function was returning illegal moves in a checkmate situation, and since I was relying on that function to derive check and checkmate status, I had to go back and fix my `Movement#valid_moves` method.
 Since I’m relying on my valid moves generator to check for check and checkmate, I need to refactor the main function so that it is correctly filtering out illegal moves.
 
 Problems I’m experiencing:
 
 1. Currently, valid moves is providing blocking moves but is not correctly identifying situations where a blocking move would be illegal. As an example `r1b1k2r/ppppqppp/2n5/8/1PP2B2/3n1N2/1P1NPPPP/R2QKB1R w KQkq - 1 9` is showing
-* Bf4 with valid moves to [e3 e5]
-* Nf3 with valid move to [e5]
-* Nd2 with valid move to [e4]
+    * Bf4 with valid moves to [e3 e5]
+    * Nf3 with valid move to [e5]
+    * Nd2 with valid move to [e4]
 
 These moves are all valid in the situation to block a potential threat from the Queen. Except that the King is under direct attack by a knight, so blocking the Queen is a secondary concern. I need to make sure my `valid_moves` is prioritizing handling direct attacks before blocking moves.
+
 2. `valid_moves` is showing pins correctly, but it’s really hacky. I think the code could benefit from a refactor here as well.
 
 Potential approach.
