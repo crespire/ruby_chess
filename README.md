@@ -90,20 +90,20 @@ Keep in mind, `valid_moves` returns a list of valid moves for a given cell. It i
 get a list of those pieces attacking the friendly king
 get a list of threats to the friendly king
 If there are any pieces attacking the king	
-	For each enemy piece in the direct attack list
-		check if the current piece has any moves that can block or capture the enemy piece?
-			return moves that intersect attack axis of enemy piece
-		If not, then
-			return no legal moves
+  For each enemy piece in the direct attack list
+    check if the current piece has any moves that can block or capture the enemy piece?
+      return moves that intersect attack axis of enemy piece
+    If not, then
+	  return no legal moves
 If there are no direct attacks but there are threats
-	for each enemy piece in threats
-		check if the current piece is pinned (ie, blocking a direct attack)
-		if pinned
-			return moves along the attacking axis that are also in the moves list
-		else
-			return all moves
+  for each enemy piece in threats
+    check if the current piece is pinned (ie, blocking a direct attack)
+      if pinned
+        return moves along the attacking axis that are also in the moves list
+      else
+        return all moves
 else there are no direct and threats
-	return all moves
+  return all moves
 ```
 
 So, the next challenge is, how do we determine if a piece is pinned? The problem here is rooted in the way I implemented move calculation. I ended up putting in some hacky code because I think my abstractions were not the most helpful. While I was already refactoring `valid_moves`, I feel that changing my move generation approach would result in a significantly larger refactoring investment that would touch back to how I generate moves in the first place. I wasn't up for this at this moment, as I am eager to move on in the course. So, I managed to get everything working based on the tests I've written which included the previous failing test with the pawn blocking a queen in a checkmate situation, and I decided it was good enough.
