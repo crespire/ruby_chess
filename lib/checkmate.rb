@@ -31,7 +31,8 @@ class Checkmate
     @board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || cell.capture?(active_king.occupant)
-        
+
+        p cell, @movement.valid_moves(cell)
         moves += @movement.valid_moves(cell).length
       end
     end

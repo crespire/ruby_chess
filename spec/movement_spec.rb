@@ -865,6 +865,12 @@ describe Movement do
         cell = board.cell('e2')
         expect(valid_moves_test.valid_moves(cell)).to eq([])
       end
+
+      it 'when selecting the pawn at e3, corretly shows no legal moves' do
+        board.make_board('r1b1k2r/ppppqppp/2n5/8/1PP2B2/3nPN2/1P1N1PPP/R2QKB1R w KQkq - 1 9')
+        cell = board.cell('e3')
+        expect(valid_moves_test.valid_moves(cell)).to eq([])
+      end
     end
   end
 end
