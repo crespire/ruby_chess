@@ -29,16 +29,12 @@ class Movement
 
       results = []
       enemy_attackers.each do |enemy_cell|
-        # Find the path from the attacker's current cell to the king, mark all captures (regardless of side).
-        # This path should include all squares to the king.
-        # If the two captures are adjacent, then the piece is pinned.
-        # When pinned, valid moves are the intersctions of moves and nme vector; otherwise,
-        # there are no available moves without putting king in check.
-        # If captures are not adjacent, then this piece can move freely.
-
-        # How do we determine if a piece is pinned?
+        # For each enemy attacker
+        # Determine if the selected piece is pinned
+        # Selected piece is on attacker's path to the king. This means it is pinned.
         # If the piece is pinned, it means certain axis of movement is not allowed.
-        # That axis is the same as the attacking axis on the opposing piece we have identified.
+        # Allowed axis is the same as the attacking axis.
+        # As long as the piece stays on the attacking axis, moves on that axis are legal.
 
         enemy_vector = vector(enemy_cell.name, king)
         coord1, coord2 = enemy_vector.last(2)
