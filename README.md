@@ -1,7 +1,7 @@
 # ruby_chess
 Chess capstone project from the Ruby path of The Odin Project.
 
-### Implementing timeline and notes
+### Implementation timeline and notes
 
 **Class pieces?**
 I chose to start with the FEN stuff because I figured it would be an easy way to handle saves, exports and also testing.
