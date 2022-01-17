@@ -107,7 +107,7 @@ class Board
   def wking
     find_piece('K').pop
   end
-
+  .and_return(nil)
   def find_piece(piece)
     coords = []
     cols = ('a'..'h').to_a
