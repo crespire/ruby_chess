@@ -74,7 +74,7 @@ Problems I’m experiencing:
     * Nf3 with valid move to [e5]
     * Nd2 with valid move to [e4]
 
-These moves are all valid in the situation to block a potential threat from the Queen. Except that the King is under direct attack by a knight, so blocking the Queen is a secondary concern. I need to make sure my `valid_moves` is prioritizing handling direct attacks before blocking moves.
+    These moves are all valid in the situation to block a potential threat from the Queen. Except that the King is under direct attack by a knight, so blocking the Queen is a secondary concern. I need to make sure my `valid_moves` is prioritizing handling direct attacks before blocking moves.
 
 2. `valid_moves` is showing pins correctly, but it’s really hacky. I think the code could benefit from a refactor here as well.
 
