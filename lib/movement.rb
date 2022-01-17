@@ -51,7 +51,7 @@ class Movement
         rank_mag = (coord1[2].ord - coord2[2].ord).abs
         adjacent = (file_mag <= 1) && (rank_mag <= 1)
 
-        # If to_king is empty, and we're not adjacent, there is an intervening piece
+        # If to_king length is 1 (king only) and we're not adjacent, there is an intervening piece
         pinned = false if to_king.length == 1 && !adjacent
 
         # Check if there are any intervening friendly pieces
