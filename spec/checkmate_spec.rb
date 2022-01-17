@@ -138,4 +138,18 @@ describe Checkmate do
       expect(checkmate5.stalemate?).to be false
     end
   end
+
+  context 'whne provided a board with black in a checkmate situation by multiple pieces' do
+    subject(:checkmate6) { described_class.new(board) }
+
+    before do
+      board.make_board('k2R4/8/1N6/R2B4/8/8/8/7K b - - 0 1')
+    end
+
+    it 'returns the correct mate status' do
+      expect(checkmate6.checkmate?).to be true
+      expect(checkmate6.check?).to be true
+      expect(checkmate6.stalemate?).to be false
+    end
+  end
 end
