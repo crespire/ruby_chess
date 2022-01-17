@@ -19,7 +19,7 @@ The one thing I have to figure out is how to keep track of what cells are under 
 ```ruby
 def valid_moves(cell) do
   if king
-		king_moves(cell, offset)
+    king_moves(cell, offset)
   end
 end
 
@@ -50,10 +50,10 @@ So, we’d probably go something like this:
 
 ```ruby
 def any_check?(last_move)
-	# Given the cell that was just updated with the last move
-	# Get enemy king
-	atkrs = Movement.check(king)
-	!atkrs.empty?
+  # Given the cell that was just updated with the last move
+  # Get enemy king
+  atkrs = Movement.check(king)
+  !atkrs.empty?
 end
 ```
 
