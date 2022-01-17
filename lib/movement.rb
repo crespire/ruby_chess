@@ -44,7 +44,9 @@ class Movement
         rank_mag = (coord1[2].ord - coord2[2].ord).abs
         adjacent = (file_mag <= 1) && (rank_mag <= 1)
         interim = adjacent ? (enemy_vector & moves).sort : moves
+        return [] if enemy_vector.include?("x#{cell.name}") && adjacent && %w[p P].include?(cell.occupant)
 
+        p moves, enemy_vector, adjacent, interim
         # Knights can't be blocked, so select capture only.
         interim.select! { |move| move.start_with?('x') } if %w[n N].include?(enemy_cell.occupant)
         results += interim
