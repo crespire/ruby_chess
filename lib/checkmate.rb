@@ -15,7 +15,7 @@ class Checkmate
     wking = get_king(@board.wking)
     return nil if bking.empty? || wking.empty?
 
-    threats = @board.active == 'w' ? @movement.checks?(wking) : @movement.checks?(bking)
+    threats = @board.active == 'w' ? @movement.attacks_on(wking) : @movement.attacks_on(bking)
     threats.length.positive?
   end
 
@@ -32,7 +32,6 @@ class Checkmate
       rank.each do |cell|
         next if cell.empty? || cell.capture?(active_king.occupant)
 
-        p cell, @movement.valid_moves(cell)
         moves += @movement.valid_moves(cell).length
       end
     end

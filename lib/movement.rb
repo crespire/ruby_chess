@@ -22,37 +22,48 @@ class Movement
       find_king_moves(cell)
     else
       moves = find_all_moves(cell)
-      king = cell.occupant.ord < 91 ? @board.wking : @board.bking # Find the friendly king
-      enemy_attackers = threatens?(@board.cell(king)) # Identify pieces that could attack the friendly
+      king = cell.occupant.ord < 91 ? @board.cell(@board.wking) : @board.cell(@board.bking) # Find the friendly king
+      enemy_attackers = attacks_on(king) # Identify direct attacks
+      enemy_threats = threats_to(king) - attacks_on(king) # Identify threats
       # send message to castle manager if cell.occupant is a Rook to update status if required.
-      return moves if enemy_attackers.empty? # not in check
+      return moves if enemy_attackers.empty? && enemy_threats.empty? # not in check
 
-      results = []
       enemy_attackers.each do |enemy_cell|
-        # For each enemy attacker
-        # Determine if the selected piece is pinned
-        # Selected piece is on attacker's path to the king. This means it is pinned.
-        # If the piece is pinned, it means certain axis of movement is not allowed.
-        # Allowed axis is the same as the attacking axis.
-        # As long as the piece stays on the attacking axis, moves on that axis are legal.
+        direct_attack = vector(enemy_cell.name, king.name)
+        interim = (direct_attack & moves).sort
+        interim = interim.select { |move| move.start_with?('x') } if %w[n N].include?(enemy_cell.occupant)
+        return interim if interim.length.positive? && enemy_threats.empty?
 
-        enemy_vector = vector(enemy_cell.name, king)
-        coord1, coord2 = enemy_vector.last(2)
-        return [] if coord1.length < 3 || coord2.length < 3
+        return []
+      end
+
+      enemy_threats.each do |enemy_cell|
+        threat = vector(enemy_cell.name, king.name)
+        to_king = vector(cell.name, king.name)
+        to_king.shift # get rid of the first element, which should be the current cell.
+        full_path = (threat + to_king).uniq
+        pinned = threat.include?(cell.name) || threat.include?("x#{cell.name}")
+
+        coord1, coord2 = full_path.last(2)
+        return moves if coord1.length < 3 || coord2.length < 3
 
         file_mag = (coord1[1].ord - coord2[1].ord).abs
         rank_mag = (coord1[2].ord - coord2[2].ord).abs
         adjacent = (file_mag <= 1) && (rank_mag <= 1)
-        interim = adjacent ? (enemy_vector & moves).sort : moves
 
-        # Knights can't be blocked, so select capture only.
-        interim.select! { |move| move.start_with?('x') } if %w[n N].include?(enemy_cell.occupant)
-        # Pawns on an attack path have no valid moves.
-        return [] if enemy_vector.include?("x#{cell.name}") && %w[p P].include?(cell.occupant)
+        # If to_king is empty, and we're not adjacent, there is an intervening piece
+        pinned = false if to_king.length == 1 && !adjacent
 
-        results += interim
+        # Check if there are any intervening friendly pieces
+        full_path.each do |coord|
+          current = @board.cell(coord.gsub('x', ''))
+          next if current.empty? || current.capture?(cell.occupant)
+          next if current == cell || current == king
+
+          pinned = false
+        end
+        return (pinned ? (threat & moves).sort : moves)
       end
-      results.sort
     end
   end
 
@@ -132,7 +143,7 @@ class Movement
     moves.reject { |move| threats.include?(move.gsub('x', '')) }
   end
 
-  def threatens?(king_cell)
+  def threats_to(king_cell)
     return [] if king_cell.empty?
 
     empty_board = Board.new
@@ -150,18 +161,18 @@ class Movement
     threats
   end
 
-  def checks?(king_cell)
-    threats = []
+  def attacks_on(king_cell)
+    attackers = []
     @board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || !king_cell.capture?(cell.occupant)
 
         current_threats = find_all_moves(cell)
         current_threats.map! { |el| el.gsub('x', '') }
-        threats << cell if current_threats.include?(king_cell.name)
+        attackers << cell if current_threats.include?(king_cell.name)
       end
     end
-    threats
+    attackers
   end
 
   private
@@ -207,7 +218,7 @@ class Movement
       step = board.cell(board.arr_to_std_chess(arr)) if new_ind.between?(0, 7)
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
-      break unless step && step.empty? && !step.capture?(piece)
+      break unless step && step.empty?
     end
     result
   end
@@ -228,7 +239,7 @@ class Movement
       step = board.cell(next_ref) if next_ref
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && (step.empty? || step.capture?(piece))
-      break unless step && step.empty? && !step.capture?(piece)
+      break unless step && step.empty?
     end
     result
   end
@@ -328,10 +339,9 @@ class Movement
 
   def vector(start, finish)
     dir = vector_info(start, finish)
-    offset = 7
-    result = path(@board.cell(start), offset, dir)
+    result = path(@board.cell(start), 8, dir)
     result.unshift "x#{start}"
-    result << "x#{finish}"
+    result.push "x#{finish}"
   end
 
   def vector_info(start, finish)
