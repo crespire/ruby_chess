@@ -1,19 +1,19 @@
 # ruby_chess
 Chess capstone project from the Ruby path of The Odin Project.
 
-### Implementation timeline and notes
+# Implementation timeline and notes
 
-**Class pieces?**
+### Class pieces?
 I chose to start with the FEN stuff because I figured it would be an easy way to handle saves, exports and also testing.
 
 Handling the FEN stuff was pretty straight forward, and actually gave me the idea about whether or not I actually needed individual Chess piece classes. All the information I required was encoded into the FEN piece notations. The type of piece and its color, plus special rules about Castling or *en passant* are all in the FEN.
 
 This led to the idea that what I should perhaps focus on instead was a class that handles all the piece movement. The idea was that, because I have the information encoded into the tokens, I just pass a given cell with an occupant to this class via a command message, and get back a list of valid cells that the piece can move to. After getting a list, the user can make a choice, and then the board updates the piece’s movement in the data based on input.
 
-**Movement implementation**
+### Movement implementation
 So far, I’ve used the `Movement` class to generate a list of valid moves for each given piece, and haven’t yet gotten to the “update the cell occupants” piece yet. That should be easy to implement once I have all the valid moves stuff working. So far, basic piece movement done, as horizontal, vertical and ordinal movement has been done. I’ve also completed Knight movement, and pawn forward movement including the double forward. I have to figure out pawn captures, and then start thinking about how to tie all the basic movements into a `valid_moves` function. 
 
-**King movement and self-checking**
+### King movement and self-checking
 The one thing I have to figure out is how to keep track of what cells are under attack so that we can’t self check when the user has selected the King. I wonder if we can define a method ~~on board~~ that generates a current list of cells under attack, and will remove them from the King’s valid moves. This way, if the king is the selected piece, we can generate a threat map for all opposing pieces, and mark those moves as invalid after generating the King’s normal list of moves. Something like this:
 
 ```ruby
@@ -39,7 +39,7 @@ Another way we can approach this might be utilizing the concept of Board control
 
 ~~I *think* en passant will be easier than castling.~~ I ended up deciding to tackle check and checkmate first.
 
-**Check and Checkmate**
+### Check and Checkmate
 How should I implement my check and checkmates? I am feeling a bit confused as to what should be responsible. I think my confusion comes from the fact that I have implemented self-check prevention into my `Movement#valid_moves(cell)` function. For example, given this board `2Q3k1/6pp/5r1q/6N1/1P5P/6P1/5P2/6K1 b - - 0 1`, selecting the black Rook correctly indicates the available blocking move. Selecting the black King correctly indicates that there are no moves available.
 
 When I think about it, a check is a condition when a king is under attack. This seems simple enough, but my trouble is where to locate this functionality. If I put it in board, it would have to know a heck of a lot about piece moves to check. It also doesn’t seem to make a whole lot of sense to put it inside the Movement helper. Though I do have a helper that might be helpful there in `can_attack_king`.
@@ -66,7 +66,7 @@ After work on `Checkmate` is completed, I should work to ensure the move counter
 - The half move clock is changed after every play. If a capture is made, or a pawn is moved, the counter resets to 0, otherwise the value is incremented by 1.
 - The full move is clock is incremented after a white and black play, constituting a full “round” of play.
 
-**Valid moves refactor**
+### Valid moves refactor
 
 While working on the Checkmate class, I ran into some issues where my `valid_moves` function was returning illegal moves in a checkmate situation, and since I was relying on that function to derive check and checkmate status, I had to go back and fix my `Movement#valid_moves` method.
 Since I’m relying on my valid moves generator to check for check and checkmate, I need to refactor the main function so that it is correctly filtering out illegal moves.
@@ -82,7 +82,7 @@ Problems I’m experiencing:
 
 2. `valid_moves` is showing pins correctly, but it’s really hacky. I think the code could benefit from a refactor here as well.
 
-**Potential approach**
+#### Potential approach
 
 Keep in mind, `valid_moves` returns a list of valid moves for a given cell. It is completely fine for the method it return an empty list. I think I was forgetting this before.
 
@@ -108,17 +108,17 @@ else there are no direct and threats
 
 So, the next challenge is, how do we determine if a piece is pinned? The problem here is rooted in the way I implemented move calculation. I ended up putting in some hacky code because I think my abstractions were not the most helpful. While I was already refactoring `valid_moves`, I feel that changing my move generation approach would result in a significantly larger refactoring investment that would touch back to how I generate moves in the first place. I wasn't up for this at this moment, as I am eager to move on in the course. So, I managed to get everything working based on the tests I've written which included the previous failing test with the pawn blocking a queen in a checkmate situation, and I decided it was good enough.
 
-**Valid moves refactor completed.**
+### Valid moves refactor completed
 A lot of what I spoke about in the notes, I ended up implementing. Our board is now aware of where any piece is if queried for that information, and will has a special method to query for the locations of the white or black king.
 
 I ended up generating the threats to the king every time, and I do wonder how the game will perform once I have all the pieces together. Everything works as expected, however, so that's a good start.
 
-**GameInformation**
+### GameInformation
 Before I move on to working on *en passant* and *castling*, I think I have to extract from Board all the stuff related to game information. The board should strictly know about what cells are where, and updating the location of the pieces in question. It should not really care about what the active color is, castling availabilty, en passant availability, ply number, and the two clocks.
 
 The board really has no business managing that, and should simply send messages to a GameInfo or Chess object that can keep track of these things, including generating and exporting FEN.
 
-**Chess**
+### Chess
 I have started to implement Chess, which is the game manager class that references board, and holds meta information about the game.
 
 Currently, Board and its spec has been re-written to rely on this Chess object, as Chess now handles the board's state and making boards from FEN, rather than the board. Chess creates new Board objects when passed in a FEN.
