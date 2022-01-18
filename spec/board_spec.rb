@@ -7,8 +7,7 @@ require_relative '../lib/chess'
 
 describe Board do
   context 'on initialize' do
-    let(:chess) { instance_double('Chess') }
-    subject(:init) { described_class.new(chess) }
+    subject(:init) { described_class.new }
 
     it 'creates an instance array to store data' do
       board = init.instance_variable_get(:@data)
@@ -27,14 +26,12 @@ describe Board do
       end
     end
 
-    it 'initializes with a game info object' do
-      info = init.instance_variable_get(:@game)
-
-      expect(info).to be_an(Object)
+    it 'initializes with default board' do
+      expect(init.cell('a8').occupant).to eq('r')
+      expect(init.cell('d4')).to be_empty
+      expect(init.cell('e1').occupant).to eq('K')
     end
   end
-
-
 
   context 'coordinates conversions' do
     context '#arr_to_std_chess' do

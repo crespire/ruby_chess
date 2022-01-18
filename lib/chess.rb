@@ -18,7 +18,19 @@ class Chess
   end
 
   def make_board(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
-    @board = Board.new(self, fen)
+     # Make new board based on FEN
+    parts = fen.split(' ')
+    raise ArgumentError, "Invalid FEN provided, incorrect number of data segments: #{fen}" unless parts.length == 6
+
+    pieces = parts[0].split('/')
+    raise ArgumentError, "Invalid FEN provided, found #{pieces.length} ranks." unless pieces.length == 8
+
+    @active = parts[1]
+    @castle = parts[2]
+    @passant = parts[3]
+    @half = parts[4].to_i
+    @full = parts[5].to_i
+    @board = Board.new(self, pieces)
   end
 
   def make_fen

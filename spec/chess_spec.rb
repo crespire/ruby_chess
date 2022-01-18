@@ -1,5 +1,12 @@
+# frozen_string_literal: true
+
+# spec/chess_spec.rb
+
+require_relative '../lib/board'
+require_relative '../lib/chess'
+
 describe Chess do
-  xcontext '#make_board' do
+  context '#make_board' do
     context 'when there are errors in the FEN notation provided' do
       subject(:fen_error) { described_class.new }
 
@@ -22,18 +29,18 @@ describe Chess do
 
       it 'for the default starting position' do
         fen_test.make_board
-        board = fen_test.instance_variable_get(:@data)
+        board = fen_test.instance_variable_get(:@board)
         active = fen_test.instance_variable_get(:@active)
         full = fen_test.instance_variable_get(:@full)
 
-        expect(board[0][0].name).to eq('a8')
-        expect(board[0][0].occupant).to eq('r')
-        expect(board[2][0].name).to eq('a6')
-        expect(board[2][0].occupant).to be_nil
-        expect(board[4][3].name).to eq('d4')
-        expect(board[4][3].occupant).to be_nil
-        expect(board[7][6].name).to eq('g1')
-        expect(board[7][6].occupant).to eq('N')
+        expect(board.data[0][0].name).to eq('a8')
+        expect(board.data[0][0].occupant).to eq('r')
+        expect(board.data[2][0].name).to eq('a6')
+        expect(board.data[2][0].occupant).to be_nil
+        expect(board.data[4][3].name).to eq('d4')
+        expect(board.data[4][3].occupant).to be_nil
+        expect(board.data[7][6].name).to eq('g1')
+        expect(board.data[7][6].occupant).to eq('N')
 
         expect(full).to eq(1)
         expect(active).to eq('w')
@@ -84,20 +91,16 @@ describe Chess do
     end
   end
 
-  context '#update_loc' do
-    let(:chess) { double('Chess') }
-    subject(:move) { described_class.new(chess) }
+  xcontext '#move_piece' do
+    subject(:chess) { described_class.new(chess) }
 
     it 'moves an occupant from the gien origin to the given destination' do
-      from = move.cell('a7')
-      to = move.cell('a6')
+      board = chess.instance_variable_get(:@board)
 
-      expect { move.update_loc('a7', 'a6') }.to \
-        change { to.occupant }.from(nil).to('p').and \
-        change { from.occupant }.from('p').to(nil)
+      expect(board).to receive(:update_loc)
+      chess.move_piece('a7', 'a6')
     end
 
-    # These tests actually go in Chess
     xcontext 'Given a sequence of moves' do
       context 'on ply 1, when moving a starting white pawn' do
         it 'increments the ply counter' do
@@ -212,7 +215,9 @@ describe Chess do
           expect { move.update_loc('f8', 'd6') }.to change { move.instance_variable_get(:@half) }.to(0)
         end
       end
-    end  xcontext '#make_board' do
+    end
+    
+    xcontext '#make_board' do
       context 'when there are errors in the FEN notation provided' do
         subject(:fen_error) { described_class.new }
   

@@ -8,23 +8,8 @@ require_relative 'chess'
 class Board
   attr_reader :data, :game
 
-  def initialize(game = Chess.new, fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+  def initialize(pieces = ['rnbqkbnr', 'pppppppp', '8', '8', '8', '8', 'PPPPPPPP', 'RNBQKBNR'])
     @data = Array.new(8) { Array.new(8, nil) }
-    @game = game
-
-    # Initialize based on FEN
-    parts = fen.split(' ')
-    raise ArgumentError, "Invalid FEN provided, incorrect number of data segments: #{fen}" unless parts.length == 6
-
-    pieces = parts[0].split('/')
-    raise ArgumentError, "Invalid FEN provided, found #{pieces.length} ranks." unless pieces.length == 8
-
-    @active = parts[1]
-    @castle = parts[2]
-    @passant = parts[3]
-    @half = parts[4].to_i
-    @full = parts[5].to_i
-
     rank_ind = 0
     col = ('a'..'h').to_a
     pieces.each do |rank|
