@@ -7,8 +7,9 @@ require_relative 'chess'
 class Movement
   EMPTY_FEN = '8/8/8/8/8/8/8/8 w - - 1 2'
 
-  def initialize(game = nil)
+  def initialize(game)
     @board = game.board
+    @game = game
   end
 
   def valid_moves(cell)
@@ -288,7 +289,7 @@ class Movement
       break unless step && step.empty?
     end
 
-    @passant_capture = result[0] if double_fwd
+    @game.passant = result[0] if double_fwd
 
     # Check diagonals, only eligible if there is a capture available
     next_refs = [[start[0] + rank_offset, start[1] - 1], [start[0] + rank_offset, start[1] + 1]]
