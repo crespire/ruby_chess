@@ -8,11 +8,10 @@ require_relative '../lib/chess'
 describe UI do
   context 'Display functionality' do
     let(:chess) { Chess.new }
-     subject(:display) { described_class.new(chess) }
+    subject(:display) { described_class.new(chess) }
 
     context 'shows a provided chess board' do
       it 'displays a chess board' do
-        chess.set_board_state
         expect { display.show_board }.to output.to_stdout
       end
     end

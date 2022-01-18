@@ -8,7 +8,7 @@ require_relative 'ui'
 class Chess
   attr_accessor :board, :active, :castle, :passant, :half, :full, :ply
 
-  def initialize(ui = UI.new)
+  def initialize(ui = UI.new(self))
     partial_fen = 'w KQkq - 0 1'
     parts = partial_fen.split(' ')
 
@@ -20,7 +20,6 @@ class Chess
     @full = parts[4].to_i
     ply_offset = @active == 'b' ? 1 : 0
     @ply = @full + ply_offset
-
     @ui = ui
   end
 
@@ -51,20 +50,20 @@ class Chess
 
     from = cell(origin)
     to = cell(destination)
-    update_game_stats(from.occupant, to.dup)
+    piece = from.occupant.dup
+    to_before = to.dup
     @board.update_loc(from, to)
-
     last_rank = to.name.include?('1') || to.name.include?('8')
-    pawn_promotion(to) if last_rank && %w[p P].include?(to.occupant)
+    pawn_promotion(@active) if last_rank && %w[p P].include?(to.occupant)
+    update_game_stats(piece, to_before)
   end
 
   def cell(piece)
     @board.cell(piece)
   end
 
-  def pawn_promotion(cell)
-    color = cell.occupant.ord < 91 ? 'w' : 'b'
-    selection = @UI.prompt_pawn_promotion
+  def pawn_promotion(active)
+    selection = @ui.prompt_pawn_promotion
     cell.occupant
   end
 

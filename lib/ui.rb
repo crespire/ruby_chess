@@ -2,7 +2,7 @@
 
 # lib/movement.rb
 
-class Display
+class UI
   PIECE_LOOKUP = {
     'P' => '♟︎',
     'R' => '♜',
@@ -19,7 +19,7 @@ class Display
     ' ' => ' '
   }.freeze
 
-  def initialize(game = nil)
+  def initialize(game)
     @board = game.board
   end
 
