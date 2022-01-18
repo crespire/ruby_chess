@@ -89,19 +89,16 @@ class Board
     coords.sort
   end
 
-  def board_to_fen
-    puts "Inside board_to_fen"
+  def to_fen
     strs = []
     @data.each.with_index(1) do |rank, i|
       rank.each { |cell| strs << cell.to_fen }
       strs << '/' unless i == rank.length
     end
-
     parsed = []
     strs.chunk { |el| el.is_a?(String) }.each do |str, chunk|
       parsed << (str ? chunk.join : chunk.sum)
     end
-    p parsed
     parsed.join
   end
 end

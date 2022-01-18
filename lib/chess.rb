@@ -34,7 +34,7 @@ class Chess
   end
 
   def make_fen
-    pieces = @board.board_to_fen
+    pieces = @board.to_fen
     [pieces, @active, @castle, @passant, @half, @full].join(' ')
   end
 
