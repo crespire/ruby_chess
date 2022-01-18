@@ -4,6 +4,7 @@
 
 require_relative '../lib/board'
 require_relative '../lib/chess'
+require_relative '../lib/ui'
 
 describe Chess do
   context 'initialize' do

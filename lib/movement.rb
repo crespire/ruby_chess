@@ -130,6 +130,9 @@ class Movement
     rank_dir = cell.occupant.ord < 91 ? -1 : 1 # Check color, if white, N, else S.
     start_rank_ind = rank_dir.negative? ? 6 : 1
     result = board.equal?(@board) ? pawn_moves(cell, rank_dir, start_rank_ind, board) : pawn_captures(cell, rank_dir, board)
+
+    # Check for passant capture here and add it to the list if available.
+
     result.sort
   end
 

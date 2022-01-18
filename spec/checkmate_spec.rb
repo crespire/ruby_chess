@@ -8,7 +8,8 @@ require_relative '../lib/movement'
 require_relative '../lib/chess'
 
 describe Checkmate do
-  let(:game) { Chess.new }
+  let(:ui) { double('UI') }
+  let(:game) { Chess.new(ui) }
   
   context 'when provided a board in a check situation' do
     subject(:check) { described_class.new(game) }

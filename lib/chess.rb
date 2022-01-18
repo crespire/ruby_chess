@@ -3,11 +3,12 @@
 # lib/chess.rb
 
 require_relative 'board'
+require_relative 'ui'
 
 class Chess
   attr_accessor :board, :active, :castle, :passant, :half, :full, :ply
 
-  def initialize
+  def initialize(ui = UI.new)
     partial_fen = 'w KQkq - 0 1'
     parts = partial_fen.split(' ')
 
@@ -19,6 +20,8 @@ class Chess
     @full = parts[4].to_i
     ply_offset = @active == 'b' ? 1 : 0
     @ply = @full + ply_offset
+
+    @ui = ui
   end
 
   def set_board_state(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
@@ -50,10 +53,19 @@ class Chess
     to = cell(destination)
     update_game_stats(from.occupant, to.dup)
     @board.update_loc(from, to)
+
+    last_rank = to.name.include?('1') || to.name.include?('8')
+    pawn_promotion(to) if last_rank && %w[p P].include?(to.occupant)
   end
 
   def cell(piece)
     @board.cell(piece)
+  end
+
+  def pawn_promotion(cell)
+    color = cell.occupant.ord < 91 ? 'w' : 'b'
+    selection = @UI.prompt_pawn_promotion
+    cell.occupant
   end
 
   private
