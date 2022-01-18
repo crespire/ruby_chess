@@ -19,8 +19,8 @@ class Display
     ' ' => ' '
   }.freeze
 
-  def initialize(board = nil)
-    @board = board
+  def initialize(game = nil)
+    @board = game.board
   end
 
   def show_board(board: @board, moves: [])

@@ -5,7 +5,7 @@
 require_relative 'board'
 
 class Chess
-  attr_accessor :active, :castle, :passant, :half, :full, :ply
+  attr_accessor :board, :active, :castle, :passant, :half, :full, :ply
 
   def initialize
     partial_fen = 'w KQkq - 0 1'
