@@ -116,26 +116,28 @@ describe Chess do
       chess.move_piece('a7', 'a6')
     end
 
-    xcontext 'Given a sequence of moves' do
+    context 'Given a sequence of moves' do
+      subject(:move) { described_class.new }
+
       context 'on ply 1, when moving a starting white pawn' do
         it 'increments the ply counter' do
-          expect { move.update_loc('a2', 'a4') }.to change { move.instance_variable_get(:@game.ply) }.by(1)
+          expect { move.move_piece('a2', 'a4') }.to change { move.instance_variable_get(:@ply) }.by(1)
         end
 
         it 'does not increment the full move counter' do
-          expect { move.update_loc('a2', 'a4') }.to_not(change { move.instance_variable_get(:@full) })
+          expect { move.move_piece('a2', 'a4') }.to_not(change { move.instance_variable_get(:@full) })
         end
 
         it 'resets the half move counter to 0' do
-          expect { move.update_loc('a2', 'a4') }.to_not(change { move.instance_variable_get(:@half) })
+          expect { move.move_piece('a2', 'a4') }.to_not(change { move.instance_variable_get(:@half) })
         end
 
         it 'sets the active to black' do
-          expect { move.update_loc('a2', 'a4') }.to change { move.instance_variable_get(:@active) }.to('b')
+          expect { move.move_piece('a2', 'a4') }.to change { move.instance_variable_get(:@active) }.to('b')
         end
       end
 
-      context 'on ply 2, when moving a starting black pawn' do
+      xcontext 'on ply 2, when moving a starting black pawn' do
         before do
           move.make_board('rnbqkbnr/pppppppp/8/8/7P/8/PPPPPPP1/RNBQKBNR b KQkq - 0 1')
         end
@@ -157,7 +159,7 @@ describe Chess do
         end
       end
 
-      context 'on ply 3, when moving a white knight' do
+      xcontext 'on ply 3, when moving a white knight' do
         before do
           move.make_board('rnbqkbnr/1ppppppp/p7/8/7P/8/PPPPPPP1/RNBQKBNR w KQkq - 0 2')
         end
@@ -175,7 +177,7 @@ describe Chess do
         end
       end
 
-      context 'on ply 4, when moving a black rook' do
+      xcontext 'on ply 4, when moving a black rook' do
         before do
           move.make_board('rnbqkbnr/1ppppppp/p7/8/7P/2N5/PPPPPPP1/R1BQKBNR b KQkq - 1 2')
         end
@@ -189,7 +191,7 @@ describe Chess do
         end
       end
 
-      context 'on ply 5, when moving the white knight' do
+      xcontext 'on ply 5, when moving the white knight' do
         before do
           move.make_board('1nbqkbnr/rppppppp/p7/8/7P/2N5/PPPPPPP1/R1BQKBNR w KQk - 2 3')
         end
@@ -199,7 +201,7 @@ describe Chess do
         end
       end
 
-      context 'on ply 6' do
+      xcontext 'on ply 6' do
         before do
           move.make_board('1nbqkbnr/rppppppp/p7/1N6/7P/8/PPPPPPP1/R1BQKBNR b KQk - 3 3')
         end
@@ -224,7 +226,7 @@ describe Chess do
         end
       end
 
-      context 'on the given board' do
+      xcontext 'on the given board' do
         it 'resets the half move counter on a capture' do
           move.make_board('1nbqkbnr/rppp1pp1/p2N4/4p2p/4P2P/8/PPPP1PP1/R1BQKBNR b KQk - 1 5')
           expect { move.update_loc('f8', 'd6') }.to change { move.instance_variable_get(:@half) }.to(0)

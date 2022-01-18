@@ -117,3 +117,10 @@ I ended up generating the threats to the king every time, and I do wonder how th
 Before I move on to working on *en passant* and *castling*, I think I have to extract from Board all the stuff related to game information. The board should strictly know about what cells are where, and updating the location of the pieces in question. It should not really care about what the active color is, castling availabilty, en passant availability, ply number, and the two clocks.
 
 The board really has no business manging that, and should simply send messages to a GameInfo or Chess object that can keep track of these things, including generating and exporting FEN.
+
+**Chess**
+I have started to implement Chess, which is the game manager class that references board, and holds meta information about the game.
+
+Currently, Board and its spec has been re-written to rely on this Chess object, as Chess now handles the board's state and making boards from FEN, rather than the board. Chess creates new Board objects when passed in a FEN.
+
+This change has also impacted `Movement` as I use an empty board to determine some moves, which in turn means `Checkmate` will need some work as well. *C'est la vie*, as they say. This change is for the better, so once I am done testing all the game info incrementing/tracking in `Chess`, I'll fix these two in order.
