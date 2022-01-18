@@ -137,99 +137,100 @@ describe Chess do
         end
       end
 
-      xcontext 'on ply 2, when moving a starting black pawn' do
+      context 'on ply 2, when moving a starting black pawn' do
         before do
           move.make_board('rnbqkbnr/pppppppp/8/8/7P/8/PPPPPPP1/RNBQKBNR b KQkq - 0 1')
         end
 
         it 'increments the ply counter' do
-          expect { move.update_loc('a7', 'a6') }.to change { move.instance_variable_get(:@ply) }.by(1)
+          expect { move.move_piece('a7', 'a6') }.to change { move.instance_variable_get(:@ply) }.by(1)
         end
 
         it 'increments the full move counter' do
-          expect { move.update_loc('a7', 'a6') }.to change { move.instance_variable_get(:@full) }.by(1)
+          expect { move.move_piece('a7', 'a6') }.to change { move.instance_variable_get(:@full) }.by(1)
         end
 
         it 'resets the half move counter to 0' do
-          expect { move.update_loc('a7', 'a6') }.to_not(change { move.instance_variable_get(:@half) })
+          expect { move.move_piece('a7', 'a6') }.to_not(change { move.instance_variable_get(:@half) })
         end
 
         it 'sets the active to white' do
-          expect { move.update_loc('a7', 'a6') }.to change { move.instance_variable_get(:@active) }.to('w')
+          expect { move.move_piece('a7', 'a6') }.to change { move.instance_variable_get(:@active) }.to('w')
         end
       end
 
-      xcontext 'on ply 3, when moving a white knight' do
+      context 'on ply 3, when moving a white knight' do
         before do
           move.make_board('rnbqkbnr/1ppppppp/p7/8/7P/8/PPPPPPP1/RNBQKBNR w KQkq - 0 2')
         end
 
         it 'increments the ply counter' do
-          expect { move.update_loc('b1', 'c3') }.to change { move.instance_variable_get(:@ply) }.by(1)
+          expect { move.move_piece('b1', 'c3') }.to change { move.instance_variable_get(:@ply) }.by(1)
         end
 
         it 'increments the half move counter by 1' do
-          expect { move.update_loc('b1', 'c3') }.to change { move.instance_variable_get(:@half) }.by(1)
+          expect { move.move_piece('b1', 'c3') }.to change { move.instance_variable_get(:@half) }.by(1)
         end
 
         it 'does not increment the full move counter' do
-          expect { move.update_loc('b1', 'c3') }.to_not(change { move.instance_variable_get(:@full) })
+          expect { move.move_piece('b1', 'c3') }.to_not(change { move.instance_variable_get(:@full) })
         end
       end
 
-      xcontext 'on ply 4, when moving a black rook' do
+      context 'on ply 4, when moving a black rook' do
         before do
           move.make_board('rnbqkbnr/1ppppppp/p7/8/7P/2N5/PPPPPPP1/R1BQKBNR b KQkq - 1 2')
         end
 
         it 'increments the half move counter by 1' do
-          expect { move.update_loc('a8', 'a7') }.to change { move.instance_variable_get(:@half) }.by(1)
+          expect { move.move_piece('a8', 'a7') }.to change { move.instance_variable_get(:@half) }.by(1)
         end
 
         it 'increments the full move counter' do
-          expect { move.update_loc('a8', 'a7') }.to change { move.instance_variable_get(:@full) }.by(1)
+          expect { move.move_piece('a8', 'a7') }.to change { move.instance_variable_get(:@full) }.by(1)
         end
       end
 
-      xcontext 'on ply 5, when moving the white knight' do
+      context 'on ply 5, when moving the white knight' do
         before do
           move.make_board('1nbqkbnr/rppppppp/p7/8/7P/2N5/PPPPPPP1/R1BQKBNR w KQk - 2 3')
         end
 
         it 'increments the half move counter by 1' do
-          expect { move.update_loc('c3', 'b5') }.to change { move.instance_variable_get(:@half) }.by(1)
+          expect { move.move_piece('c3', 'b5') }.to change { move.instance_variable_get(:@half) }.by(1)
         end
       end
 
-      xcontext 'on ply 6' do
+      context 'on ply 6' do
         before do
           move.make_board('1nbqkbnr/rppppppp/p7/1N6/7P/8/PPPPPPP1/R1BQKBNR b KQk - 3 3')
         end
 
         context 'when moving a black pawn to capture b5' do
           it 'resets the half move counter' do
-            expect { move.update_loc('a6', 'b5') }.to change { move.instance_variable_get(:@half) }.to(0)
+            expect { move.move_piece('a6', 'b5') }.to change { move.instance_variable_get(:@half) }.to(0)
           end
+
           it 'increments the full move counter' do
-            expect { move.update_loc('a6', 'b5') }.to change { move.instance_variable_get(:@full) }.by(1)
+            expect { move.move_piece('a6', 'b5') }.to change { move.instance_variable_get(:@full) }.by(1)
           end
         end
 
         context 'when moving a black pawn to h5' do
           it 'reests the half move counter' do
-            expect { move.update_loc('h7', 'h5') }.to change { move.instance_variable_get(:@half) }.to(0)
+            expect { move.move_piece('h7', 'h5') }.to change { move.instance_variable_get(:@half) }.to(0)
           end
 
           it 'increments the full move counter' do
-            expect { move.update_loc('a6', 'b5') }.to change { move.instance_variable_get(:@full) }.by(1)
+            expect { move.move_piece('a6', 'b5') }.to change { move.instance_variable_get(:@full) }.by(1)
           end
         end
       end
 
-      xcontext 'on the given board' do
+      context 'on the given board' do
         it 'resets the half move counter on a capture' do
           move.make_board('1nbqkbnr/rppp1pp1/p2N4/4p2p/4P2P/8/PPPP1PP1/R1BQKBNR b KQk - 1 5')
-          expect { move.update_loc('f8', 'd6') }.to change { move.instance_variable_get(:@half) }.to(0)
+          expect { move.move_piece('f8', 'd6') }.to change { move.instance_variable_get(:@half) }.to(0)
         end
       end
     end
