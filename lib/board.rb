@@ -8,8 +8,10 @@ require_relative 'chess'
 class Board
   attr_reader :data, :game
 
-  def initialize(pieces = ['rnbqkbnr', 'pppppppp', '8', '8', '8', '8', 'PPPPPPPP', 'RNBQKBNR'])
+  def initialize(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
     @data = Array.new(8) { Array.new(8, nil) }
+
+    pieces = fen.split('/')
     rank_ind = 0
     col = ('a'..'h').to_a
     pieces.each do |rank|

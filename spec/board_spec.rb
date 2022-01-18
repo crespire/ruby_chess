@@ -121,11 +121,17 @@ describe Board do
   end
 
   context '#to_fen' do
-    subject(:fen) { described_class.new }
-
     it 'returns the correct FEN notation for the default board' do
+      fen = described_class.new
       output = fen.to_fen
       expect(output).to eq('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
+    end
+
+    it 'returns the correct FEN for the specified board' do
+      input = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R'
+      fen = described_class.new(input)
+      output = fen.to_fen
+      expect(output).to eq(input)
     end
   end
 end
