@@ -41,7 +41,6 @@ describe Chess do
       subject(:fen_test) { described_class.new }
 
       it 'for the default starting position' do
-        fen_test.set_board_state
         board = fen_test.instance_variable_get(:@board)
         active = fen_test.instance_variable_get(:@active)
         full = fen_test.instance_variable_get(:@full)
@@ -90,7 +89,6 @@ describe Chess do
 
     context 'on the starting position board' do
       it 'generates the right FEN notation for the given board' do
-        get_fen.set_board_state
         fen = get_fen.make_fen
         expect(fen).to eq('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
       end
