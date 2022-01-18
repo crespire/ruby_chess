@@ -3,21 +3,16 @@
 # lib/board.rb
 
 require_relative 'cell'
+require_relative 'chess'
 
 class Board
-  attr_reader :data, :active, :castle, :passant, :half, :full
+  attr_reader :data, :game
 
-  def initialize
+  def initialize(game = Chess.new, fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
     @data = Array.new(8) { Array.new(8, nil) }
-    @active = nil
-    @castle = nil
-    @passant = nil
-    @half = nil
-    @full = nil
-    @ply = 0
-  end
+    @game = game
 
-  def make_board(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+    # Initialize based on FEN
     parts = fen.split(' ')
     raise ArgumentError, "Invalid FEN provided, incorrect number of data segments: #{fen}" unless parts.length == 6
 
@@ -53,12 +48,6 @@ class Board
       end
       rank_ind += 1
     end
-
-    true
-  end
-
-  def make_fen
-    [pieces_to_fen, @active, @castle, @passant, @half, @full].join(' ')
   end
 
   def arr_to_std_chess(input)
@@ -80,24 +69,20 @@ class Board
     [8 - coords[1].to_i, lookup[coords[0]]]
   end
 
-  def cell(input)
-    coords = std_chess_to_arr(input)
-    return nil if coords.nil?
-
-    @data[coords[0]][coords[1]]
-  end
-
   def update_loc(origin, destination)
     return nil if origin.empty? || destination.empty?
 
     from = cell(origin)
     to = cell(destination)
-    piece = from.occupant
-
-    update_game_stats(piece, to.dup)
-
     to.occupant = from.occupant.dup
     from.occupant = nil
+  end
+
+  def cell(input)
+    coords = std_chess_to_arr(input)
+    return nil if coords.nil?
+
+    @data[coords[0]][coords[1]]
   end
 
   def bking
@@ -107,7 +92,7 @@ class Board
   def wking
     find_piece('K').pop
   end
-  .and_return(nil)
+
   def find_piece(piece)
     coords = []
     cols = ('a'..'h').to_a
@@ -117,41 +102,6 @@ class Board
       end
     end
     coords.sort
-  end
-
-  private
-
-  def increment_full
-    @full += 1
-  end
-
-  def increment_ply
-    @ply += 1
-  end
-
-  def increment_half
-    @half += 1
-  end
-
-  def reset_half
-    @half = 0
-  end
-
-  def update_active(piece)
-    @active = piece.ord < 91 ? 'b' : 'w'
-  end
-
-  def update_game_stats(piece, destination)
-    update_active(piece)
-    increment_ply
-    if destination.empty? && @passant == '-'
-      %w[p P].include?(piece) ? reset_half : increment_half
-    elsif !@passant == '-' && (destination.name == @passant)
-      reset_half
-    else
-      destination.capture?(piece) && !destination.empty? ? reset_half : increment_half
-    end
-    increment_full if piece.ord > 91
   end
 
   def pieces_to_fen
