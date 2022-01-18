@@ -19,21 +19,21 @@ describe Chess do
     end
   end
 
-  context '#make_board' do
+  context '#set_board_state' do
     context 'when there are errors in the FEN notation provided' do
       subject(:fen_error) { described_class.new }
 
       it 'raises an ArgumentError when there are unrecognized characters in the notation' do
-        expect { fen_error.make_board('rnbqkbnr/pp$ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2') }.to raise_error(ArgumentError)
+        expect { fen_error.set_board_state('rnbqkbnr/pp$ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2') }.to raise_error(ArgumentError)
       end
 
       it 'raises an ArgumentError when there are the incorrect number of information sections in the FEN' do
-        expect { fen_error.make_board('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1') }.to raise_error(ArgumentError)
+        expect { fen_error.set_board_state('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1') }.to raise_error(ArgumentError)
       end
 
       it 'raises an ArgumentError when there are the wrong number of ranks in the FEN provided' do
-        expect { fen_error.make_board('rnbqkbnr/pppppppp/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2') }.to raise_error(ArgumentError)
-        expect { fen_error.make_board('rnbqkbnr/pppppppp/8/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2') }.to raise_error(ArgumentError)
+        expect { fen_error.set_board_state('rnbqkbnr/pppppppp/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2') }.to raise_error(ArgumentError)
+        expect { fen_error.set_board_state('rnbqkbnr/pppppppp/8/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2') }.to raise_error(ArgumentError)
       end
     end
 
@@ -41,7 +41,7 @@ describe Chess do
       subject(:fen_test) { described_class.new }
 
       it 'for the default starting position' do
-        fen_test.make_board
+        fen_test.set_board_state
         board = fen_test.instance_variable_get(:@board)
         active = fen_test.instance_variable_get(:@active)
         full = fen_test.instance_variable_get(:@full)
@@ -63,7 +63,7 @@ describe Chess do
 
       it 'for a board with pieces moved correctly' do
         input = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2'
-        fen_test.make_board(input)
+        fen_test.set_board_state(input)
         board = fen_test.instance_variable_get(:@board)
         active = fen_test.instance_variable_get(:@active)
         full = fen_test.instance_variable_get(:@full)
@@ -90,7 +90,7 @@ describe Chess do
 
     context 'on the starting position board' do
       it 'generates the right FEN notation for the given board' do
-        get_fen.make_board
+        get_fen.set_board_state
         fen = get_fen.make_fen
         expect(fen).to eq('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
       end
@@ -99,7 +99,7 @@ describe Chess do
     context 'on a board with moves made' do
       it 'generates the right FEN notation for the given board' do
         input = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2'
-        get_fen.make_board(input)
+        get_fen.set_board_state(input)
         fen = get_fen.make_fen
         expect(fen).to eq(input)
       end
@@ -139,7 +139,7 @@ describe Chess do
 
       context 'on ply 2, when moving a starting black pawn' do
         before do
-          move.make_board('rnbqkbnr/pppppppp/8/8/7P/8/PPPPPPP1/RNBQKBNR b KQkq - 0 1')
+          move.set_board_state('rnbqkbnr/pppppppp/8/8/7P/8/PPPPPPP1/RNBQKBNR b KQkq - 0 1')
         end
 
         it 'increments the ply counter' do
@@ -161,7 +161,7 @@ describe Chess do
 
       context 'on ply 3, when moving a white knight' do
         before do
-          move.make_board('rnbqkbnr/1ppppppp/p7/8/7P/8/PPPPPPP1/RNBQKBNR w KQkq - 0 2')
+          move.set_board_state('rnbqkbnr/1ppppppp/p7/8/7P/8/PPPPPPP1/RNBQKBNR w KQkq - 0 2')
         end
 
         it 'increments the ply counter' do
@@ -179,7 +179,7 @@ describe Chess do
 
       context 'on ply 4, when moving a black rook' do
         before do
-          move.make_board('rnbqkbnr/1ppppppp/p7/8/7P/2N5/PPPPPPP1/R1BQKBNR b KQkq - 1 2')
+          move.set_board_state('rnbqkbnr/1ppppppp/p7/8/7P/2N5/PPPPPPP1/R1BQKBNR b KQkq - 1 2')
         end
 
         it 'increments the half move counter by 1' do
@@ -193,7 +193,7 @@ describe Chess do
 
       context 'on ply 5, when moving the white knight' do
         before do
-          move.make_board('1nbqkbnr/rppppppp/p7/8/7P/2N5/PPPPPPP1/R1BQKBNR w KQk - 2 3')
+          move.set_board_state('1nbqkbnr/rppppppp/p7/8/7P/2N5/PPPPPPP1/R1BQKBNR w KQk - 2 3')
         end
 
         it 'increments the half move counter by 1' do
@@ -203,7 +203,7 @@ describe Chess do
 
       context 'on ply 6' do
         before do
-          move.make_board('1nbqkbnr/rppppppp/p7/1N6/7P/8/PPPPPPP1/R1BQKBNR b KQk - 3 3')
+          move.set_board_state('1nbqkbnr/rppppppp/p7/1N6/7P/8/PPPPPPP1/R1BQKBNR b KQk - 3 3')
         end
 
         context 'when moving a black pawn to capture b5' do
@@ -229,7 +229,7 @@ describe Chess do
 
       context 'on the given board' do
         it 'resets the half move counter on a capture' do
-          move.make_board('1nbqkbnr/rppp1pp1/p2N4/4p2p/4P2P/8/PPPP1PP1/R1BQKBNR b KQk - 1 5')
+          move.set_board_state('1nbqkbnr/rppp1pp1/p2N4/4p2p/4P2P/8/PPPP1PP1/R1BQKBNR b KQk - 1 5')
           expect { move.move_piece('f8', 'd6') }.to change { move.instance_variable_get(:@half) }.to(0)
         end
       end

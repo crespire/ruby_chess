@@ -150,7 +150,7 @@ class Movement
       rank.each do |cell|
         next if cell.empty? || !king_cell.capture?(cell.occupant)
 
-        empty_game.make_board(EMPTY_FEN)
+        empty_game.set_board_state(EMPTY_FEN)
         empty_board = empty_game.board
         current_threats = find_all_moves(cell, empty_board)
         current_threats.map! { |el| el.gsub('x', '') }
@@ -328,7 +328,7 @@ class Movement
       rank.each do |threat_cell|
         next if threat_cell.empty? || !threat_cell.capture?(current_piece)
 
-        empty_game.make_board(EMPTY_FEN)
+        empty_game.set_board_state(EMPTY_FEN)
         empty_board = empty_game.board
         current_threats = find_all_moves(threat_cell, empty_board)
         threats = (threats + current_threats).uniq
