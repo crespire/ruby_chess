@@ -134,4 +134,17 @@ describe Board do
       expect(output).to eq(input)
     end
   end
+
+  context '#update_loc' do
+    subject(:move) { described_class.new }
+
+    it 'moves an occupant from the given origin to the given destination' do
+      from = move.cell('a7')
+      to = move.cell('a6')
+
+      expect { move.update_loc('a7', 'a6') }.to \
+        change { to.occupant }.from(nil).to('p').and \
+        change { from.occupant }.from('p').to(nil)
+    end
+  end
 end

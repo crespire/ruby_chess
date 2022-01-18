@@ -8,34 +8,39 @@ class Chess
   attr_accessor :active, :castle, :passant, :half, :full, :ply
 
   def initialize
-    @board = Board.new
-    @active = nil
-    @castle = nil
-    @passant = nil
-    @half = nil
-    @full = nil
-    @ply = 0
+    partial_fen = 'w KQkq - 0 1'
+    parts = partial_fen.split(' ')
+
+    @board = Board.new # Board defaults to starting position
+    @active = parts[0]
+    @castle = parts[1]
+    @passant = parts[2]
+    @half = parts[3].to_i
+    @full = parts[4].to_i
+    ply_offset = @active == 'b' ? 1 : 0
+    @ply = @full + ply_offset
   end
 
   def make_board(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
-     # Make new board based on FEN
     parts = fen.split(' ')
     raise ArgumentError, "Invalid FEN provided, incorrect number of data segments: #{fen}" unless parts.length == 6
 
-    pieces = parts[0].split('/')
-    raise ArgumentError, "Invalid FEN provided, found #{pieces.length} ranks." unless pieces.length == 8
+    pieces = parts[0]
+    pieces_check = pieces.split('/').length
+    raise ArgumentError, "Invalid FEN provided, found #{pieces_check} ranks." unless pieces_check == 8
 
     @active = parts[1]
     @castle = parts[2]
     @passant = parts[3]
     @half = parts[4].to_i
     @full = parts[5].to_i
+    ply_offset = @active == 'b' ? 1 : 0
+    @ply = @full + ply_offset
     @board = Board.new(pieces)
   end
 
   def make_fen
-    pieces = @board.to_fen
-    [pieces, @active, @castle, @passant, @half, @full].join(' ')
+    [@board.to_fen, @active, @castle, @passant, @half, @full].join(' ')
   end
 
   def move_piece(origin, destination)
