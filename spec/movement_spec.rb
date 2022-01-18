@@ -12,7 +12,6 @@ describe Movement do
     subject(:move_init) { described_class.new(game) }
 
     it 'stores a reference to the board properly' do
-      game.set_board_state
       board_ref = move_init.instance_variable_get(:@board)
 
       expect(board_ref.data.flatten.length).to eq(64)
