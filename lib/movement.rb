@@ -2,15 +2,13 @@
 
 # lib/movement.rb
 
-class Movement
-  attr_reader :passant_capture
-  attr_accessor :bking, :wking
+require_relative 'chess'
 
+class Movement
   EMPTY_FEN = '8/8/8/8/8/8/8/8 w - - 1 2'
 
-  def initialize(board = nil)
-    @board = board
-    @passant_capture = nil
+  def initialize(game = nil)
+    @board = game.board
   end
 
   def valid_moves(cell)
@@ -146,13 +144,14 @@ class Movement
   def threats_to(king_cell)
     return [] if king_cell.empty?
 
-    empty_board = Board.new
+    empty_game = Chess.new
     threats = []
     @board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || !king_cell.capture?(cell.occupant)
 
-        empty_board.make_board(EMPTY_FEN)
+        empty_game.make_board(EMPTY_FEN)
+        empty_board = empty_game.board
         current_threats = find_all_moves(cell, empty_board)
         current_threats.map! { |el| el.gsub('x', '') }
         threats << cell if current_threats.include?(king_cell.name)
@@ -323,13 +322,14 @@ class Movement
     return [] if cell.empty?
 
     current_piece = cell.occupant
-    empty_board = Board.new
+    empty_game = Chess.new
     threats = []
     @board.data.each do |rank|
       rank.each do |threat_cell|
         next if threat_cell.empty? || !threat_cell.capture?(current_piece)
 
-        empty_board.make_board(EMPTY_FEN)
+        empty_game.make_board(EMPTY_FEN)
+        empty_board = empty_game.board
         current_threats = find_all_moves(threat_cell, empty_board)
         threats = (threats + current_threats).uniq
       end

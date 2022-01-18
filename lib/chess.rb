@@ -46,10 +46,14 @@ class Chess
   def move_piece(origin, destination)
     return nil if origin.empty? || destination.empty?
 
-    from = @board.cell(origin)
-    to = @board.cell(destination)
+    from = cell(origin)
+    to = cell(destination)
     update_game_stats(from.occupant, to.dup)
     @board.update_loc(from, to)
+  end
+
+  def cell(piece)
+    @board.cell(piece)
   end
 
   private
