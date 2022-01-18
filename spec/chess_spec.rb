@@ -49,20 +49,20 @@ describe Chess do
       it 'for a board with pieces moved correctly' do
         input = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2'
         fen_test.make_board(input)
-        board = fen_test.instance_variable_get(:@data)
+        board = fen_test.instance_variable_get(:@board)
         active = fen_test.instance_variable_get(:@active)
         full = fen_test.instance_variable_get(:@full)
 
-        expect(board[3][1].name).to eq('b5')
-        expect(board[3][1]).to be_empty
-        expect(board[3][2].name).to eq('c5')
-        expect(board[3][2].occupant).to eq('p')
-        expect(board[4][3].name).to eq('d4')
-        expect(board[4][3]).to be_empty
-        expect(board[4][4].name).to eq('e4')
-        expect(board[4][4].occupant).to eq('P')
-        expect(board[4][5].name).to eq('f4')
-        expect(board[4][5]).to be_empty
+        expect(board.data[3][1].name).to eq('b5')
+        expect(board.data[3][1]).to be_empty
+        expect(board.data[3][2].name).to eq('c5')
+        expect(board.data[3][2].occupant).to eq('p')
+        expect(board.data[4][3].name).to eq('d4')
+        expect(board.data[4][3]).to be_empty
+        expect(board.data[4][4].name).to eq('e4')
+        expect(board.data[4][4].occupant).to eq('P')
+        expect(board.data[4][5].name).to eq('f4')
+        expect(board.data[4][5]).to be_empty
 
         expect(full).to eq(2)
         expect(active).to eq('b')
@@ -70,12 +70,14 @@ describe Chess do
     end
   end
 
-  xcontext '#make_fen' do
+  context '#make_fen' do
     subject(:get_fen) { described_class.new }
 
     context 'on the starting position board' do
       it 'generates the right FEN notation for the given board' do
         get_fen.make_board
+        board = get_fen.instance_variable_get(:@board)
+        expect(board).to receive(:board_to_fen)
         fen = get_fen.make_fen
         expect(fen).to eq('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
       end
@@ -85,6 +87,8 @@ describe Chess do
       it 'generates the right FEN notation for the given board' do
         input = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2'
         get_fen.make_board(input)
+        board = get_fen.instance_variable_get(:@board)
+        expect(board).to receive(:board_to_fen)
         fen = get_fen.make_fen
         expect(fen).to eq(input)
       end

@@ -8,7 +8,7 @@ class Chess
   attr_accessor :active, :castle, :passant, :half, :full, :ply
 
   def initialize
-    @board = Board.new(self)
+    @board = Board.new
     @active = nil
     @castle = nil
     @passant = nil
@@ -30,11 +30,12 @@ class Chess
     @passant = parts[3]
     @half = parts[4].to_i
     @full = parts[5].to_i
-    @board = Board.new(self, pieces)
+    @board = Board.new(pieces)
   end
 
   def make_fen
-    [@board.pieces_to_fen, @active, @castle, @passant, @half, @full].join(' ')
+    pieces = @board.board_to_fen
+    [pieces, @active, @castle, @passant, @half, @full].join(' ')
   end
 
   def move_piece(origin, destination)
