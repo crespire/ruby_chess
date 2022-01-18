@@ -5,9 +5,10 @@
 require_relative 'movement'
 
 class Checkmate
-  def initialize(board)
-    @board = board
-    @movement = Movement.new(@board)
+  def initialize(game)
+    @game = game
+    @board = game.board
+    @moves_manager = Movement.new(game)
   end
 
   def check?
@@ -15,7 +16,7 @@ class Checkmate
     wking = get_king(@board.wking)
     return nil if bking.empty? || wking.empty?
 
-    threats = @board.active == 'w' ? @movement.attacks_on(wking) : @movement.attacks_on(bking)
+    threats = @game.active == 'w' ? @moves_manager.attacks_on(wking) : @moves_manager.attacks_on(bking)
     threats.length.positive?
   end
 
@@ -26,13 +27,13 @@ class Checkmate
     return false unless check?
 
     # We are in a potential checkmate situation.
-    active_king = @board.active == 'w' ? wking : bking
+    active_king = @game.active == 'w' ? wking : bking
     moves = 0
     @board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || cell.capture?(active_king.occupant)
 
-        moves += @movement.valid_moves(cell).length
+        moves += @moves_manager.valid_moves(cell).length
       end
     end
     moves.zero?
@@ -44,13 +45,13 @@ class Checkmate
     return nil if bking.empty? || wking.empty?
     return false if checkmate?
 
-    active_king = @board.active == 'w' ? wking : bking
+    active_king = @game.active == 'w' ? wking : bking
     moves = 0
     @board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || cell.capture?(active_king.occupant)
 
-        moves += @movement.valid_moves(cell).length
+        moves += @moves_manager.valid_moves(cell).length
       end
     end
 
@@ -62,7 +63,7 @@ class Checkmate
   def get_king(reference)
     case reference
     when String
-      king = @board.cell(reference)
+      king = @game.cell(reference)
     when reference
       king = reference
     else
