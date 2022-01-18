@@ -305,9 +305,6 @@ describe Board do
     subject(:find) { described_class.new }
 
     context 'from the starting position' do
-      before do
-        find.make_board
-      end
 
       it 'correctly identifies the coordinates of the two White Bishops' do
         results = find.find_piece('B')
@@ -333,7 +330,6 @@ describe Board do
     subject(:kings) { described_class.new }
 
     it 'provides the correct locations for the Kings' do
-      kings.make_board
       black = kings.bking
       white = kings.wking
       expect(black).to eq('e8')
