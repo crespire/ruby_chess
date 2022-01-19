@@ -54,10 +54,15 @@ class Chess
     to_before = to.dup
     @board.update_loc(from, to)
 
-    # Do I have enough information here to make en passant updates?
-
-    last_rank = to.name.include?('1') || to.name.include?('8')
-    pawn_promotion(@active) if last_rank && %w[p P].include?(to.occupant)
+    if %w[p P].include?(piece)
+      last_rank = destination.include?('1') || destination.include?('8')
+      if last_rank
+        pawn_promotion(@active) if last_rank
+      else
+        passant(from, to)
+      end
+    end
+    
     update_game_stats(piece, to_before)
   end
 
@@ -101,5 +106,14 @@ class Chess
       destination.capture?(piece) && !destination.empty? ? reset_half : increment_half
     end
     increment_full if piece.ord > 91
+  end
+
+  def passant(from, to)
+    home_rank = from.name.include?('2') || from.name.include?('7')
+    passant_rank = to.name.between?('4', '5')
+    if home_rank && passant_rank
+      offset = @active == 'w' ? -1 : 1
+      
+    end
   end
 end

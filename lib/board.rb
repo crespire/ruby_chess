@@ -65,7 +65,7 @@ class Board
     from.occupant = nil
   end
 
-  def cell(input)
+  def cell(input, rank_offset = 0, file_offset = 0)
     coords = std_chess_to_arr(input)
     return nil if coords.nil?
 
