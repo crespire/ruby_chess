@@ -934,8 +934,8 @@ describe Movement do
       expect(moves).to eq(46) # missing one legal move, ba6 is a "threat" to the king's f1, but blocked.
     end
 
-    it 'given position 3 without castle rights, should return the right amount of nodes' do
-      game.set_board_state('8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - -  0 1')
+    it 'given position 3, should return the right amount of moves' do
+      game.set_board_state('8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1')
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
