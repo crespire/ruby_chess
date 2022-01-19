@@ -234,4 +234,28 @@ describe Chess do
       end
     end
   end
+  
+  context '#cell' do
+    subject(:cells) { described_class.new }
+
+    it 'takes a string of Chess notation and returns the correct Cell object' do
+      test_cell = cells.cell('a8')
+      test_cell2 = cells.cell('d4')
+
+      expect(test_cell).to have_attributes(name: 'a8')
+      expect(test_cell2).to have_attributes(name: 'd4')
+    end
+
+    it 'takes a string with optional offsets and returns the correct Cell object' do
+      test_cell = cells.cell('a8', 0, -1)
+      test_cell2 = cells.cell('d4', 1, 0)
+      test_cell3 = cells.cell('d4', 5, 0)
+      test_cell4 = cells.cell('d4', 4, 1)
+
+      expect(test_cell).to have_attributes(name: 'a7')
+      expect(test_cell2).to have_attributes(name: 'e4')
+      expect(test_cell3).to be nil
+      expect(test_cell4).to have_attributes(name: 'h5')
+    end
+  end
 end

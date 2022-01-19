@@ -59,15 +59,15 @@ class Chess
       if last_rank
         pawn_promotion(@active) if last_rank
       else
-        passant(from, to)
+        pawn_passant(from, to)
       end
     end
     
     update_game_stats(piece, to_before)
   end
 
-  def cell(piece)
-    @board.cell(piece)
+  def cell(piece, file_offset = 0, rank_offset = 0)
+    @board.cell(piece, file_offset, rank_offset)
   end
 
   def pawn_promotion(active)
@@ -108,12 +108,12 @@ class Chess
     increment_full if piece.ord > 91
   end
 
-  def passant(from, to)
+  def pawn_passant(from, to)
     home_rank = from.name.include?('2') || from.name.include?('7')
     passant_rank = to.name.between?('4', '5')
     if home_rank && passant_rank
       offset = @active == 'w' ? -1 : 1
-      
+
     end
   end
 end

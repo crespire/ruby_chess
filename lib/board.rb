@@ -65,11 +65,16 @@ class Board
     from.occupant = nil
   end
 
-  def cell(input, rank_offset = 0, file_offset = 0)
+  def cell(input, file_offset = 0, rank_offset = 0)
     coords = std_chess_to_arr(input)
     return nil if coords.nil?
 
-    @data[coords[0]][coords[1]]
+    rank_ind = coords[0] + (rank_offset * -1)
+    file_ind = coords[1] + file_offset
+    return nil unless rank_ind.between?(0, 7)
+    return nil unless file_ind.between?(0, 7)
+
+    @data[rank_ind][file_ind]
   end
 
   def bking
