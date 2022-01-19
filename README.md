@@ -164,3 +164,8 @@ I have implemented *en passant* entirely inside the `Chess` class, which I think
 I think there's room for improvement, but it would involve a refactor of the entire `Movement` class using my new offset query approach and some new abstractions. While I think it would be worthwhile to pursue in the future, my goal is to finish the program and move on to Rails, so I think I'm going to leave it for now.
 
 Up next, I was going initally tackle castling, but I think I'll work on fleshing out the UI a little more in order to get pawn promotion up and running. After that, likely castling, and then UI/save and load. So we are getting quite close.
+
+### Issues with legal move generation
+I came across some performance test boards that allow me to verify how many legal moves my program *should* come up with for any given FEN for the next move.
+
+Given how I've implemented `Movement` at the moment, it is badly failing some of these more complicated situations, and I am heavily considering re-wrtiting the whole class.
