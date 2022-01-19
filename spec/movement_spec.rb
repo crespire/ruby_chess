@@ -904,5 +904,14 @@ describe Movement do
         expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
       end
     end
+
+    context 'when provided a white pawn with an available passant capture during a check' do
+      it 'shows the right moves' do
+        game.set_board_state('r3k2r/pp1n1ppp/8/2pP1b2/2PK1PqP/1Q2P3/P5P1/2B2B1R w - c6 0 2')
+        cell = game.cell('d5')
+        eligible = %w[xc6]
+        expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
+      end
+    end
   end
 end
