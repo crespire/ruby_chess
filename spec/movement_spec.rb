@@ -927,7 +927,6 @@ describe Movement do
           next if cell.empty? || cell.occupant.ord > 91
 
           legal = valid_moves_test.valid_moves(cell)
-          p cell, legal
           moves += legal.length
         end
       end
