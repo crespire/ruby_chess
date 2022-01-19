@@ -29,9 +29,10 @@ class Movement
 
       enemy_attackers.each do |enemy_cell|
         direct_attack = vector(enemy_cell.name, king.name)
+        direct_attack << "x#{@game.passant}" if @game.passant.length > 1 && %W[p P].include?(enemy_cell.occupant)
         interim = (direct_attack & moves).sort
         interim = interim.select { |move| move.start_with?('x') } if %w[n N].include?(enemy_cell.occupant)
-        return interim if interim.length.positive? && enemy_threats.empty?
+        return interim if interim.length.positive? && (enemy_threats.empty? || @game.passant.length > 1)
 
         return []
       end

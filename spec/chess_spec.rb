@@ -267,6 +267,16 @@ describe Chess do
         expect { passant.move_piece('e7', 'e5') }.to change { passant.passant }.from('h3').to('e6')
       end
     end
+
+    context 'given a check situation that can be resolved with a passant' do
+      subject(:passant_check) { described_class.new }
+
+      it 'correctly allows the passant move' do
+        passant_check.set_board_state('r3k2r/pp1n1ppp/8/2pP1b2/2PK1PqP/1Q2P3/P5P1/2B2B1R w - c6 0 2')
+        expect { passant_check.move_piece('d5', 'c6') }.to change { passant_check.passant }.from('c6').to('-')
+        expect(passant_check.cell('c5')).to be_empty
+      end
+    end
   end
   
   context '#cell' do

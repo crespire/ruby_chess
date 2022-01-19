@@ -154,4 +154,18 @@ describe Checkmate do
       expect(checkmate6.stalemate?).to be false
     end
   end
+
+  context 'when provided a board with white in a checkmate situation' do
+    subject(:checkmate7) { described_class.new(game) }
+
+    before do
+      game.set_board_state('r3k2r/pp1n1ppp/8/2pP1b2/2PK1PqP/1Q2P3/P5P1/2B2B1R w - c6 0 2')
+    end
+
+    it 'returns the correct mate status' do
+      expect(checkmate7.checkmate?).to be false
+      expect(checkmate7.check?).to be true
+      expect(checkmate7.stalemate?).to be false
+    end
+  end
 end
