@@ -532,6 +532,22 @@ describe Movement do
         end
       end
     end
+
+    context 'when given a pawn with an available passant capture' do
+      it 'correctly shows the passant capture availabilty for a black pawn' do
+        game.set_board_state('k7/7p/8/8/6pP/8/8/K7 b - h3 0 1')
+        cell = game.cell('g4')
+        eligible = %w[g3 xh3].sort
+        expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+      end
+
+      it 'correctly shows the passant capture availability for a white pawn' do
+        game.set_board_state('k7/8/8/3Pp3/6pP/8/8/K7 w - e6 0 2')
+        cell = game.cell('d5')
+        eligible = %w[d6 xe6].sort
+        expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
+      end
+    end
   end
 
   context '#find_all_moves' do

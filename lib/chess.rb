@@ -57,12 +57,12 @@ class Chess
     if %w[p P].include?(piece)
       last_rank = destination.include?('1') || destination.include?('8')
       if last_rank
-        pawn_promotion(@active) if last_rank
+        pawn_promotion
       else
         pawn_passant(from, to)
       end
     end
-    
+
     update_game_stats(piece, to_before)
   end
 
@@ -70,13 +70,8 @@ class Chess
     @board.cell(piece, file_offset, rank_offset)
   end
 
-  def pawn_promotion(active)
-    selection = @ui.prompt_pawn_promotion
-    cell.occupant
-  end
-
   private
-  
+
   def increment_full
     @full += 1
   end
@@ -109,11 +104,30 @@ class Chess
   end
 
   def pawn_passant(from, to)
-    home_rank = from.name.include?('2') || from.name.include?('7')
-    passant_rank = to.name.between?('4', '5')
-    if home_rank && passant_rank
-      offset = @active == 'w' ? -1 : 1
+    rank_offset = @active == 'w' ? -1 : 1
 
+    if @passant == to.name
+      # Available and taken
+      captured_cell = cell(to.name, 0, rank_offset)
+      captured_cell.occupant = nil
+      @passant = '-'
+    elsif @passant.length == 2 && to.name != @passant
+      # Available, not taken: reset
+      @passant = '-'
     end
+
+    # Does this current move give a new passant?
+    home_rank = from.name.include?('2') || from.name.include?('7')
+    passant_rank = to.name.include?('4') || to.name.include?('5')
+    return unless home_rank && passant_rank
+
+    cell_east = cell(to.name, -1, 0)
+    cell_west = cell(to.name, 1, 0)
+    @passant = cell(to.name, 0, rank_offset).name if cell_east || cell_west
+  end
+
+  def pawn_promotion
+    selection = @ui.prompt_pawn_promotion(@active)
+    cell.occupant
   end
 end

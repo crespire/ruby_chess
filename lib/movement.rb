@@ -131,7 +131,11 @@ class Movement
     start_rank_ind = rank_dir.negative? ? 6 : 1
     result = board.equal?(@board) ? pawn_moves(cell, rank_dir, start_rank_ind, board) : pawn_captures(cell, rank_dir, board)
 
-    # Check for passant capture here and add it to the list if available.
+    # Check for passant capture and add it to the list if available.
+    side1 = board.cell(cell.name, -1, (rank_dir * -1))
+    side2 = board.cell(cell.name, 1, (rank_dir * -1))
+    result << "x#{side1.name}" if !side1.nil? && side1.name == @game.passant
+    result << "x#{side2.name}" if !side2.nil? && side2.name == @game.passant
 
     result.sort
   end

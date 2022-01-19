@@ -106,16 +106,19 @@ describe Chess do
   end
 
   context '#move_piece' do
-    subject(:chess) { described_class.new }
+    context 'on a single move' do
+      subject(:chess) { described_class.new }
 
-    it 'sends a message to move pieces to Board' do
-      board = chess.instance_variable_get(:@board)
-      
-      expect(board).to receive(:update_loc)
-      chess.move_piece('a7', 'a6')
+      it 'sends the right messages to itself and other objects' do
+        board = chess.instance_variable_get(:@board)
+
+        expect(board).to receive(:update_loc)
+        expect(chess).to receive(:update_game_stats)
+        chess.move_piece('a7', 'a6')
+      end
     end
 
-    context 'Given a sequence of moves' do
+    context 'on a sequence of moves' do
       subject(:move) { described_class.new }
 
       context 'on ply 1, when moving a starting white pawn' do
@@ -231,6 +234,37 @@ describe Chess do
           move.set_board_state('1nbqkbnr/rppp1pp1/p2N4/4p2p/4P2P/8/PPPP1PP1/R1BQKBNR b KQk - 1 5')
           expect { move.move_piece('f8', 'd6') }.to change { move.instance_variable_get(:@half) }.to(0)
         end
+      end
+    end
+
+    context 'given a move involving a pawn that leads to a passant availablity' do
+      subject(:passant) { described_class.new }
+
+      it 'sends the right messages to itself' do
+        passant.set_board_state('k7/8/8/8/6p1/8/7P/K7 w - - 0 1')
+        expect(passant).to receive(:pawn_passant)
+        passant.move_piece('h2', 'h4')
+      end
+
+      it 'move 1: correctly identifies a passant move' do
+        passant.set_board_state('k7/8/8/8/6p1/8/7P/K7 w - - 0 1')
+        expect { passant.move_piece('h2', 'h4') }.to change { passant.passant }.from('-').to('h3')
+      end
+
+      it 'move 2: correctly executes passant if taken' do
+        passant.set_board_state('k7/7p/8/8/6pP/8/8/K7 b - h3 0 1')
+        expect { passant.move_piece('g4', 'h3') }.to change { passant.passant }.from('h3').to('-')
+        expect(passant.cell('h4')).to be_empty
+      end
+
+      it 'move 2: correctly rests passant if not taken immediately, with no new passant available' do
+        passant.set_board_state('k7/7p/8/8/6pP/8/8/K7 b - h3 0 1')
+        expect { passant.move_piece('h7', 'h6') }.to change { passant.passant }.from('h3').to('-')
+      end
+
+      it 'move 2a: correctly updates passant it not taken immediately, with new passant available' do
+        passant.set_board_state('k7/4p3/8/3P4/6pP/8/8/K7 b - h3 0 1')
+        expect { passant.move_piece('e7', 'e5') }.to change { passant.passant }.from('h3').to('e6')
       end
     end
   end
