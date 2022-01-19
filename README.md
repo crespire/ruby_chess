@@ -156,4 +156,4 @@ def move_piece(origin, destination)
 end
 ```
 
-I think we'll start with this approach and see how it goes.
+I think we'll start with this approach and see how it goes. I've added an offset retrieval feature to the `Board#cell` (and consequently the `Chess#cell`) function that should make retrieving neighbouring cells a little easier.
