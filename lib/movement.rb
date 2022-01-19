@@ -5,6 +5,7 @@
 require_relative 'chess'
 
 class Movement
+
   EMPTY_FEN = '8/8/8/8/8/8/8/8 w - - 1 2'
 
   def initialize(game)
@@ -305,6 +306,8 @@ class Movement
 
       next_ref = board.arr_to_std_chess(arr)
       step = board.cell(next_ref) if next_ref
+      next if step.nil? || step.empty?
+
       cap = step.capture?(piece) && !step.empty? ? 'x' : '' if step
       result << (cap + step.to_s) if step && !step.empty? && step.capture?(piece)
     end

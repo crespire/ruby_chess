@@ -169,3 +169,7 @@ Up next, I was going initally tackle castling, but I think I'll work on fleshing
 I came across some performance test boards that allow me to verify how many legal moves my program *should* come up with for any given FEN for the next move.
 
 Given how I've implemented `Movement` at the moment, it is badly failing some of these more complicated situations, and I am heavily considering re-wrtiting the whole class.
+
+After working on trying to address a number of edge cases introduced by using the Perft boards, I realize that I think it would be much more productive to re-write the `Movement` class.
+
+I have many functions that break single responsiblity and are extremely brittle. The result is that trying to fix an edge case in one function introduces many problems in other areas of the code. This seems to me to signal that a refactor is in order.
