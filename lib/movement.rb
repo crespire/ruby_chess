@@ -292,8 +292,6 @@ class Movement
       break unless step && step.empty?
     end
 
-    @game.passant = result[0] if double_fwd
-
     # Check diagonals, only eligible if there is a capture available
     next_refs = [[start[0] + rank_offset, start[1] - 1], [start[0] + rank_offset, start[1] + 1]]
     next_refs.each do |arr|

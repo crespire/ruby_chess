@@ -124,3 +124,36 @@ I have started to implement Chess, which is the game manager class that referenc
 Currently, Board and its spec has been re-written to rely on this Chess object, as Chess now handles the board's state and making boards from FEN, rather than the board. Chess creates new Board objects when passed in a FEN.
 
 This change has also impacted `Movement` as I use an empty board to determine some moves, which in turn means `Checkmate` will need some work as well. *C'est la vie*, as they say. This change is for the better, so once I am done testing all the game info incrementing/tracking in `Chess`, I'll fix these two in order.
+
+### Chess object completed
+Having finished the Chess class and all the refactoring to get the other classes ready, I've turned my thoughts to how I might implement *en passant*.
+
+I already tried to implement it directly into `Movement` and `Chess` but I got rid of that work because I felt like it was getting too complicated and I was having to really entagle a lot of objects together in order to make it happen.
+
+Looking over my code, I actually think I can fit *en passant* movement inside the `Chess` metadata class, as I think I have all the information I'd need to implement it there without a helper class. Just to think it through a little:
+```ruby
+def move_piece(origin, destination)
+  # already existing code
+
+  # this can probably all go into a few helper methods.
+  # Chess should have all the information we need to make the determination about an en passant
+  if piece is a pawn
+    if destination is last rank
+      can we promote?
+    else
+      is start rank the home rank?
+      is destination rank the double move rank?
+      If both are true, check the destination rank neighbours
+      any valid neighbors?
+      if valid neighbors and we did a double forward then set passant
+    end
+  end
+
+  # we can probably do castling here too via helper methods.
+  # it makes it super easy to unit test these two special moves and doesn't go all over the place
+
+  # rest of code  
+end
+```
+
+I think we'll start with this approach and see how it goes.

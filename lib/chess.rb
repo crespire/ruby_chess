@@ -53,6 +53,9 @@ class Chess
     piece = from.occupant.dup
     to_before = to.dup
     @board.update_loc(from, to)
+
+    # Do I have enough information here to make en passant updates?
+
     last_rank = to.name.include?('1') || to.name.include?('8')
     pawn_promotion(@active) if last_rank && %w[p P].include?(to.occupant)
     update_game_stats(piece, to_before)
@@ -92,10 +95,8 @@ class Chess
   def update_game_stats(piece, destination)
     update_active(piece)
     increment_ply
-    if destination.empty? && @passant == '-'
+    if destination.empty?
       %w[p P].include?(piece) ? reset_half : increment_half
-    elsif !@passant == '-' && (destination.name == @passant)
-      reset_half
     else
       destination.capture?(piece) && !destination.empty? ? reset_half : increment_half
     end
