@@ -654,7 +654,7 @@ describe Movement do
 
     context 'on a board with an enemy Rook' do
       it 'starting on e6, returns the correct list of available moves that prevents a king from self-checking in the vertical axis' do
-        game.set_board_state('8/8/4k3/8/8/8/5R2/8 b - - 1 2')
+        game.set_board_state('8/8/4k3/8/8/8/5R2/K7 b - - 1 2')
         cell = game.cell('e6')
         eligible = %w[e7 d7 d6 d5 e5].sort
         expect(k_selfcheck_test.find_king_moves(cell)).to eq(eligible)
