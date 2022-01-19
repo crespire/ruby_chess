@@ -475,14 +475,14 @@ describe Movement do
     context 'with a white Pawn' do
       context 'on an empty board' do
         it 'starting at c2, returns the correct list of available moves, including the double forward move' do
-          game.set_board_state('8/8/8/8/8/8/2P5/8 b - - 1 2')
+          game.set_board_state('k7/8/8/8/8/8/2P5/K7 w - - 1 2')
           cell = game.cell('c2')
           eligible = %w[c3 c4].sort
           expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
         end
 
         it 'starting at c3, returns the correct list of available moves' do
-          game.set_board_state('8/8/8/8/8/2P5/8/8 b - - 1 2')
+          game.set_board_state('k7/8/8/8/8/2P5/8/K7 w - - 1 2')
           cell = game.cell('c3')
           eligible = %w[c4].sort
           expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
@@ -491,14 +491,14 @@ describe Movement do
 
       context 'on a board with a friendly' do
         it 'starting at c2, returns the correct list of available moves when fully blocked' do
-          game.set_board_state('8/8/8/8/8/2P5/2P5/8 b - - 1 2')
+          game.set_board_state('8/8/8/8/8/2P5/2P5/8 w - - 1 2')
           cell = game.cell('c2')
           eligible = %w[].sort
           expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
         end
 
         it 'starting at c2, returns the correct list of available moves when only one square blocked' do
-          game.set_board_state('8/8/8/8/2P5/8/2P5/8 b - - 1 2')
+          game.set_board_state('8/8/8/8/2P5/8/2P5/8 w - - 1 2')
           cell = game.cell('c2')
           eligible = %w[c3].sort
           expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
@@ -508,14 +508,14 @@ describe Movement do
       context 'on a board with other pieces' do
         context 'starting at c3' do
           it 'returns the correct list of available moves when fully blocked with a capture available' do
-            game.set_board_state('8/8/8/8/2Pp4/2P5/8/8 b - - 1 2')
+            game.set_board_state('8/8/8/8/2Pp4/2P5/8/8 w - - 1 2')
             cell = game.cell('c3')
             eligible = %w[xd4].sort
             expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
           end
 
           it 'returns the correct list of available moves when only one sqaure is blocked and a capture is available' do
-            game.set_board_state('8/8/8/2N5/3p4/2P5/8/8 b - - 1 2')
+            game.set_board_state('8/8/8/2N5/3p4/2P5/8/8 w - - 1 2')
             cell = game.cell('c3')
             eligible = %w[c4 xd4].sort
             expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
@@ -524,7 +524,7 @@ describe Movement do
 
         context 'starting at c4' do
           it 'returns the correct list of available moves when fully blocked with a capture available' do
-            game.set_board_state('8/8/8/1pPp4/2P5/8/8/8 b - - 1 2')
+            game.set_board_state('8/8/8/1pPp4/2P5/8/8/8 w - - 1 2')
             cell = game.cell('c4')
             eligible = %w[xb5 xd5].sort
             expect(pawn_test.find_pawn_moves(cell)).to eq(eligible)
@@ -618,7 +618,7 @@ describe Movement do
       context 'when the Pawn is white' do
         context 'on an empty board' do
           it 'starting at c2, returns the correct list of available moves, including the double forward move' do
-            game.set_board_state('8/8/8/8/8/8/2P5/8 b - - 1 2')
+            game.set_board_state('8/8/8/8/8/8/2P5/8 w - - 1 2')
             cell = game.cell('c2')
             eligible = %w[c3 c4].sort
             expect(moves_test.find_all_moves(cell)).to eq(eligible)
@@ -627,7 +627,7 @@ describe Movement do
 
         context 'on a board with other pieces' do
           it 'starting at c3, returns the correct list of available moves when only one sqaure is blocked and a capture is available' do
-            game.set_board_state('8/8/8/2N5/3p4/2P5/8/8 b - - 1 2')
+            game.set_board_state('8/8/8/2N5/3p4/2P5/8/8 w - - 1 2')
             cell = game.cell('c3')
             eligible = %w[c4 xd4].sort
             expect(moves_test.find_all_moves(cell)).to eq(eligible)
@@ -721,7 +721,7 @@ describe Movement do
     context 'when provided a King' do
       context 'when there is a friendly on one side, and an enemy on the other' do
         it 'starting at d4, returns the correct list of available moves including two capture' do
-          game.set_board_state('8/8/8/8/2pkP3/2N5/8/8 b - - 1 2')
+          game.set_board_state('8/8/8/8/2pkP3/2N5/8/7K b - - 1 2')
           cell = game.cell('d4')
           eligible = %w[c5 e5 xc3 d3 e3].sort
           expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
@@ -912,6 +912,27 @@ describe Movement do
         eligible = %w[xc6]
         expect(valid_moves_test.valid_moves(cell)).to eq(eligible)
       end
+    end
+  end
+
+  context 'testing with a given board' do
+    let(:game) { Chess.new }
+    subject(:valid_moves_test) { described_class.new(game) }
+
+    it 'shows the right moves' do
+      game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w - - 0 1')
+      moves = 0
+      game.board.data.each do |rank|
+        rank.each do |cell|
+          next if cell.empty? || cell.occupant.ord > 91
+
+          legal = valid_moves_test.valid_moves(cell)
+          p cell, legal
+          moves += legal.length
+        end
+      end
+
+      expect(moves).to eq(46) # missing one legal move, ba6 is a "threat" to the king's f1, but blocked.
     end
   end
 end
