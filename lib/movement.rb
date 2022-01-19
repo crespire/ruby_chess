@@ -29,7 +29,6 @@ class Movement
 
       enemy_attackers.each do |enemy_cell|
         direct_attack = vector(enemy_cell.name, king.name)
-
         # Add passant capture if it's a move so we can intersect it.
         direct_attack << "x#{@game.passant}" if moves.include?("x#{@game.passant}")
         interim = (direct_attack & moves).sort
