@@ -157,3 +157,10 @@ end
 ```
 
 I think we'll start with this approach and see how it goes. I've added an offset retrieval feature to the `Board#cell` (and consequently the `Chess#cell`) function that should make retrieving neighbouring cells a little easier.
+
+### *en passant* completed
+I have implemented *en passant* entirely inside the `Chess` class, which I think makes it easy to manage. My previous attempt had code split across `Chess` and `Movement` which was not only a disaster conceptually, but also mucked up my tests a lot. That is what prompted me to think about doing the *en passant* in this way.
+
+I think there's room for improvement, but it would involve a refactor of the entire `Movement` class using my new offset query approach and some new abstractions. While I think it would be worthwhile to pursue in the future, my goal is to finish the program and move on to Rails, so I think I'm going to leave it for now.
+
+Up next, I was going initally tackle castling, but I think I'll work on fleshing out the UI a little more in order to get pawn promotion up and running. After that, likely castling, and then UI/save and load. So we are getting quite close.
