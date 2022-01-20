@@ -17,7 +17,7 @@ describe Cell do
     end
 
     it 'returns the correct answer for filled?' do
-      expect(cell.occupied?).to be false
+      expect(cell.full?).to be false
     end
 
     it 'returns nil on hostility check' do
@@ -40,7 +40,7 @@ describe Cell do
     end
 
     it 'occupied? return the right status' do
-      expect(cell_knight.occupied?).to be true
+      expect(cell_knight.full?).to be true
     end
 
     it 'correctly identifies whether another piece is hostile' do
@@ -48,7 +48,7 @@ describe Cell do
       expect(cell_knight.hostile?('K')).to be_falsey
     end
 
-    it 'correctly identifies wether another piece is friendly' do
+    it 'correctly identifies whether another piece is friendly' do
       expect(cell_knight.friendly?('N')).to be true
       expect(cell_knight.friendly?('n')).to be false
     end

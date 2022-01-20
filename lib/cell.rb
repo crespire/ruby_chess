@@ -15,7 +15,7 @@ class Cell
     @occupant.nil?
   end
 
-  def occupied?
+  def full?
     !empty?
   end
 

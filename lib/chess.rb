@@ -98,7 +98,7 @@ class Chess
     if destination.empty?
       %w[p P].include?(piece) ? reset_half : increment_half
     else
-      destination.capture?(piece) && !destination.empty? ? reset_half : increment_half
+      destination.hostile?(piece) && !destination.empty? ? reset_half : increment_half
     end
     increment_full if piece.ord > 91
   end

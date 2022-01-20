@@ -192,12 +192,23 @@ Psuedo-legal moves are all the locations a piece can go to either by sliding/mov
   * Pawn can capture if target square has a hostile, otherwise not eligible.
   * Pawn can only move two forward if not obstructed and on starting rank.
 
-Moves.list - All valid empty or capture locations inside.
-  This attribute should be an array of arrays. ex:
-  For a knight at d4 with all moves: `Moves.list = [[e6], [f5], [f3], [e2], [b3], [b5], [c6]]`
-  For a rook at d4 with all moves: `Moves.list = [[d5, d6, d7, d8], [e4, f4, g4, h4], [d3, d2, d1], [c4 b4 a4]]`
-  Moves should start from the cell and go outward.
-  I think the arrays should hold a reference to the cell, so we can query the cell for its name or occupant.
-Moves.obstructed? - Are there any captures or friendlies?
-Moves.capture? - Are there any captures specifically?
-Moves.restricted? - Any moves that have a capture and a friendly?
+Given a piece, we generate a Move object that has all the base movements. This allows us to ask a bunch of questions about the Moves.
+
+Firstly, what are they? What moves have we come up with? We can use an array to hold move objects, based on the piece.
+
+For a knight at d4 with all moves: The knight would hold `Move` 8 move objects: `[<Cell e6>]` etc.
+For a rook at d4 with all moves: `Move` would  = [[d5, d6, d7, d8], [e4, f4, g4, h4], [d3, d2, d1], [c4 b4 a4]]`
+Move should start from the cell and go outward. I think the array should hold a reference to the cell so we can query the cell for information.
+
+Secondly, once we have the raw information, we can ask questions about the move itself by asking the cells questions.
+
+Move.obstructed? - Are there any friendlies on the move?
+Move.hostile? - Are there any captures on the move?
+Move.valid_moves - Return a list of Cells that piece can actually traverse to in a psuedo-legal way.
+
+// Move.restricted? - Does this move have a capture and a friendly?
+I don't think asking if a single move is restricted is helpful.
+
+I think I'll need an object to both hold the Move objects and to generate them. So maybe I will need to implement a "Piece" object, and perhaps have inheritance for all the piece types.
+
+If I take this approach I can work with pieces, as well as their moves, via queries. Would be helpful for situations like pins.
