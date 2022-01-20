@@ -21,9 +21,15 @@ describe Movement do
         end
       end
     end
+
+    it 'stores a reference to the game' do
+      game_ref = move_init.instance_variable_get(:@game)
+
+      expect(game_ref).to be_a(Chess)
+    end
   end
 
-  context '#find_horizontal_moves' do
+  xcontext '#find_horizontal_moves' do
     let(:game) { Chess.new }
 
     context 'with a Rook as input' do
@@ -163,7 +169,7 @@ describe Movement do
     end
   end
 
-  context '#find_vertical_moves' do
+  xcontext '#find_vertical_moves' do
     let(:game) { Chess.new }
 
     context 'with a Rook as input' do
@@ -303,7 +309,7 @@ describe Movement do
     end
   end
 
-  context '#find_diagonal_moves' do
+  xcontext '#find_diagonal_moves' do
     let(:game) { Chess.new }
 
     context 'with a Bishop as input' do
@@ -375,7 +381,7 @@ describe Movement do
     end
   end
 
-  context '#find_knight_moves' do
+  xcontext '#find_knight_moves' do
     let(:game) { Chess.new }
     subject(:knight_test) { described_class.new(game) }
 
@@ -407,7 +413,7 @@ describe Movement do
     end
   end
 
-  context '#find_pawn_moves' do
+  xcontext '#find_pawn_moves' do
     let(:game) { Chess.new }
     subject(:pawn_test) { described_class.new(game) }
 
@@ -550,7 +556,7 @@ describe Movement do
     end
   end
 
-  context '#find_all_moves' do
+  xcontext '#find_all_moves' do
     let(:game) { Chess.new }
     subject(:moves_test) { described_class.new(game) }
 
@@ -648,7 +654,7 @@ describe Movement do
     end
   end
 
-  context '#find_king_moves' do
+  xcontext '#find_king_moves' do
     let(:game) { Chess.new }
     subject(:k_selfcheck_test) { described_class.new(game) }
 
@@ -683,7 +689,7 @@ describe Movement do
     end
   end
 
-  context '#valid_moves' do
+  xcontext '#valid_moves' do
     let(:game) { Chess.new }
     subject(:valid_moves_test) { described_class.new(game) }
 
@@ -915,7 +921,7 @@ describe Movement do
     end
   end
 
-  context 'testing with Perft boards from https://www.chessprogramming.org/Perft_Results' do
+  xcontext 'testing with Perft boards from https://www.chessprogramming.org/Perft_Results' do
     let(:game) { Chess.new }
     subject(:valid_moves_test) { described_class.new(game) }
 

@@ -10,8 +10,15 @@ class Movement
     @game = game
   end
 
-  def valid_moves(cell)
+  def legal_moves(cell)
     return [] if cell.empty?
+
+    # Get possible moves, then remove invalid ones.
+  end
+
+  def possible_moves(cell)
+    return [] if cell.empty?
+
+    # Generate all possible moves based on the rules of each piece.
   end
 end
-  
