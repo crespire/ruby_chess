@@ -21,4 +21,6 @@ class Movement
 
     # Generate all possible moves based on the rules of each piece.
   end
+
+  # Start with Knight and King. Those should be the easiest to get working for possible moves.
 end
