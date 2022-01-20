@@ -4,6 +4,7 @@
 
 require_relative 'cell'
 require_relative 'chess'
+require_relative 'piece'
 
 class Board
   attr_reader :data, :game
@@ -16,19 +17,20 @@ class Board
     col = ('a'..'h').to_a
     pieces.each do |rank|
       col_ind = 0
-      rank.each_char do |piece|
-        case piece
+      rank.each_char do |char|
+        case char
         when /[[:alpha:]]/
+          piece = Piece::from_fen(char)
           @data[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", piece)
         when /[[:digit:]]/
-          times = piece.to_i
+          times = char.to_i
           times.times do
             @data[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", nil)
             col_ind += 1
           end
           col_ind -= 1
         else
-          raise ArgumentError, "Unexpected character in piece notation: #{piece}"
+          raise ArgumentError, "Unexpected character in piece notation: #{char}"
         end
         col_ind += 1
         raise ArgumentError, "Invalid FEN: Rank #{rank_ind + 1} does not have the correct amount of entries." unless @data[rank_ind].length == 8
@@ -85,15 +87,17 @@ class Board
     find_piece('K').pop
   end
 
-  def find_piece(piece)
-    coords = []
-    cols = ('a'..'h').to_a
-    @data.each.with_index(1) do |rank, rank_ind|
-      rank.each_with_index do |cell, file_ind|
-        coords << "#{cols[file_ind]}#{9 - rank_ind}" if piece == cell.occupant
+  def find_piece(fen)
+    piece = Piece::from_fen(fen)
+    matches = []
+    @data.each do |rank|
+      rank.each do |cell|
+        next if cell.empty?
+
+        matches << cell if cell.occupant == piece
       end
     end
-    coords.sort
+    matches
   end
 
   def to_fen

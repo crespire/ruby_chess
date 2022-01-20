@@ -27,9 +27,9 @@ describe Board do
     end
 
     it 'initializes with default board' do
-      expect(init.cell('a8').occupant).to eq('r')
+      expect(init.cell('a8').occupant.to_s).to eq('r')
       expect(init.cell('d4')).to be_empty
-      expect(init.cell('e1').occupant).to eq('K')
+      expect(init.cell('e1').occupant.to_s).to eq('K')
     end
   end
 
@@ -104,19 +104,19 @@ describe Board do
       it 'correctly identifies the coordinates of the two White Bishops' do
         results = find.find_piece('B')
         expected = %w[c1 f1].sort
-        expect(results).to eq(expected)
+        expect(results.map(&:to_s)).to eq(expected)
       end
 
       it 'correctly identifies the coordinates of the two Black Bishops' do
         results = find.find_piece('b')
         expected = %w[c8 f8].sort
-        expect(results).to eq(expected)
+        expect(results.map(&:to_s)).to eq(expected)
       end
 
       it 'correctly identifies the coordinates of the eight Black pawns' do
         results = find.find_piece('p')
         expected = %w[a7 b7 c7 d7 e7 f7 g7 h7].sort
-        expect(results).to eq(expected)
+        expect(results.map(&:to_s)).to eq(expected)
       end
     end
   end
@@ -127,8 +127,8 @@ describe Board do
     it 'provides the correct locations for the Kings' do
       black = kings.bking
       white = kings.wking
-      expect(black).to eq('e8')
-      expect(white).to eq('e1')
+      expect(black).to have_attributes(name: 'e8')
+      expect(white).to have_attributes(name: 'e1')
     end
   end
 
@@ -155,8 +155,8 @@ describe Board do
       to = move.cell('a6')
 
       expect { move.update_loc('a7', 'a6') }.to \
-        change { to.occupant }.from(nil).to('p').and \
-        change { from.occupant }.from('p').to(nil)
+        change { to.occupant }.from(nil).to(Pawn).and \
+        change { from.occupant }.from(Pawn).to(nil)
     end
   end
 end

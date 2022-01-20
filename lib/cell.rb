@@ -38,11 +38,11 @@ class Cell
   end
 
   def to_fen
-    @occupant.nil? ? 1 : @occupant
+    @occupant.nil? ? 1 : @occupant.to_s
   end
 
   def to_display
-    @occupant.nil? ? ' ' : @occupant
+    @occupant.nil? ? ' ' : @occupant.to_s
   end
 
   def to_s
