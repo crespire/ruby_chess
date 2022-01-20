@@ -181,16 +181,16 @@ I think my approach will focus on initially generating psuedo-legal moves and th
 
 Psuedo-legal moves are all the locations a piece can go to either by sliding/moving or capturing.
 
-Knights have 8 options around them, either empty or capture.
-Kings, have 8 options around them, either empty or capture.
-Rooks and Bishops have 2 axis until there is an obstruction. If friendly, can't go there. If enemy, can capture.
-Queen combines the rook and bishop.
-Pawns are a little more complicated.
-  Pawns have 4 options. Two forward and 1 on each forward diagonal.
-  We can call the foward moves moves and the diagonals captures.
-  Pawn can move forward unless obstructed.
-  Pawn can capture if target square has a hostile, otherwise not eligible.
-  Pawn can only move two forward if not obstructed and on starting rank.
+* Knights have 8 options around them with no obstructions, either empty or capture.
+* Kings, have 8 options around them unless obstructed, either empty or capture.
+* Rooks and Bishops have 2 axis until there is an obstruction. If friendly, can't go there. If enemy, can capture.
+* Queen combines the rook and bishop.
+* Pawns are a little more complicated.
+  * Pawns have 4 options. Two forward and 1 on each forward diagonal.
+  * We can call the foward moves moves and the diagonals captures.
+  * Pawn can move forward unless obstructed.
+  * Pawn can capture if target square has a hostile, otherwise not eligible.
+  * Pawn can only move two forward if not obstructed and on starting rank.
 
 Moves.list - All valid empty or capture locations inside.
   This attribute should be an array of arrays. ex:
@@ -201,4 +201,3 @@ Moves.list - All valid empty or capture locations inside.
 Moves.obstructed? - Are there any captures or friendlies?
 Moves.capture? - Are there any captures specifically?
 Moves.restricted? - Any moves that have a capture and a friendly?
-Moves.restricted_to_king - Return the set that contains a capture and friendly, if the friendly is a king.

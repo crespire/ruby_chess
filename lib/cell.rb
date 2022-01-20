@@ -20,8 +20,7 @@ class Cell
   end
 
   def hostile?(other)
-    return nil if other.nil?
-    return nil if empty?
+    return nil if other.nil? || empty?
     return nil if other.is_a?(Cell) && other.empty?
 
     other = other.occupant if other.is_a?(Cell)
@@ -34,7 +33,6 @@ class Cell
   def friendly?(other)
     return nil if other.nil?
     return nil if empty?
-    return nil if other.is_a?(Cell) && other.empty?
 
     !hostile?(other)
   end
