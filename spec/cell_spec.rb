@@ -16,13 +16,15 @@ describe Cell do
       expect(cell.name).to be_nil
     end
 
-    it 'returns nil for capture? as cell is empty' do
-      expect(cell.capture?('N')).to be_nil
-      expect(cell.capture?('n')).to be_nil
-    end
-
     it 'returns the correct answer for filled?' do
       expect(cell.occupied?).to be false
+    end
+
+    it 'returns nil on hostility check' do
+      expect(cell.hostile?('N')).to be_nil
+      expect(cell.hostile?('n')).to be_nil
+      expect(cell.friendly?('N')).to be_nil
+      expect(cell.friendly?('n')).to be_nil
     end
   end
 
@@ -41,9 +43,14 @@ describe Cell do
       expect(cell_knight.occupied?).to be true
     end
 
-    it 'correctly identifies whether another peice can attack' do
-      expect(cell_knight.capture?('n')).to be_truthy
-      expect(cell_knight.capture?('K')).to be_falsey
+    it 'correctly identifies whether another piece is hostile' do
+      expect(cell_knight.hostile?('n')).to be_truthy
+      expect(cell_knight.hostile?('K')).to be_falsey
+    end
+
+    it 'correctly identifies wether another piece is friendly' do
+      expect(cell_knight.friendly?('N')).to be true
+      expect(cell_knight.friendly?('n')).to be false
     end
   end
 end

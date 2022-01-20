@@ -19,6 +19,26 @@ class Cell
     !empty?
   end
 
+  def hostile?(other)
+    return nil if other.nil?
+    return nil if empty?
+    return nil if other.is_a?(Cell) && other.empty?
+
+    other = other.occupant if other.is_a?(Cell)
+
+    atk_color = other.ord < 91 ? 'w' : 'b'
+    color = @occupant.ord < 91 ? 'w' : 'b'
+    atk_color != color
+  end
+
+  def friendly?(other)
+    return nil if other.nil?
+    return nil if empty?
+    return nil if other.is_a?(Cell) && other.empty?
+
+    !hostile?(other)
+  end
+
   def to_fen
     @occupant.nil? ? 1 : @occupant
   end
@@ -29,13 +49,5 @@ class Cell
 
   def to_s
     @name
-  end
-
-  def capture?(attacking)
-    return nil if empty?
-
-    atk_color = attacking.ord < 91 ? 'w' : 'b'
-    color = @occupant.ord < 91 ? 'w' : 'b'
-    atk_color != color
   end
 end
