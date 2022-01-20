@@ -20,6 +20,10 @@ describe Cell do
       expect(cell.capture?('N')).to be_nil
       expect(cell.capture?('n')).to be_nil
     end
+
+    it 'returns the correct answer for filled?' do
+      expect(cell.occupied?).to be false
+    end
   end
 
   context 'on piece initialize' do
@@ -31,6 +35,10 @@ describe Cell do
 
     it 'empty? returns the right status' do
       expect(cell_knight.empty?).to be_falsey
+    end
+
+    it 'occupied? return the right status' do
+      expect(cell_knight.occupied?).to be true
     end
 
     it 'correctly identifies whether another peice can attack' do

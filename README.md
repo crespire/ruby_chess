@@ -173,3 +173,32 @@ Given how I've implemented `Movement` at the moment, it is badly failing some of
 After working on trying to address a number of edge cases introduced by using the Perft boards, I realize that I think it would be much more productive to re-write the `Movement` class.
 
 I have many functions that break single responsiblity and are extremely brittle. The result is that trying to fix an edge case in one function introduces many problems in other areas of the code. This seems to me to signal that a refactor is in order.
+
+### Movement Re-write
+I have decided to commit to a rewrite of my Movement generation class, as I think I need to take more care in how I am setting it up so that it is easier for me to work with the results.
+
+I think my approach will focus on initially generating psuedo-legal moves and then filter them later.
+
+Psuedo-legal moves are all the locations a piece can go to either by sliding/moving or capturing.
+
+Knights have 8 options around them, either empty or capture.
+Kings, have 8 options around them, either empty or capture.
+Rooks and Bishops have 2 axis until there is an obstruction. If friendly, can't go there. If enemy, can capture.
+Queen combines the rook and bishop.
+Pawns are a little more complicated.
+  Pawns have 4 options. Two forward and 1 on each forward diagonal.
+  We can call the foward moves moves and the diagonals captures.
+  Pawn can move forward unless obstructed.
+  Pawn can capture if target square has a hostile, otherwise not eligible.
+  Pawn can only move two forward if not obstructed and on starting rank.
+
+Moves.list - All valid empty or capture locations inside.
+  This attribute should be an array of arrays. ex:
+  For a knight at d4 with all moves: `Moves.list = [[e6], [f5], [f3], [e2], [b3], [b5], [c6]]`
+  For a rook at d4 with all moves: `Moves.list = [[d5, d6, d7, d8], [e4, f4, g4, h4], [d3, d2, d1], [c4 b4 a4]]`
+  Moves should start from the cell and go outward.
+  I think the arrays should hold a reference to the cell, so we can query the cell for its name or occupant.
+Moves.obstructed? - Are there any captures or friendlies?
+Moves.capture? - Are there any captures specifically?
+Moves.restricted? - Any moves that have a capture and a friendly?
+Moves.restricted_to_king - Return the set that contains a capture and friendly, if the friendly is a king.

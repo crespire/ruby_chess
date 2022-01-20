@@ -15,6 +15,10 @@ class Cell
     @occupant.nil?
   end
 
+  def occupied?
+    !empty?
+  end
+
   def to_fen
     @occupant.nil? ? 1 : @occupant
   end
