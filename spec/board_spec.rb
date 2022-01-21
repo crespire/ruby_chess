@@ -151,9 +151,9 @@ describe Board do
       from = move.cell('a7')
       to = move.cell('a6')
 
-      expect { move.update_loc('a7', 'a6') }.to \
-        change { to.occupant }.from(nil).to(Pawn).and \
-        change { from.occupant }.from(Pawn).to(nil)
+      expect { move.update_loc('a7', 'a6') }
+      expect(to.occupant).to be nil
+      expect(from.occupant).to be_a(Pawn)
     end
   end
 end

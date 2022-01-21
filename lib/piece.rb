@@ -43,6 +43,8 @@ class Piece
   end
 
   def <=>(other)
+    return false if other.nil?
+    
     @fen <=> other.fen
   end
 end
