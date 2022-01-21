@@ -13,6 +13,12 @@ class Move
     @cells.empty?
   end
 
+  def to_capture; end
+
+  def to_obstruction; end
+
+  def clear_moves; end
+
   private
 
   def cells(board = nil, offset = nil, steps = nil)

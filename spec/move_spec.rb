@@ -15,12 +15,17 @@ describe Move do
 
   context 'with a Knight at b8' do
     before do
-      # I should use a mock here to test, because the actual Piece move will change
-      # I plan to filter the move by psueo-legality, which would remove dead moves
-      # as well as remove moves where the destination is a friendly/ie, the move is obstructed.
-      # But those considerations are implemented in each piece.
-      # To that end, I'm going to use Mocks here to faciliate testing, even though
-      # the real objects exist already.
+      # We are using a before to set up "pieces", as I need to unit test Move
+      # so that I can make sure it's generating all the right objects, but we
+      # know we will be disarding some moves that are dead. We will further be
+      # filtering the final "Move" objects based basic movement rules.
+      # As an example, I want pawns to return all 3 moves, but forward diagonal
+      # is not a valid move unless a capture is available. This type of change
+      # is best implemented in each piece, not the generic move object.
+      # Its goal should just be to return valid in-bound locations, regardless
+      # of whether that square is occupied or free, etc.
+      # To that end, I'm going to set up "pieces" using a before statement 
+      # to faciliate testing, even though the real objects exist already.
 
       # Knight offsets
       offsets = [[2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2], [1, 2]] #[file, rank] offset pairs
