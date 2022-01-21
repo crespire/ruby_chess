@@ -28,9 +28,9 @@ describe Board do
     end
 
     it 'initializes with default board' do
-      expect(init.cell('a8').piece.to_s).to eq('r')
+      expect(init.cell('a8').piece).to be_a(Rook).and be_black
       expect(init.cell('d4')).to be_empty
-      expect(init.cell('e1').piece.to_s).to eq('K')
+      expect(init.cell('e1').piece).to be_a(King).and be_white
     end
   end
 
@@ -80,8 +80,8 @@ describe Board do
       test_cell = cells.cell('a8')
       test_cell2 = cells.cell('d4')
 
-      expect(test_cell).to have_attributes(name: 'a8')
-      expect(test_cell2).to have_attributes(name: 'd4')
+      expect(test_cell).to be_a(Cell).and have_attributes(name: 'a8')
+      expect(test_cell2).to be_a(Cell).and have_attributes(name: 'd4')
     end
 
     it 'takes a string with optional offsets and returns the correct Cell object' do
@@ -90,10 +90,10 @@ describe Board do
       test_cell3 = cells.cell('d4', 5, 0)
       test_cell4 = cells.cell('d4', 4, 1)
 
-      expect(test_cell).to have_attributes(name: 'a7')
-      expect(test_cell2).to have_attributes(name: 'e4')
+      expect(test_cell).to be_a(Cell).and have_attributes(name: 'a7')
+      expect(test_cell2).to be_a(Cell).and have_attributes(name: 'e4')
       expect(test_cell3).to be nil
-      expect(test_cell4).to have_attributes(name: 'h5')
+      expect(test_cell4).to be_a(Cell).and have_attributes(name: 'h5')
     end
   end
 
@@ -102,18 +102,24 @@ describe Board do
 
     context 'from the starting position' do
       it 'correctly identifies the coordinates of the two White Bishops' do
+        results = find.find_piece('B')
         expected = %w[c1 f1].sort
-        expect(find.find_piece('B').map(&:to_s)).to eq(expected)
+        expect(results).to include(Cell).twice
+        expect(results.map(&:to_s)).to eq(expected)
       end
 
       it 'correctly identifies the coordinates of the two Black Bishops' do
+        results = find.find_piece(Piece::from_fen('b'))
         expected = %w[c8 f8].sort
-        expect(find.find_piece('b').map(&:to_s)).to eq(expected)
+        expect(results).to include(Cell).twice
+        expect(results.map(&:to_s)).to eq(expected)
       end
 
       it 'correctly identifies the coordinates of the eight Black pawns' do
+        results = find.find_piece(Piece::from_fen('p'))
         expected = %w[a7 b7 c7 d7 e7 f7 g7 h7].sort
-        expect(find.find_piece('p').map(&:to_s)).to eq(expected)
+        expect(results).to include(Cell).exactly(8).times
+        expect(results.map(&:to_s)).to eq(expected)
       end
     end
   end
@@ -124,8 +130,8 @@ describe Board do
     it 'provides the correct locations for the Kings' do
       black = kings.bking
       white = kings.wking
-      expect(black).to have_attributes(name: 'e8')
-      expect(white).to have_attributes(name: 'e1')
+      expect(black).to be_a(Cell).and have_attributes(name: 'e8')
+      expect(white).to be_a(Cell).and have_attributes(name: 'e1')
     end
   end
 

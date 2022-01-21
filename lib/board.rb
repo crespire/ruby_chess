@@ -89,7 +89,7 @@ class Board
   end
 
   def find_piece(fen)
-    piece = Piece::from_fen(fen)
+    piece = fen.is_a?(Piece) ? fen : Piece::from_fen(fen)
     matches = []
     @data.each do |rank|
       rank.each do |cell|
