@@ -249,7 +249,7 @@ def moves(board, origin)
 end
 ```
 
-The interesting case is the Pawn. Because we're generating psuedo-legal moves, the pawn should always generate 3 moves with 4 squares (2 forward, and 1 each forward diagonal). As far as the pawn is concerned, these are all moves it can make. It does not care whether they are *legal* moves. This question should be handled by the Movement manager class, not here in Pawn.
+The interesting case is the Pawn. Because we're generating psuedo-legal moves, the pawn should always generate 3 moves with 4 squares (2 forward, and 1 each forward diagonal). As far as the pawn is concerned, these are all moves it can make. `#valid_moves` should filter out captures if the cells are empty, so it wouldn't be a valid move.
 
 ```ruby
 # Inside Pawn
@@ -270,7 +270,7 @@ So, if these are the requirements for `Move`, then what does Move look like inte
 * Move.capture? - Are there any captures on the move?
 * Move.valid_moves - Return a list of Cells that piece can actually traverse to in a psuedo-legal way. We don't care, at this point, about legal moves, just moves we can actually make.
 
-So, the `Move` should contain all reachable cells on the board, then we can use these predicates and `valid_moves` to filter out squares that are blocked, etc.
+So, the `Move` should contain all reachable cells on the board, then we can use these predicates and `possible_moves` to filter out squares that are blocked, not eligible etc.
 
 So we are passed in the board, origin, an offset and if we should repeat.
 
@@ -286,10 +286,11 @@ class Move
     build_move
   end
 
-  def valid_moves
+  def possible_moves
     build_moves if @all_cells.empty?
 
-    # Do stuff to figure out what moves are psuedo-legal. 
+    # Do stuff to figure out what moves are possible. 
+    # ie, can a pawn capture forward diagonal? If so, then it's a possible move. If not, then it's not possible.
   end
 
   private
@@ -300,3 +301,6 @@ class Move
     end
   end
 end
+```
+
+I think this is a good start to Move
