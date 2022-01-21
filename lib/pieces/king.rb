@@ -3,6 +3,6 @@
 # lib/pieces/king.rb
 
 class King < Piece
-  def moves(board = nil, from = nil, to = nil)
+  def moves(board = nil, origin = nil)
   end
 end

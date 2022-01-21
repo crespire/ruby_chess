@@ -200,11 +200,13 @@ For a knight at d4 with all moves: The knight would hold `Move` 8 move objects: 
 For a rook at d4 with all moves: `Move` would  = [[d5, d6, d7, d8], [e4, f4, g4, h4], [d3, d2, d1], [c4 b4 a4]]`
 Move should start from the cell and go outward. I think the array should hold a reference to the cell so we can query the cell for information.
 
+Each move should contain a list of all the cells we can move to, regardless of if they're occupied or empty. The only limit is that the destination must be on the board.
+
 Secondly, once we have the raw information, we can ask questions about the move itself by asking the cells questions.
 
 Move.obstructed? - Are there any friendlies on the move?
-Move.hostile? - Are there any captures on the move?
-Move.valid_moves - Return a list of Cells that piece can actually traverse to in a psuedo-legal way.
+Move.capture? - Are there any captures on the move?
+Move.valid_moves - Return a list of Cells that piece can actually traverse to in a psuedo-legal way. We don't care, at this point, about legal moves, just moves we can actually make.
 
 // Move.restricted? - Does this move have a capture and a friendly?
 I don't think asking if a single move is restricted is helpful.
@@ -212,3 +214,89 @@ I don't think asking if a single move is restricted is helpful.
 I think I'll need an object to both hold the Move objects and to generate them. So maybe I will need to implement a "Piece" object, and perhaps have inheritance for all the piece types.
 
 If I take this approach I can work with pieces, as well as their moves, via queries. Would be helpful for situations like pins.
+
+### Piece.moves
+So, let's think about how we make the moves. Each piece should have the corresponding number of moves. Let's look at the knight.
+
+A Knight has 8 possible moves.
+```ruby
+# Inside Knight
+def moves(board, origin)
+  moves = []
+  offsets = [[2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2], [1, 2]] #[file, rank] offset pairs
+
+  offsets.each do |offset|
+    moves << Move.new(board, origin, offset) # board, origin, offset values, steps (defaults to 1)
+  end
+
+  moves
+end
+```
+
+This allows us to generate 8 moves for the Knight. Let's look at the Rook, which has 4 possible moves.
+
+```ruby
+# Inside Rook
+def moves(board, origin)
+  moves = []
+  offsets = [[1, 0], [0, -1], [-1, 0], [0, 1]]
+  
+  offsets.each do |offest|
+    moves << Move.new(board, origin, offset, 7) # board, origin, offset values, steps
+  end
+
+  moves
+end
+```
+
+The interesting case is the Pawn. Because we're generating psuedo-legal moves, the pawn should always generate 3 moves with 4 squares (2 forward, and 1 each forward diagonal). As far as the pawn is concerned, these are all moves it can make. It does not care whether they are *legal* moves. This question should be handled by the Movement manager class, not here in Pawn.
+
+```ruby
+# Inside Pawn
+def moves(board, origin)
+  moves = []
+  rank_dir = white? ? 1 : -1
+  offsets = [[0, rank_dir], [1, rank_dir], [-1, rank_dir]]
+
+  offsets.each_with_index do |offset, i|
+    moves << Move.new(board, origin, offset, (i == 0 ? 2 : 1))  # board, origin, offset values, steps
+  end
+end
+```
+
+So, if these are the requirements for `Move`, then what does Move look like internally? Recall, we want to be able to ask each move some questions: 
+
+* Move.obstructed? - Are there any friendlies on the move?
+* Move.capture? - Are there any captures on the move?
+* Move.valid_moves - Return a list of Cells that piece can actually traverse to in a psuedo-legal way. We don't care, at this point, about legal moves, just moves we can actually make.
+
+So, the `Move` should contain all pieces on the board, then we can use these predicates and `valid_moves` to filter out squares that are blocked, etc.
+
+So we are passed in the board, origin, an offset and if we should repeat.
+
+```ruby
+class Move
+  def initialize(board, origin, offset, steps = 1)
+    @board = board
+    @origin = origin
+    @offset = offset
+    @repeats = repeats
+    @all_cells = []
+
+    build_move
+  end
+
+  def valid_moves
+    build_moves if @all_cells.empty?
+
+    # Do stuff to figure out what moves are psuedo-legal. 
+  end
+
+  private
+
+  def build_move
+    @repeat.times do
+      @cells << @board.cell(origin, @offset[0], @offset[1])
+    end
+  end
+end
