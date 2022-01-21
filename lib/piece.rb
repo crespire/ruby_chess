@@ -30,7 +30,6 @@ class Piece
   def initialize(fen)
     @color = fen.ord < 91 ? 'w' : 'b'
     @fen = fen
-    @moves = moves
   end
 
   # Must be implemented by subclasses.
