@@ -4,16 +4,9 @@
 
 class Move
   def initialize(board, origin, offset, steps = 1)
-    @origin = origin
+    @origin = origin.is_a?(Cell) ? origin : board.cell(origin)
 
     cells(board, offset, steps)
-  end
-
-  def possible_moves
-    return @cells if @cells.empty?
-
-    # Do stuff to figure out what moves are possible. 
-    # ie, can a pawn capture forward diagonal? If so, then it's a possible move. If not, then it's not possible.
   end
 
   def dead?
@@ -22,17 +15,19 @@ class Move
 
   private
 
-  def cells(board, offset, steps)
+  def cells(board = nil, offset = nil, steps = nil)
     return @cells if @cells
+    return if board.nil?
 
     @cells ||= []
+    next_cell = @origin
     steps.times do
-      destination = board.cell(@origin, offset[0], offset[1])
+      destination = board.cell(next_cell.name, offset[0], offset[1])
       break unless destination.is_a?(Cell)
 
-      @cells << destination if destination.empty? || destination.hostile?(board.cell(@origin))
+      @cells << destination
+      next_cell = destination
     end
-    
     @cells
   end
 end
