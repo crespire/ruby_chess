@@ -2,7 +2,7 @@
 
 # lib/piece.rb
 
-#require_relative 'move'
+require_relative 'move'
 
 class Piece
   attr_reader :color, :fen
