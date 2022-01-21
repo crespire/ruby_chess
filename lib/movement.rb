@@ -3,6 +3,10 @@
 # lib/movement.rb
 
 require_relative 'chess'
+require_relative 'board'
+require_relative 'cell'
+require_relative 'piece'
+require_relative 'pieces/all_pieces'
 
 class Movement
   def initialize(game)

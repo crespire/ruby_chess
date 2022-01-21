@@ -930,7 +930,7 @@ describe Movement do
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
-          next if cell.empty? || cell.occupant.ord > 91
+          next if cell.empty? || cell.piece.ord > 91
 
           legal = valid_moves_test.valid_moves(cell)
           puts "moves from #{cell.to_fen}#{cell}: #{legal}"
@@ -946,7 +946,7 @@ describe Movement do
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
-          next if cell.empty? || cell.occupant.ord > 91
+          next if cell.empty? || cell.piece.ord > 91
 
           legal = valid_moves_test.valid_moves(cell)
           puts "moves from #{cell.to_fen}#{cell}: #{legal}"
@@ -962,7 +962,7 @@ describe Movement do
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
-          next if cell.empty? || cell.occupant.ord < 91
+          next if cell.empty? || cell.piece.ord < 91
 
           legal = valid_moves_test.valid_moves(cell)
           puts "moves from #{cell.to_fen}#{cell}: #{legal}"
@@ -978,7 +978,7 @@ describe Movement do
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
-          next if cell.empty? || cell.occupant.ord > 91
+          next if cell.empty? || cell.piece.ord > 91
 
           legal = valid_moves_test.valid_moves(cell)
           puts "moves from #{cell.to_fen}#{cell}: #{legal}"

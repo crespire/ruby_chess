@@ -28,9 +28,9 @@ describe Board do
     end
 
     it 'initializes with default board' do
-      expect(init.cell('a8').occupant.to_s).to eq('r')
+      expect(init.cell('a8').piece.to_s).to eq('r')
       expect(init.cell('d4')).to be_empty
-      expect(init.cell('e1').occupant.to_s).to eq('K')
+      expect(init.cell('e1').piece.to_s).to eq('K')
     end
   end
 
@@ -147,13 +147,13 @@ describe Board do
   context '#update_loc' do
     subject(:move) { described_class.new }
 
-    it 'moves an occupant from the given origin to the given destination' do
+    it 'moves an piece from the given origin to the given destination' do
       from = move.cell('a7')
       to = move.cell('a6')
 
       move.update_loc('a7', 'a6')
-      expect(to.occupant).to be_a(Pawn)
-      expect(from.occupant).to be_a(NilClass)
+      expect(to.piece).to be_a(Pawn)
+      expect(from.piece).to be_a(NilClass)
     end
   end
 end

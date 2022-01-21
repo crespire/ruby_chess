@@ -64,8 +64,8 @@ class Board
 
     from = origin.is_a?(Cell) ? origin : cell(origin)
     to = destination.is_a?(Cell) ? destination : cell(destination)
-    to.occupant = from.occupant
-    from.occupant = nil
+    to.piece = from.piece
+    from.piece = nil
   end
 
   def cell(input, file_offset = 0, rank_offset = 0)
@@ -95,7 +95,7 @@ class Board
       rank.each do |cell|
         next if cell.empty?
 
-        matches << cell if cell.occupant == piece
+        matches << cell if cell.piece == piece
       end
     end
     matches

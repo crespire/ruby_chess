@@ -2,6 +2,9 @@
 
 # lib/piece.rb
 
+#require_relative 'move'
+#require_relative 'moves/all_moves'
+
 class Piece
   include Comparable
   attr_reader :color, :fen
@@ -40,7 +43,7 @@ class Piece
   end
 
   def black?
-    !white?
+    @color == 'b'
   end
 
   def to_s

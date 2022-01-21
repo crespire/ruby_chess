@@ -48,13 +48,13 @@ describe Chess do
         half = fen_test.instance_variable_get(:@half)
 
         expect(board.data[0][0].name).to eq('a8')
-        expect(board.data[0][0].occupant).to eq('r')
+        expect(board.data[0][0].piece).to be_a(Rook).and be_black
         expect(board.data[2][0].name).to eq('a6')
-        expect(board.data[2][0].occupant).to be_nil
+        expect(board.data[2][0].piece).to be_nil
         expect(board.data[4][3].name).to eq('d4')
-        expect(board.data[4][3].occupant).to be_nil
+        expect(board.data[4][3].piece).to be_nil
         expect(board.data[7][6].name).to eq('g1')
-        expect(board.data[7][6].occupant).to eq('N')
+        expect(board.data[7][6].piece).to be_a(Knight).and be_white
 
         expect(full).to eq(1)
         expect(half).to eq(0)
@@ -71,11 +71,11 @@ describe Chess do
         expect(board.data[3][1].name).to eq('b5')
         expect(board.data[3][1]).to be_empty
         expect(board.data[3][2].name).to eq('c5')
-        expect(board.data[3][2].occupant).to eq('p')
+        expect(board.data[3][2].piece).to be_a(Pawn).and be_black
         expect(board.data[4][3].name).to eq('d4')
         expect(board.data[4][3]).to be_empty
         expect(board.data[4][4].name).to eq('e4')
-        expect(board.data[4][4].occupant).to eq('P')
+        expect(board.data[4][4].piece).to be_a(Pawn).and be_white
         expect(board.data[4][5].name).to eq('f4')
         expect(board.data[4][5]).to be_empty
 

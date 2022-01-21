@@ -50,11 +50,11 @@ class Chess
 
     from = cell(origin)
     to = cell(destination)
-    piece = from.occupant.dup
+    piece = from.piece.dup
     to_before = to.dup
     @board.update_loc(from, to)
 
-    if %w[p P].include?(piece)
+    if piece.is_a?(Pawn)
       last_rank = destination.include?('1') || destination.include?('8')
       if last_rank
         pawn_promotion
@@ -89,18 +89,18 @@ class Chess
   end
 
   def update_active(piece)
-    @active = piece.ord < 91 ? 'b' : 'w'
+    @active = piece.white? ? 'b' : 'w'
   end
 
   def update_game_stats(piece, destination)
     update_active(piece)
     increment_ply
     if destination.empty?
-      %w[p P].include?(piece) ? reset_half : increment_half
+      piece.is_a?(Pawn) ? reset_half : increment_half
     else
       destination.hostile?(piece) && !destination.empty? ? reset_half : increment_half
     end
-    increment_full if piece.ord > 91
+    increment_full if piece.black?
   end
 
   def pawn_passant(from, to)
@@ -109,7 +109,7 @@ class Chess
     if @passant == to.name
       # Available and taken
       captured_cell = cell(to.name, 0, rank_offset)
-      captured_cell.occupant = nil
+      captured_cell.piece = nil
       @passant = '-'
     elsif @passant.length == 2 && to.name != @passant
       # Available, not taken: reset
@@ -128,6 +128,6 @@ class Chess
 
   def pawn_promotion
     selection = @ui.prompt_pawn_promotion(@active)
-    cell.occupant
+    cell.piece
   end
 end

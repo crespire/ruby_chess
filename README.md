@@ -8,10 +8,10 @@ I chose to start with the FEN stuff because I figured it would be an easy way to
 
 Handling the FEN stuff was pretty straight forward, and actually gave me the idea about whether or not I actually needed individual Chess piece classes. All the information I required was encoded into the FEN piece notations. The type of piece and its color, plus special rules about Castling or *en passant* are all in the FEN.
 
-This led to the idea that what I should perhaps focus on instead was a class that handles all the piece movement. The idea was that, because I have the information encoded into the tokens, I just pass a given cell with an occupant to this class via a command message, and get back a list of valid cells that the piece can move to. After getting a list, the user can make a choice, and then the board updates the piece’s movement in the data based on input.
+This led to the idea that what I should perhaps focus on instead was a class that handles all the piece movement. The idea was that, because I have the information encoded into the tokens, I just pass a given cell with an piece to this class via a command message, and get back a list of valid cells that the piece can move to. After getting a list, the user can make a choice, and then the board updates the piece’s movement in the data based on input.
 
 ### Movement implementation
-So far, I’ve used the `Movement` class to generate a list of valid moves for each given piece, and haven’t yet gotten to the “update the cell occupants” piece yet. That should be easy to implement once I have all the valid moves stuff working. So far, basic piece movement done, as horizontal, vertical and ordinal movement has been done. I’ve also completed Knight movement, and pawn forward movement including the double forward. I have to figure out pawn captures, and then start thinking about how to tie all the basic movements into a `valid_moves` function. 
+So far, I’ve used the `Movement` class to generate a list of valid moves for each given piece, and haven’t yet gotten to the “update the cell pieces” piece yet. That should be easy to implement once I have all the valid moves stuff working. So far, basic piece movement done, as horizontal, vertical and ordinal movement has been done. I’ve also completed Knight movement, and pawn forward movement including the double forward. I have to figure out pawn captures, and then start thinking about how to tie all the basic movements into a `valid_moves` function. 
 
 ### King movement and self-checking
 The one thing I have to figure out is how to keep track of what cells are under attack so that we can’t self check when the user has selected the King. I wonder if we can define a method ~~on board~~ that generates a current list of cells under attack, and will remove them from the King’s valid moves. This way, if the king is the selected piece, we can generate a threat map for all opposing pieces, and mark those moves as invalid after generating the King’s normal list of moves. Something like this:
@@ -24,7 +24,7 @@ def valid_moves(cell) do
 end
 
 def king_moves(cell, offset) do
-  enemy_color = cell.occupant.ord > 91 ? 'b' : 'w'
+  enemy_color = cell.piece.ord > 91 ? 'b' : 'w'
   threat = threat_map(enemy_color)
   result = # Calculate king moves
   (result - threat).uniq.sort
