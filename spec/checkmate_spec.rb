@@ -7,7 +7,7 @@ require_relative '../lib/board'
 require_relative '../lib/movement'
 require_relative '../lib/chess'
 
-describe Checkmate do
+xdescribe Checkmate do
   let(:ui) { double('UI') }
   let(:game) { Chess.new(ui) }
   

@@ -6,7 +6,6 @@
 #require_relative 'moves/all_moves'
 
 class Piece
-  include Comparable
   attr_reader :color, :fen
 
   def self.from_fen(fen)
@@ -50,13 +49,7 @@ class Piece
     @fen
   end
 
-  def <=>(other)
-    return false if other.nil?
-
-    @fen <=> other.fen
-  end
-
   def ==(other)
-    @color == other.color && self.class == other.class
+    self.class == other.class && @color == other.color
   end
 end
