@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# lib/pieces/all_pieces.rb
+
 require_relative 'bishop'
 require_relative 'king'
 require_relative 'knight'

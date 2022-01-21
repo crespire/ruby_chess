@@ -112,9 +112,8 @@ describe Board do
       end
 
       it 'correctly identifies the coordinates of the eight Black pawns' do
-        results = find.find_piece('p')
         expected = %w[a7 b7 c7 d7 e7 f7 g7 h7].sort
-        expect(results = find.find_piece('p').map(&:to_s)).to eq(expected)
+        expect(find.find_piece('p').map(&:to_s)).to eq(expected)
       end
     end
   end
