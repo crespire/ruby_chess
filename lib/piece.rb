@@ -6,7 +6,7 @@ require_relative './pieces/all_pieces'
 
 class Piece
   include Comparable
-  attr_reader :color, :fen, :moves
+  attr_reader :color, :fen
 
   def self.from_fen(fen)
     case fen.downcase
