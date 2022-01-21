@@ -5,6 +5,7 @@
 require_relative '../lib/board'
 require_relative '../lib/chess'
 
+
 describe Board do
   context 'on initialize' do
     subject(:init) { described_class.new }
@@ -151,9 +152,9 @@ describe Board do
       from = move.cell('a7')
       to = move.cell('a6')
 
-      expect { move.update_loc('a7', 'a6') }
-      expect(to.occupant).to be nil
-      expect(from.occupant).to be_a(Pawn)
+      move.update_loc('a7', 'a6')
+      expect(to.occupant).to be_a(Pawn)
+      expect(from.occupant).to be_a(NilClass)
     end
   end
 end

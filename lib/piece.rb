@@ -2,9 +2,11 @@
 
 # lib/piece.rb
 
+require_relative './pieces/all_pieces'
+
 class Piece
   include Comparable
-  attr_reader :color, :fen
+  attr_reader :color, :fen, :moves
 
   def self.from_fen(fen)
     case fen.downcase
@@ -21,13 +23,19 @@ class Piece
     when 'n'
       Knight.new(fen)
     else
-      Piece.new(fen)
+      raise ArgumentError, "Unrecognized FEN character '#{fen}'"
     end
   end
 
   def initialize(fen)
-    @color = fen.ord < 91 ? 'w' : 'b'  
+    @color = fen.ord < 91 ? 'w' : 'b'
     @fen = fen
+    @moves = moves
+  end
+
+  # Must be implemented by subclasses.
+  def moves
+    raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
 
   def white?
@@ -44,25 +52,11 @@ class Piece
 
   def <=>(other)
     return false if other.nil?
-    
+
     @fen <=> other.fen
   end
-end
 
-class King < Piece
-end
-
-class Queen < Piece
-end
-
-class Bishop < Piece
-end
-
-class Rook < Piece
-end
-
-class Knight < Piece
-end
-
-class Pawn < Piece
+  def ==(other)
+    @color == other.color && self.class == other.class
+  end
 end
