@@ -2,8 +2,6 @@
 
 # lib/piece.rb
 
-require_relative './pieces/all_pieces'
-
 class Piece
   include Comparable
   attr_reader :color, :fen

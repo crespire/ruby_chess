@@ -5,6 +5,7 @@
 require_relative 'cell'
 require_relative 'chess'
 require_relative 'piece'
+require_relative 'pieces/all_pieces'
 
 class Board
   attr_reader :data, :game
