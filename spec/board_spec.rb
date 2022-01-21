@@ -100,23 +100,20 @@ describe Board do
     subject(:find) { described_class.new }
 
     context 'from the starting position' do
-
       it 'correctly identifies the coordinates of the two White Bishops' do
-        results = find.find_piece('B')
         expected = %w[c1 f1].sort
-        expect(results.map(&:to_s)).to eq(expected)
+        expect(find.find_piece('B').map(&:to_s)).to eq(expected)
       end
 
       it 'correctly identifies the coordinates of the two Black Bishops' do
-        results = find.find_piece('b')
         expected = %w[c8 f8].sort
-        expect(results.map(&:to_s)).to eq(expected)
+        expect(find.find_piece('b').map(&:to_s)).to eq(expected)
       end
 
       it 'correctly identifies the coordinates of the eight Black pawns' do
         results = find.find_piece('p')
         expected = %w[a7 b7 c7 d7 e7 f7 g7 h7].sort
-        expect(results.map(&:to_s)).to eq(expected)
+        expect(results = find.find_piece('p').map(&:to_s)).to eq(expected)
       end
     end
   end
@@ -155,8 +152,8 @@ describe Board do
       to = move.cell('a6')
 
       expect { move.update_loc('a7', 'a6') }.to \
-        change { to.occupant }.from(nil).to(Pawn).and \
-        change { from.occupant }.from(Pawn).to(nil)
+        change { to.occupant }.from(NilClass).to(Pawn).and \
+        change { from.occupant }.from(Pawn).to(NilClass)
     end
   end
 end

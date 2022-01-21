@@ -61,9 +61,9 @@ class Board
   def update_loc(origin, destination)
     return nil if origin.empty? || destination.empty?
 
-    from = origin.instance_of?(Cell) ? origin : cell(origin)
-    to = destination.instance_of?(Cell) ? destination : cell(destination)
-    to.occupant = from.occupant.dup
+    from = origin.is_a?(Cell) ? origin : cell(origin)
+    to = destination.is_a?(Cell) ? destination : cell(destination)
+    to.occupant = from.occupant
     from.occupant = nil
   end
 
