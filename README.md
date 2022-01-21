@@ -270,7 +270,7 @@ So, if these are the requirements for `Move`, then what does Move look like inte
 * Move.capture? - Are there any captures on the move?
 * Move.valid_moves - Return a list of Cells that piece can actually traverse to in a psuedo-legal way. We don't care, at this point, about legal moves, just moves we can actually make.
 
-So, the `Move` should contain all pieces on the board, then we can use these predicates and `valid_moves` to filter out squares that are blocked, etc.
+So, the `Move` should contain all reachable cells on the board, then we can use these predicates and `valid_moves` to filter out squares that are blocked, etc.
 
 So we are passed in the board, origin, an offset and if we should repeat.
 
