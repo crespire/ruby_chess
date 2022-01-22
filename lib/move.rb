@@ -6,7 +6,8 @@ class Move
   include Enumerable
   extend Forwardable
 
-  def_delegators :@cells, :<<, :&, :length, :each
+  def_delegators :@cells, :<<, :&, :length, :each, :union, :uniq
+  attr_reader :cells
 
   def initialize(board, origin, offset, steps = 1)
     @origin = origin.is_a?(Cell) ? origin : board.cell(origin)
@@ -28,6 +29,8 @@ class Move
   def path_to_enemy; end
 
   def to_friendly; end
+
+  private
 
   def cells(board = nil, offset = nil, steps = nil)
     return @cells if @cells
