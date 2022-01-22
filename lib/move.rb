@@ -4,34 +4,30 @@
 
 class Move
   include Enumerable
+  extend Forwardable
+
+  def_delegators :@cells, :<<, :&, :length, :each
 
   def initialize(board, origin, offset, steps = 1)
     @origin = origin.is_a?(Cell) ? origin : board.cell(origin)
-
-    cells(board, offset, steps)
+    @cells ||= cells(board, offset, steps)
   end
 
   def dead?
     @cells.empty?
   end
 
-  def length
-    return nil unless defined?(@cells)
-
-    @cells.length
-  end
-
-  def each(&block)
+  def to_ary
     return unless defined?(@cells)
 
-    @cells.each(&block)
+    @cells
   end
+
+  alias to_a to_ary
 
   def path_to_enemy; end
 
   def to_friendly; end
-
-  private
 
   def cells(board = nil, offset = nil, steps = nil)
     return @cells if @cells
