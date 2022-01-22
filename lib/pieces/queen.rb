@@ -5,4 +5,8 @@
 class Queen < Piece
   def moves(board = nil, origin = nil)
   end
+
+  def slides?
+    true
+  end
 end

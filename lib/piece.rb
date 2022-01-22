@@ -36,6 +36,10 @@ class Piece
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
 
+  def slides?
+    false
+  end
+
   def white?
     @color == 'w'
   end

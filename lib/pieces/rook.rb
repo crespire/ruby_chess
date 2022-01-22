@@ -12,4 +12,8 @@ class Rook < Piece
     end
     moves
   end
+
+  def slides?
+    true
+  end
 end
