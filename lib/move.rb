@@ -3,6 +3,8 @@
 # lib/move.rb
 
 class Move
+  include Enumerable
+
   def initialize(board, origin, offset, steps = 1)
     @origin = origin.is_a?(Cell) ? origin : board.cell(origin)
 
@@ -14,9 +16,15 @@ class Move
   end
 
   def length
-    return nil unless @cells
+    return nil unless defined?(@cells)
 
     @cells.length
+  end
+
+  def each(&block)
+    return unless defined?(@cells)
+
+    @cells.each(&block)
   end
 
   def path_to_enemy; end
