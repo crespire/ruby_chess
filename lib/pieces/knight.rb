@@ -5,7 +5,8 @@
 class Knight < Piece
   def moves(board, origin)
     moves = []
-    offsets = [[2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2], [1, 2]] #[file, rank] offset pairs
+    # Clockwise from north @ 12
+    offsets = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]] 
     offsets.each do |offset|
       moves << Move.new(board, origin, offset)
     end

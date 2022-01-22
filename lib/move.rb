@@ -13,6 +13,12 @@ class Move
     @cells.empty?
   end
 
+  def length
+    return nil unless @cells
+
+    @cells.length
+  end
+
   def to_capture; end
 
   def to_obstruction; end
