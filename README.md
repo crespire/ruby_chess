@@ -303,4 +303,4 @@ class Move
 end
 ```
 
-I think this is a good start to Move
+I think this is a good start to Move. I thought about adding some enumerable methods to Move. Might be helpful to work with them similar to arrays.

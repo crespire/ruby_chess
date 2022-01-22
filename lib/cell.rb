@@ -6,6 +6,7 @@ require_relative 'piece'
 require_relative 'pieces/all_pieces'
 
 class Cell
+  include Comparable
   attr_reader :name
   attr_accessor :piece
 
@@ -46,5 +47,9 @@ class Cell
 
   def to_s
     @name
+  end
+
+  def <=>(other)
+    @name <=> other.name
   end
 end
