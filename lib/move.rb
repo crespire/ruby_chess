@@ -19,11 +19,9 @@ class Move
     @cells.length
   end
 
-  def to_capture; end
+  def path_to_enemy; end
 
-  def to_obstruction; end
-
-  def clear_moves; end
+  def to_friendly; end
 
   private
 
