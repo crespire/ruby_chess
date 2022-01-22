@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # lib/move.rb
+require 'forwardable'
 
 class Move
   include Enumerable
@@ -26,9 +27,21 @@ class Move
 
   alias to_a to_ary
 
+  def capture?
+    return unless defined?(@cells)
+
+    @cells.any? { |cell| @origin.hostile?(cell) }
+  end
+
+  def friendly?
+    return unless defined?(@cells)
+
+    @cells.any? { |cell| @origin.friendly?(cell) }
+  end
+
   def path_to_enemy; end
 
-  def to_friendly; end
+  def path_to_friendly; end
 
   private
 

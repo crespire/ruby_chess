@@ -28,13 +28,15 @@ class Cell
     return nil if other.is_a?(Cell) && other.empty?
 
     other = other.piece if other.is_a?(Cell)
-    @piece.white? & other.black?
+    @piece.color != other.color
   end
 
   def friendly?(other)
     return nil if other.nil? || empty?
+    return nil if other.is_a?(Cell) && other.empty?
 
-    !hostile?(other)
+    other = other.piece if other.is_a?(Cell)
+    @piece.color == other.color
   end
 
   def to_fen

@@ -116,11 +116,23 @@ describe Move do
         expect(moves.reject(&:dead?)).to include(Move).exactly(4).times
       end
 
-      it 'correctly puts all calls into each move' do
+      it 'correctly puts all cells into each move' do
         expected = [6, 3, 1, 4]
         moves.each_with_index do |path, i|
           expect(path.length).to eq(expected[i])
         end
+      end
+
+      it 'correctly indicates when a move has a capture' do
+        move_north = moves[0]
+        expect(move_north.capture?).to be true
+        expect(move_north.friendly?).to be false
+      end
+
+      it 'correctly indicates when a move has an obstruction' do
+        move_west = moves[3]
+        expect(move_west.friendly?).to be true
+        expect(move_west.capture?).to be false
       end
     end
   end
