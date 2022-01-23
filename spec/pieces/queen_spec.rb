@@ -7,6 +7,10 @@ require_relative '../../lib/piece'
 require_relative '../../lib/pieces/queen'
 
 describe Queen do
+  it 'correctly reports true when sending #slides? query' do
+    expect(Queen.new('q').slides?).to be true
+  end
+
   context 'with the given board' do
     let(:game) { Chess.new }
     let(:board) { game.board }
@@ -14,10 +18,6 @@ describe Queen do
 
     before do
       game.set_board_state('k6q/1p6/8/6np/8/2P1QR2/4PP2/K1R5 w - - 0 1')
-    end
-
-    it 'correctly reports true when sending #slides? query' do
-      expect(white_q.slides?).to be true
     end
 
     it 'correctly reports 5 moves when asked' do
