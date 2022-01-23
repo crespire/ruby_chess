@@ -19,14 +19,6 @@ class Move
     @cells.empty?
   end
 
-  def to_ary
-    return unless defined?(@cells)
-
-    @cells
-  end
-
-  alias to_a to_ary
-
   def capture?
     return unless defined?(@cells)
 
@@ -39,9 +31,57 @@ class Move
     @cells.any? { |cell| @origin.friendly?(cell) }
   end
 
-  def path_to_enemy; end
+  def enemies
+    return unless defined?(@cells)
 
-  def path_to_friendly; end
+    @cells.count { |cell| @origin.hostile?(cell) }
+  end
+
+  def path_enemy
+    return nil unless capture?
+
+    result = []
+    path = @cells.dup
+    current_cell = path.shift
+    loop do
+      result << current_cell
+      current_cell = path.shift
+      break if @origin.hostile?(current_cell)
+    end
+    result << current_cell
+  end
+
+  def path_friendly
+    return nil unless friendly?
+
+    result = []
+    path = @cells.dup
+    current_cell = path.shift
+    loop do
+      result << current_cell
+      current_cell = path.shift
+      break if @origin.friendly?(current_cell)
+    end
+    result
+  end
+
+  def path_xray_enemies
+    return path_enemy unless enemies > 1
+
+    result = []
+    path = @cells.dup
+    current_cell = path.shift
+    found = 0
+    loop do # We only care about the first two enemies for xray
+      result << current_cell
+      current_cell = path.shift
+      if @origin.hostile?(current_cell)
+        found += 1
+        break if found == 2
+      end
+    end
+    result << current_cell
+  end
 
   private
 
@@ -59,4 +99,12 @@ class Move
     end
     @cells
   end
+
+  def to_ary
+    return unless defined?(@cells)
+
+    @cells
+  end
+
+  alias to_a to_ary
 end
