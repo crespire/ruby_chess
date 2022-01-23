@@ -31,6 +31,12 @@ class Move
     @cells.any? { |cell| @origin.friendly?(cell) }
   end
 
+  def clear?
+    return unless defined?(@cells)
+
+    @cells.none? { |cell| @origin.friendly?(cell) || @origin.hostile?(cell) }
+  end
+
   def enemies
     return unless defined?(@cells)
 
@@ -63,6 +69,19 @@ class Move
       break if @origin.friendly?(current_cell)
     end
     result
+  end
+
+  def path_clear
+    return nil unless clear?
+
+    result = []
+    path = @cells.dup
+    current_cell = path.shift
+    until path.empty?
+      result << current_cell
+      current_cell = path.shift
+    end
+    result << current_cell
   end
 
   def path_xray_enemies

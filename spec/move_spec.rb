@@ -135,12 +135,17 @@ describe Move do
           expect(move_north.enemies).to eq(3)
         end
 
-        it 'returns nil when sending #path_to_friendly' do
+        it 'returns nil when sending #path_friendly' do
           move_north = moves[0]
           expect(move_north.path_friendly).to be nil
         end
 
-        it 'returns the correct path to the first enemy when sending #path_to_enemy' do
+        it 'returns nil when sending #path_clear' do
+          move_north = moves[0]
+          expect(move_north.path_clear).to be nil
+        end
+
+        it 'returns the correct path to the first enemy when sending #path_enemy' do
           move_north = moves[0]
           expect(move_north.path_enemy.length).to eq(2)
         end
@@ -158,12 +163,12 @@ describe Move do
           expect(move_west.capture?).to be false
         end
 
-        it 'returns the correct path when sending #path_to_friendly' do
+        it 'returns the correct path when sending #path_friendly' do
           move_west = moves[3]
           expect(move_west.path_friendly.length).to eq(2)
         end
 
-        it 'returns nil when sending #path_to_enemy' do
+        it 'returns nil when sending #path_enemy' do
           move_west = moves[3]
           expect(move_west.path_enemy).to be nil
         end
@@ -176,15 +181,120 @@ describe Move do
           expect(move_east.capture?).to be false
         end
 
-        it 'returns nil when sending #path_to_friendly' do
+        it 'returns nil when sending #path_friendly' do
           move_east = moves[1]
           expect(move_east.path_friendly).to be nil
         end
 
-        it 'returns nil when sending #path_to_enemy' do
+        it 'returns nil when sending #path_enemy' do
           move_east = moves[1]
           expect(move_east.path_enemy).to be nil
         end
+
+        it 'returns nil when sending #path_clear' do
+          move_east = moves[1]
+          expect(move_east.path_clear.length).to eq(3)
+        end
+      end
+    end
+
+    context 'with a Bishop on d3 with an obstruction and a capture available' do
+      let(:moves) { Array.new }
+
+      before do
+        game.set_board_state('k7/8/6q1/5n2/8/3B4/4P3/KR6 w - - 0 1')
+        # Clockwise from north @ 12
+        offsets = [[1, 1], [1, -1], [-1, -1], [-1, 1]]
+        offsets.each do |offset|
+          moves << Move.new(board, 'd3', offset, 7)
+        end
+      end
+
+      it 'builds all basic moves' do
+        expect(moves).to include(Move).exactly(4).times
+      end
+
+      it 'correctly identifies no dead moves' do
+        expect(moves.reject(&:dead?)).to include(Move).exactly(4).times
+      end
+
+      it 'correctly puts all cells into each move' do
+        expected = [4, 2, 2, 3]
+        moves.each_with_index do |path, i|
+          expect(path.length).to eq(expected[i])
+        end
+      end
+
+      context 'with the north-east path' do
+        it 'correctly indicates when a move has a capture' do
+          move_north = moves[0]
+          expect(move_north.capture?).to be true
+          expect(move_north.friendly?).to be false
+        end
+
+        it 'correctly indicates 2 enemy on the move' do
+          move_north = moves[0]
+          expect(move_north.enemies).to eq(2)
+        end
+
+        it 'returns nil when sending #path_friendly' do
+          move_north = moves[0]
+          expect(move_north.path_friendly).to be nil
+        end
+
+        it 'returns the correct path to the first enemy when sending #path_enemy' do
+          move_north = moves[0]
+          expect(move_north.path_enemy.length).to eq(2)
+        end
+
+        it 'returns the correct path to all enemies when sending #path_xray_to_enemies' do
+          move_north = moves[0]
+          expect(move_north.path_xray_enemies.length).to eq(3)
+        end
+      end
+
+      context 'with the north-west path' do
+        it 'correctly indicates when a move has an obstruction' do
+          move_west = moves[3]
+          expect(move_west.friendly?).to be false
+          expect(move_west.capture?).to be false
+          expect(move_west.clear?).to be true
+        end
+
+        it 'returns nil when sending #path_friendly' do
+          move_west = moves[3]
+          expect(move_west.path_friendly).to be nil
+        end
+
+        it 'returns nil when sending #path_enemy' do
+          move_west = moves[3]
+          expect(move_west.path_enemy).to be nil
+        end
+
+        it 'returns the correct path when sending #path_clear' do
+          move_west = moves[3]
+          expect(move_west.path_clear.length).to eq(3)
+        end
+      end
+
+      xcontext 'with the east-bound path' do
+        it 'correctly indicates the move has no capture or obstruction' do
+          move_east = moves[1]
+          expect(move_east.friendly?).to be false
+          expect(move_east.capture?).to be false
+        end
+
+        it 'returns nil when sending #path_friendly' do
+          move_east = moves[1]
+          expect(move_east.path_friendly).to be nil
+        end
+
+        it 'returns nil when sending #path_enemy' do
+          move_east = moves[1]
+          expect(move_east.path_enemy).to be nil
+        end
+
+        it 'returns '
       end
     end
   end
