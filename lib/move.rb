@@ -12,7 +12,7 @@ class Move
 
   def initialize(board, origin, offset, steps = 1)
     @origin = origin.is_a?(Cell) ? origin : board.cell(origin)
-    @cells ||= cells(board, offset, steps)
+    @cells ||= build_move(board, offset, steps)
   end
 
   def dead?
@@ -45,9 +45,8 @@ class Move
 
   private
 
-  def cells(board = nil, offset = nil, steps = nil)
+  def build_move(board, offset, steps)
     return @cells if @cells
-    return if board.nil?
 
     @cells ||= []
     next_cell = @origin
