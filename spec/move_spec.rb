@@ -40,12 +40,8 @@ describe Move do
         end
       end
 
-      it 'builds all basic moves given a knight on the starting board' do
-        expect(moves).to include(Move).exactly(8).times
-      end
-
-      it 'correctly reports three moves after removing dead moves' do
-        expect(moves.reject(&:dead?)).to include(Move).exactly(3).times
+      it 'using reject(&:dead?) correctly filters moves down to two' do
+        expect(moves.reject(&:dead?)).to include(Move).exactly(2).times
       end
     end
 
@@ -58,8 +54,8 @@ describe Move do
         end
       end
 
-      it 'with a black pawn on d7, builds all basic moves' do
-        expect(moves).to include(Move).exactly(3).times
+      it 'using reject(&:dead?) correctly filters no moves' do
+        expect(moves.reject(&:dead?)).to include(Move).exactly(3).times
       end
     end
 
@@ -72,8 +68,7 @@ describe Move do
         end
       end
 
-      it 'with a white pawn on h3, builds all basic moves' do
-        expect(moves).to include(Move).exactly(3).times
+      it 'using reject(&:dead?) filters out an out of bound move' do
         expect(moves.reject(&:dead?)).to include(Move).exactly(2).times
       end
     end
@@ -87,11 +82,7 @@ describe Move do
         end
       end
 
-      it 'builds all basic moves' do
-        expect(moves).to include(Move).exactly(8).times
-      end
-
-      it 'correctly no moves dead' do
+      it 'using reject(&:dead?) correctly filters no moves' do
         expect(moves.reject(&:dead?)).to include(Move).exactly(8).times
       end
     end
@@ -100,7 +91,7 @@ describe Move do
   context 'for the given board' do
     context 'with a Rook on e2 with an obstruction and a capture available' do
       before do
-        game.set_board_state('4q2k/8/4n3/8/4p3/8/1P2R3/7K w - - 0 1')
+        game.set_board_state('4q2k/8/4n3/8/4p3/8/rP2R3/7K w - - 0 1')
         # Rook offsets
         offsets = [[0, 1], [1, 0], [0, -1], [-1, 0]] # N, E, S, W
         offsets.each do |offset|
@@ -108,98 +99,69 @@ describe Move do
         end
       end
 
-      it 'builds all basic moves' do
-        expect(moves).to include(Move).exactly(4).times
+      context 'testing the "before" block move generation, targeting private Move#build_move method.' do
+        it 'builds all basic moves' do
+          expect(moves).to include(Move).exactly(4).times
+        end
+  
+        it 'correctly puts all cells into each move' do
+          expected = [6, 3, 1, 4]
+          moves.each_with_index do |path, i|
+            expect(path.length).to eq(expected[i])
+          end
+        end
       end
 
-      it 'correctly identifies no dead moves' do
+      it 'using reject(&:dead?) correctly identifies no dead moves' do
         expect(moves.reject(&:dead?)).to include(Move).exactly(4).times
       end
 
-      it 'correctly puts all cells into each move' do
-        expected = [6, 3, 1, 4]
-        moves.each_with_index do |path, i|
-          expect(path.length).to eq(expected[i])
-        end
-      end
-
-      context 'with the north-bound path' do
-        it 'correctly indicates when a move has a capture' do
-          move_north = moves[0]
-          expect(move_north.capture?).to be true
-          expect(move_north.friendly?).to be false
-        end
-
-        it 'correctly indicates 3 enemies on the move' do
+      context 'with the north-bound path we generated' do
+        it 'correctly indicates 3 enemies on the move when sending #enemies' do
           move_north = moves[0]
           expect(move_north.enemies).to eq(3)
         end
 
-        it 'returns nil when sending #path_friendly' do
+        it 'returns the correct path to the first enemy when sending #path' do
           move_north = moves[0]
-          expect(move_north.path_friendly).to be nil
+          expect(move_north.valid).to include(Cell).twice
         end
 
-        it 'returns nil when sending #path_clear' do
+        it 'returns the correct moves to the second enemy when sending #path_xray' do
           move_north = moves[0]
-          expect(move_north.path_clear).to be nil
-        end
-
-        it 'returns the correct path to the first enemy when sending #path_enemy' do
-          move_north = moves[0]
-          expect(move_north.path_enemy.length).to eq(2)
-        end
-
-        it 'returns the correct path to all enemies when sending #path_xray_to_enemies' do
-          move_north = moves[0]
-          expect(move_north.path_xray_enemies.length).to eq(4)
+          expect(move_north.valid_xray).to include(Cell).exactly(4).times
         end
       end
 
       context 'with the west-bound path' do
-        it 'correctly indicates when a move has an obstruction' do
+        it 'correctly indicates 1 enemy on the move when sending #enemies' do
           move_west = moves[3]
-          expect(move_west.friendly?).to be true
-          expect(move_west.capture?).to be false
+          expect(move_west.enemies).to eq(1)
         end
 
-        it 'returns the correct path when sending #path_friendly' do
+        it 'returns the correct moves when sending #path' do
           move_west = moves[3]
-          expect(move_west.path_friendly.length).to eq(2)
-        end
-
-        it 'returns nil when sending #path_enemy' do
-          move_west = moves[3]
-          expect(move_west.path_enemy).to be nil
+          expect(move_west.valid).to include(Cell).twice
         end
       end
 
       context 'with the east-bound path' do
-        it 'correctly indicates the move has no capture or obstruction' do
+        it 'returns the correct moves when sending #path' do
           move_east = moves[1]
-          expect(move_east.friendly?).to be false
-          expect(move_east.capture?).to be false
+          expect(move_east.valid).to include(Cell).exactly(3).times
         end
+      end
 
-        it 'returns nil when sending #path_friendly' do
-          move_east = moves[1]
-          expect(move_east.path_friendly).to be nil
-        end
-
-        it 'returns nil when sending #path_enemy' do
-          move_east = moves[1]
-          expect(move_east.path_enemy).to be nil
-        end
-
-        it 'returns nil when sending #path_clear' do
-          move_east = moves[1]
-          expect(move_east.path_clear.length).to eq(3)
+      context 'with the south-bound path' do
+        it 'returns the correct moves when sending #path' do
+          move_south = moves[2]
+          expect(move_south.valid).to include(Cell).once
         end
       end
     end
 
     context 'with a Bishop on d3 with an obstruction and a capture available' do
-      let(:moves) { Array.new }
+      let(:moves) { [] }
 
       before do
         game.set_board_state('k7/8/6q1/5n2/8/3B4/4P3/KR6 w - - 0 1')
@@ -210,91 +172,84 @@ describe Move do
         end
       end
 
-      it 'builds all basic moves' do
-        expect(moves).to include(Move).exactly(4).times
-      end
-
-      it 'correctly identifies no dead moves' do
-        expect(moves.reject(&:dead?)).to include(Move).exactly(4).times
-      end
-
-      it 'correctly puts all cells into each move' do
-        expected = [4, 2, 2, 3]
-        moves.each_with_index do |path, i|
-          expect(path.length).to eq(expected[i])
+      context 'testing the "before" block code, targeting private Move#build_move method.' do
+        it 'builds all basic moves' do
+          expect(moves).to include(Move).exactly(4).times
         end
+
+        it 'correctly puts all cells into each move' do
+          expected = [4, 2, 2, 3]
+          moves.each_with_index do |path, i|
+            expect(path.length).to eq(expected[i])
+          end
+        end
+      end
+
+      it 'using reject(&:dead?) correctly identifies 1 dead move' do
+        expect(moves.reject(&:dead?)).to include(Move).exactly(3).times
       end
 
       context 'with the north-east path' do
-        it 'correctly indicates when a move has a capture' do
-          move_north = moves[0]
-          expect(move_north.capture?).to be true
-          expect(move_north.friendly?).to be false
-        end
-
         it 'correctly indicates 2 enemy on the move' do
           move_north = moves[0]
           expect(move_north.enemies).to eq(2)
         end
 
-        it 'returns nil when sending #path_friendly' do
+        it 'returns the correct path to the first enemy when sending #path' do
           move_north = moves[0]
-          expect(move_north.path_friendly).to be nil
+          expect(move_north.valid).to include(Cell).twice
         end
 
-        it 'returns the correct path to the first enemy when sending #path_enemy' do
+        it 'returns the correct path to all enemies when sending #path_xray' do
           move_north = moves[0]
-          expect(move_north.path_enemy.length).to eq(2)
-        end
-
-        it 'returns the correct path to all enemies when sending #path_xray_to_enemies' do
-          move_north = moves[0]
-          expect(move_north.path_xray_enemies.length).to eq(3)
+          expect(move_north.valid_xray).to include(Cell).exactly(3).times
         end
       end
 
       context 'with the north-west path' do
-        it 'correctly indicates when a move has an obstruction' do
+        it 'returns the correct path when sending #path' do
           move_west = moves[3]
-          expect(move_west.friendly?).to be false
-          expect(move_west.capture?).to be false
-          expect(move_west.clear?).to be true
+          expect(move_west.valid).to include(Cell).exactly(3).times
         end
 
-        it 'returns nil when sending #path_friendly' do
+        it 'returns an empty list when sending #path_xray' do
           move_west = moves[3]
-          expect(move_west.path_friendly).to be nil
-        end
-
-        it 'returns nil when sending #path_enemy' do
-          move_west = moves[3]
-          expect(move_west.path_enemy).to be nil
-        end
-
-        it 'returns the correct path when sending #path_clear' do
-          move_west = moves[3]
-          expect(move_west.path_clear.length).to eq(3)
+          expect(move_west.valid_xray).to be_empty
         end
       end
 
-      xcontext 'with the east-bound path' do
-        it 'correctly indicates the move has no capture or obstruction' do
+      context 'with the south-east path' do
+        it 'returns an empty list when sending #path' do
           move_east = moves[1]
-          expect(move_east.friendly?).to be false
-          expect(move_east.capture?).to be false
+          expect(move_east.valid).to be_empty
         end
 
-        it 'returns nil when sending #path_friendly' do
+        it 'returns an empty list when sending #path_xray' do
           move_east = moves[1]
-          expect(move_east.path_friendly).to be nil
+          expect(move_east.valid_xray).to be_empty
         end
 
-        it 'returns nil when sending #path_enemy' do
+        it 'returns 0 when being sent #enemies' do
           move_east = moves[1]
-          expect(move_east.path_enemy).to be nil
+          expect(move_east.enemies).to eq(0)
+        end
+      end
+
+      context 'with the south-west path' do
+        it 'returns the correct moves when sending #path' do
+          move_east = moves[2]
+          expect(move_east.valid).to include(Cell).once
         end
 
-        it 'returns '
+        it 'returns an empty list when sending #path_xray' do
+          move_east = moves[2]
+          expect(move_east.valid_xray).to be_empty
+        end
+
+        it 'returns 0 when being sent #enemies' do
+          move_east = moves[2]
+          expect(move_east.enemies).to eq(0)
+        end
       end
     end
   end

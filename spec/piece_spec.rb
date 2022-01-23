@@ -4,7 +4,7 @@
 
 require_relative '../lib/chess'
 require_relative '../lib/piece'
-require_relative '../lib/pieces/all_pieces'
+# require_relative '../lib/pieces/all_pieces'
 
 describe Piece do
   context 'factory method ::from_fen' do
@@ -48,36 +48,4 @@ describe Piece do
       expect(white_pawn1 == white_knight).to be false
     end
   end
-
-  context 'for each individiual piece' do
-    let(:game) { Chess.new }
-    let(:board) { game.board }
-
-    context 'given a black knight with the given board' do
-      let(:black_n) { Knight.new('n') }
-
-      before do
-        game.set_board_state('7k/2p1p3/1p3r2/3n4/5B2/2P5/8/K7 b - - 0 1')
-      end
-
-      it 'correctly reports 4 moves when asked' do
-        moves = black_n.moves(board, 'd5')
-        expect(moves.length).to eq(4)
-      end
-    end
-
-    context 'given a white bishop with the given board' do
-      let(:white_b) { Bishop.new('B') }
-
-      before do
-        game.set_board_state('k7/8/8/5n2/8/3B4/4P3/KR6 w - - 0 1')
-      end
-
-      it 'correctly reports 4 moves when asked' do
-        moves = white_b.moves(board, 'd3')
-        expect(moves.length).to eq(4)
-      end
-    end
-  end
-
 end

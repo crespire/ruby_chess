@@ -16,25 +16,7 @@ class Move
   end
 
   def dead?
-    @cells.empty?
-  end
-
-  def capture?
-    return unless defined?(@cells)
-
-    @cells.any? { |cell| @origin.hostile?(cell) }
-  end
-
-  def friendly?
-    return unless defined?(@cells)
-
-    @cells.any? { |cell| @origin.friendly?(cell) }
-  end
-
-  def clear?
-    return unless defined?(@cells)
-
-    @cells.none? { |cell| @origin.friendly?(cell) || @origin.hostile?(cell) }
+    @cells.empty? || valid.empty?
   end
 
   def enemies
@@ -43,49 +25,14 @@ class Move
     @cells.count { |cell| @origin.hostile?(cell) }
   end
 
-  def path_enemy
-    return nil unless capture?
+  def valid
+    return path_clear unless capture? || friendly?
 
-    result = []
-    path = @cells.dup
-    current_cell = path.shift
-    loop do
-      result << current_cell
-      current_cell = path.shift
-      break if @origin.hostile?(current_cell)
-    end
-    result << current_cell
+    path_obstructed
   end
 
-  def path_friendly
-    return nil unless friendly?
-
-    result = []
-    path = @cells.dup
-    current_cell = path.shift
-    loop do
-      result << current_cell
-      current_cell = path.shift
-      break if @origin.friendly?(current_cell)
-    end
-    result
-  end
-
-  def path_clear
-    return nil unless clear?
-
-    result = []
-    path = @cells.dup
-    current_cell = path.shift
-    until path.empty?
-      result << current_cell
-      current_cell = path.shift
-    end
-    result << current_cell
-  end
-
-  def path_xray_enemies
-    return path_enemy unless enemies > 1
+  def valid_xray
+    return [] unless enemies > 1
 
     result = []
     path = @cells.dup
@@ -117,6 +64,53 @@ class Move
       next_cell = destination
     end
     @cells
+  end
+
+  def capture?
+    return unless defined?(@cells)
+
+    @cells.any? { |cell| @origin.hostile?(cell) }
+  end
+
+  def friendly?
+    return unless defined?(@cells)
+
+    @cells.any? { |cell| @origin.friendly?(cell) }
+  end
+
+  def clear?
+    return unless defined?(@cells)
+
+    @cells.none? { |cell| @origin.friendly?(cell) || @origin.hostile?(cell) }
+  end
+
+  def path_clear
+    return [] unless clear?
+
+    result = []
+    path = @cells.dup
+    current_cell = path.shift
+    until path.empty?
+      result << current_cell
+      current_cell = path.shift
+    end
+    result << current_cell
+  end
+
+  def path_obstructed
+    return [] unless friendly? || capture?
+
+    result = []
+    path = @cells.dup
+    current_cell = path.shift
+    loop do
+      break if @origin.friendly?(current_cell) || @origin.hostile?(current_cell)
+
+      result << current_cell
+      current_cell = path.shift
+    end
+    result << current_cell if @origin.hostile?(current_cell)
+    result
   end
 
   def to_ary
