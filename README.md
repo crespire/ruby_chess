@@ -304,3 +304,13 @@ end
 ```
 
 I think this is a good start to Move. I thought about adding some enumerable methods to Move. Might be helpful to work with them similar to arrays.
+
+Move builds all move vectors for a given piece offset, however, we classify Move objects with an empty @cells array as dead. We also classify a Move object with 0 valid destinations as dead.
+
+As an example, given this board: https://i.vgy.me/6qp2Ol.png
+
+The d3 Bishop has one path obstructed, but the Move object in the south east direction actually is not empty, and includes cell e2 and f1, but we mark it as dead as there is no valid move to make.
+
+These move objects have a `valid` method, but this method only returns valid destinations with respect to their basic movement rules. For example, a pawn will return a forward diagonal as a valid if it is not an obstructed square, even if there is no valid capture there.
+
+The idea behind Move is to report all psuedo-legal moves. We will rely on Movement to do the final filtering to legal moves. The same would be true for a King's moves. We would report all psuedo-legal moves, then filter out moves that would result in a self-check.
