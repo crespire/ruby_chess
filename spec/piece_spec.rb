@@ -4,7 +4,6 @@
 
 require_relative '../lib/chess'
 require_relative '../lib/piece'
-# require_relative '../lib/pieces/all_pieces'
 
 describe Piece do
   context 'factory method ::from_fen' do
