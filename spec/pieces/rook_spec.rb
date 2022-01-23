@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 
-# spec/bishop_spec.rb
+# spec/rook_spec.rb
 
-require_relative '../lib/chess'
-require_relative '../lib/piece'
-require_relative '../lib/pieces/bishop'
+require_relative '../../lib/chess'
+require_relative '../../lib/piece'
+require_relative '../../lib/pieces/rook'
 
-describe Bishop do
+describe Queen do
   context 'with the given board' do
     let(:game) { Chess.new }
     let(:board) { game.board }
-    let(:white_b) { Bishop.new('B') }
+    let(:white_r) { Rook.new('R') }
 
     before do
-      game.set_board_state('k7/8/8/5n2/8/3B4/4P3/KR6 w - - 0 1')
+      game.set_board_state('k6q/1p6/8/6np/8/2P1QR2/4P1P1/K1R5 w - - 0 1')
     end
 
     it 'correctly reports true when sending #slides? query' do
-      expect(white_b.slides?).to be true
+      expect(white_r.slides?).to be true
     end
 
     it 'correctly reports 3 moves when asked' do
-      moves = white_b.moves(board, 'd3')
+      moves = white_r.moves(board, 'f3')
       expect(moves).to include(Move).exactly(3).times
     end
   end

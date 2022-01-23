@@ -2,9 +2,9 @@
 
 # spec/bishop_spec.rb
 
-require_relative '../lib/chess'
-require_relative '../lib/piece'
-require_relative '../lib/pieces/knight'
+require_relative '../../lib/chess'
+require_relative '../../lib/piece'
+require_relative '../../lib/pieces/knight'
 
 describe Knight do
   context 'with the given board' do

@@ -2,9 +2,9 @@
 
 # spec/king_spec.rb
 
-require_relative '../lib/chess'
-require_relative '../lib/piece'
-require_relative '../lib/pieces/king'
+require_relative '../../lib/chess'
+require_relative '../../lib/piece'
+require_relative '../../lib/pieces/king'
 
 describe King do
   context 'with the given board' do

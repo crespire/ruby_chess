@@ -2,9 +2,9 @@
 
 # spec/pawn_spec.rb
 
-require_relative '../lib/chess'
-require_relative '../lib/piece'
-require_relative '../lib/pieces/pawn'
+require_relative '../../lib/chess'
+require_relative '../../lib/piece'
+require_relative '../../lib/pieces/pawn'
 
 describe Pawn do
   it 'correctly reports false when sending #slides? query' do
