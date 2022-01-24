@@ -29,7 +29,7 @@ class Pawn < Piece
 
   def captures(board, origin)
     moves = all_paths(board, origin)
-    moves.shift
+    moves.shift # Remove forward path
     result = []
     moves.each { |move| result += move.valid }
     result

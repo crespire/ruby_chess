@@ -34,29 +34,29 @@ class Piece
   ##
   # Returns a list of all Move objects, regardless of their status.
   # Must be implemented by subclasses.
-  def all_paths
+  def all_paths(board, origin)
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
 
   ##
   # Returns a list of Move objects that are not dead.
   # Must be implemented by subclasses.
-  def valid_paths
+  def valid_paths(board, origin)
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
 
   ##
   # Returns a list of Cell objects that are valid destinations.
   # Must be implemented by subclasses.
-  def moves
+  def moves(board, origin)
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
 
   ##
   # Returns a list of Cell objects that are valid capture destinations.
   # Must be implemented by a subclass.
-  def captures
-    raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
+  def captures(board, origin)
+    moves(board, origin)
   end
 
   def slides?
