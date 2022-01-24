@@ -348,3 +348,5 @@ If there are no direct attackers
     * Psuedo-legal moves for rook, knight, bishop and queen.
 4. In the case of a Pawn, we remove forward diagonals if there is no capture or en passant.
 5. In the case of the King, we remove any cells that are on an enemy path.
+
+I added a `captures` method to Piece in order to progress on `Movement`, but I should add unit tests to each piece to confirm it is working as expected. I don't see why it wouldn't be, but better to check than not.

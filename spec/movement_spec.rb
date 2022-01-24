@@ -260,7 +260,25 @@ describe Movement do
       end
     end
 
-    context 'when provided a black King in a check situation' do
+    context 'when provided a white King at d1 in a check situation' do
+      before do
+        game.set_board_state('k2b4/2p2n2/1p6/8/7R/4n3/7P/3K2B1 w - - 0 1')
+      end
+
+      it 'when selecting the friendly Bishop, corretly shows only one capture move' do
+        cell = game.cell('g1')
+        eligible = %w[e3]
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
+
+      it 'when selecting the King, correctly shows four moves to resovle check' do
+        cell = game.cell('d1')
+        eligible = %w[c1 e1 d2 e2].sort
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
+    end
+
+    context 'when provided a black King at g1 in a check situation' do
       before do
         game.set_board_state('2Q3k1/6pp/5r1q/6N1/1P5P/6P1/5P2/6K1 b - - 0 1')
       end
@@ -277,8 +295,14 @@ describe Movement do
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
 
-      xit 'when selecting a friendly pawn, correctly shows no available moves' do
+      it 'when selecting a friendly pawn, correctly shows no available moves' do
         cell = game.cell('g7')
+        eligible = %w[]
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
+
+      it 'when selecting a friendly queen, correctly shows no available moves' do
+        cell = game.cell('h6')
         eligible = %w[]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end

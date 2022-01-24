@@ -27,14 +27,11 @@ class Movement
     if danger_zone.include?(king)
       return [] if attackers.length > 1 # Double check, only King has moves
 
-      # Single check
       results = []
-      enemy_cell = @board.find_piece(attackers.pop).select { |find_cell| find_cell.piece == attacker }
+      enemy_cell = attackers.pop
+      return [enemy_cell.name] if psuedo.include?(enemy_cell)
 
-      # Can we capture the piece?
-      results << enemy_cell if psuedo.include?(enemy_cell)
-
-      # Can we block the attack?
+      # Test block available?
 
       results.map(&:name).sort
     else
@@ -60,7 +57,7 @@ class Movement
   end
 
   def dangers(king)
-    # Should return a list of cells attackers can traverse.
+    # Based on all_paths
     result = []
     @board.data.each do |rank|
       rank.each do |cell|
