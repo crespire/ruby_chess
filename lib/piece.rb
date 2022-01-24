@@ -32,6 +32,11 @@ class Piece
   end
 
   # Must be implemented by subclasses.
+  def all_moves
+    raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
+  end
+
+  # Must be implemented by subclasses.
   def moves
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end

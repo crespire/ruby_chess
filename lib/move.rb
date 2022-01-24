@@ -16,7 +16,15 @@ class Move
   end
 
   def dead?
-    @cells.empty? || valid.empty?
+    out_of_bounds? || blocked?
+  end
+
+  def out_of_bounds?
+    @cells.empty?
+  end
+
+  def blocked?
+    valid.empty?
   end
 
   def enemies

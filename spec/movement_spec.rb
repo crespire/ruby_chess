@@ -61,23 +61,23 @@ describe Movement do
         it 'starting at d4, returns the correct list of available moves including eligible captures' do
           game.set_board_state('k7/3p4/8/8/3qn3/8/3P1P2/7K b - - 1 2')
           cell = game.cell('d4')
-          eligible = %w[d6 d5 d3 xd2 a4 b4 c4 e5 f6 g7 h8 c3 b2 a1 c5 b6 a7 e3 xf2].sort
+          eligible = %w[d6 d5 d3 d2 a4 b4 c4 e5 f6 g7 h8 c3 b2 a1 c5 b6 a7 e3 f2].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
       end
     end
 
-    xcontext 'when provided a King' do
+    context 'when provided a King' do
       context 'when there is a friendly on one side, and an enemy on the other' do
-        it 'starting at d4, returns the correct list of available moves including two capture' do
+        it 'starting at d4, returns the correct list of available moves including one capture' do
           game.set_board_state('8/8/8/8/2pkP3/2N5/8/7K b - - 1 2')
           cell = game.cell('d4')
-          eligible = %w[c5 e5 xc3 d3 e3].sort
+          eligible = %w[c5 c3 d3 e3 e5].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
       end
 
-      context 'when there are a limited set of moves' do
+      xcontext 'when there are a limited set of moves' do
         it 'correctly shows moves that prevent self-checking' do
           game.set_board_state('8/8/8/2k5/3R4/2B5/8/4K3 b - - 1 2')
           cell = game.cell('c5')

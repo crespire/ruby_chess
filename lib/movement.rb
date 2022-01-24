@@ -19,14 +19,14 @@ class Movement
 
     piece = cell.piece
     moves = piece.moves(@board, cell.name)
-    p moves
-    destinations = []
+    psuedo = []
     moves.each do |move|
-      destinations += move.valid
+      psuedo += move.valid
     end
 
-    destinations.map(&:name).sort
-  end
+    # Psuedo contains cells, so we can actually ask questions about it.
+    names = psuedo.map(&:name).sort
 
-  # Start with Knight and King. Those should be the easiest to get working for possible moves.
+    
+  end
 end
