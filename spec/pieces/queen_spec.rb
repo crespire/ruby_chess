@@ -23,6 +23,12 @@ describe Queen do
       moves = white_q.moves(board, 'e3')
       expect(moves).to include(Move).exactly(5).times
     end
+
+    it 'correctly generates the valid destinations' do
+      move_names = white_q.moves(board, 'e3').map { |move| move.map(&:name) }.flatten.sort
+      expected = %w[d2 d3 d4 c5 b6 a7 f4 e5 e4 e5 e6 e7 e8].sort
+      expect(move_names).to eq(expected)
+    end
   end
 
   context 'with the second given board' do

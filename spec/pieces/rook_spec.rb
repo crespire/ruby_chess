@@ -24,5 +24,12 @@ describe Rook do
       moves = white_r.moves(board, 'f3')
       expect(moves).to include(Move).exactly(3).times
     end
+
+    it 'correctly generates valid basic moves' do
+      moves = white_r.moves(board, 'f3')
+      move_names = moves.map { |move| move.map(&:name) }.flatten.sort
+      expected = %w[f1 f2 f4 f5 f6 f7 f8 g3 h3].sort
+      expect(move_names).to eq(expected)
+    end
   end
 end

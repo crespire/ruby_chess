@@ -112,12 +112,12 @@ class Move
     path = @cells.dup
     current_cell = path.shift
     loop do
+      result << current_cell if @origin.hostile?(current_cell)
       break if @origin.friendly?(current_cell) || @origin.hostile?(current_cell)
 
       result << current_cell
       current_cell = path.shift
     end
-    result << current_cell if @origin.hostile?(current_cell)
     result
   end
 

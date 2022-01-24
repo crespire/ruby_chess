@@ -24,5 +24,12 @@ describe Bishop do
       moves = white_b.moves(board, 'd3')
       expect(moves).to include(Move).exactly(3).times
     end
+
+    it 'correctly generates valid basic moves' do
+      moves = white_b.moves(board, 'd3')
+      move_names = moves.map { |move| move.map(&:name) }.flatten.sort
+      expected = %w[c2 a6 b5 c4 e4 f5].sort
+      expect(move_names).to eq(expected)
+    end
   end
 end

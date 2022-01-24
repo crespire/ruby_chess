@@ -9,7 +9,7 @@ class Rook < Piece
 
   def all_moves(board, origin)
     moves = []
-    offsets.each { |offset| moves << Move.new(board, origin, offset, STEPS) }
+    OFFSETS.each { |offset| moves << Move.new(board, origin, offset, STEPS) }
     moves
   end
 
