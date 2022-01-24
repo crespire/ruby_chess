@@ -20,9 +20,9 @@ describe King do
       expect(white_k.slides?).to be false
     end
 
-    it 'correctly reports 6 moves when asked' do
-      moves = white_k.valid_paths(board, 'd3')
-      expect(moves).to include(Move).exactly(6).times
+    it 'correctly reports 8 moves when sent #all_paths' do
+      moves = white_k.all_paths(board, 'd3')
+      expect(moves).to include(Move).exactly(8).times
     end
 
     it 'correctly includes all cells basic moves (all cells on all moves)' do
@@ -32,7 +32,12 @@ describe King do
       expect(move_names).to eq(expected)
     end
 
-    it 'correctly includes valid cells basic moves' do
+    it 'correctly reports 6 moves when sent #valid_paths' do
+      moves = white_k.valid_paths(board, 'd3')
+      expect(moves).to include(Move).exactly(6).times
+    end
+
+    it 'correctly includes all valid moves when sent #moves' do
       moves = white_k.moves(board, 'd3')
       move_names = moves.map(&:name).sort
       expected = %w[d4 e4 e3 d2 c2 c4].sort
