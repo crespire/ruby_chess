@@ -21,8 +21,22 @@ describe King do
     end
 
     it 'correctly reports 6 moves when asked' do
-      moves = white_k.moves(board, 'd3')
+      moves = white_k.valid_paths(board, 'd3')
       expect(moves).to include(Move).exactly(6).times
+    end
+
+    it 'correctly includes all cells basic moves (all cells on all moves)' do
+      moves = white_k.all_paths(board, 'd3')
+      move_names = moves.map { |move| move.map(&:name) }.flatten.sort
+      expected = %w[d4 e4 e3 e2 d2 c2 c3 c4].sort
+      expect(move_names).to eq(expected)
+    end
+
+    it 'correctly includes valid cells basic moves' do
+      moves = white_k.moves(board, 'd3')
+      move_names = moves.map(&:name).sort
+      expected = %w[d4 e4 e3 d2 c2 c4].sort
+      expect(move_names).to eq(expected)
     end
   end
 end

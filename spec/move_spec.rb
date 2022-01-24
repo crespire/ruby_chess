@@ -14,14 +14,14 @@ describe Move do
   let(:moves) { Array.new }
 
   ##
-  # Use all_moves on the pieces to verify all moves are generated, then we can
+  # Use all_paths on the pieces to verify all moves are generated, then we can
   # test the filtering, and make sure the right destinations are made.
 
   context 'with single pieces on a starting board' do
     context 'with a Knight at b8' do
       it 'using reject(&:dead?) correctly filters moves down to two' do
         black_knight = Piece::from_fen('n')
-        moves = black_knight.all_moves(board, 'b8')
+        moves = black_knight.all_paths(board, 'b8')
         expect(moves.reject(&:dead?)).to include(Move).exactly(2).times
       end
     end
@@ -29,7 +29,7 @@ describe Move do
     context 'with a black pawn on d7' do
       it 'using reject(&:dead?) correctly filters no moves' do
         black_pawn = Piece::from_fen('p')
-        moves = black_pawn.all_moves(board, 'd7')
+        moves = black_pawn.all_paths(board, 'd7')
         expect(moves.reject(&:dead?)).to include(Move).exactly(3).times
       end
     end
@@ -37,7 +37,7 @@ describe Move do
     context 'with a white pawn on h3' do
       it 'using reject(&:dead?) filters out an out of bound move' do
         white_pawn = Piece::from_fen('P')
-        moves = white_pawn.all_moves(board, 'h3')
+        moves = white_pawn.all_paths(board, 'h3')
         expect(moves.reject(&:dead?)).to include(Move).exactly(2).times
       end
     end
@@ -45,7 +45,7 @@ describe Move do
     context 'with a white king on d5' do
       it 'using reject(&:dead?) correctly filters no moves' do
         white_king = Piece::from_fen('K')
-        moves = white_king.all_moves(board, 'd5')
+        moves = white_king.all_paths(board, 'd5')
         expect(moves.reject(&:dead?)).to include(Move).exactly(8).times
       end
     end
@@ -54,7 +54,7 @@ describe Move do
   context 'for the given board' do
     context 'with a Rook on e2 with an obstruction and a capture available' do
       let(:white_rook) { Piece::from_fen('R') }
-      let(:moves) { white_rook.all_moves(board, 'e2') }
+      let(:moves) { white_rook.all_paths(board, 'e2') }
 
       before do
         game.set_board_state('4q2k/8/4n3/8/4p3/8/rP2R3/7K w - - 0 1')
@@ -110,7 +110,7 @@ describe Move do
 
     context 'with a Bishop on d3 with an obstruction and a capture available' do
       let(:white_bishop) { Piece::from_fen('B') }
-      let(:moves) { white_bishop.all_moves(board, 'd3') }
+      let(:moves) { white_bishop.all_paths(board, 'd3') }
 
       before do
         game.set_board_state('k7/8/6q1/5n2/8/3B4/4P3/KR6 w - - 0 1')

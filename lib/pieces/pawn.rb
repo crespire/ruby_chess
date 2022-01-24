@@ -9,13 +9,22 @@ class Pawn < Piece
     @offsets = [[0, rank_dir], [1, rank_dir], [-1, rank_dir]].freeze
   end
 
-  def all_moves(board, origin)
+  def all_paths(board, origin)
     moves = []
     @offsets.each_with_index { |offset, i| moves << Move.new(board, origin, offset, i.zero? ? 2 : 1) }
     moves
   end
 
+  def valid_paths(board, origin)
+    all_paths(board, origin).reject(&:dead?) # Remove empty/first-cell blocked moves
+  end
+
   def moves(board, origin)
-    all_moves(board, origin).reject(&:dead?) # Remove empty/first-cell blocked moves
+    moves = valid_paths(board, origin)
+    result = []
+    moves.each do |move|
+      result += move.valid
+    end
+    result
   end
 end

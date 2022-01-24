@@ -17,7 +17,7 @@ describe Knight do
     end
 
     it 'correctly reports 4 moves when asked' do
-      moves = black_n.moves(board, 'd5')
+      moves = black_n.valid_paths(board, 'd5')
       expect(moves).to include(Move).exactly(4).times
     end
   end

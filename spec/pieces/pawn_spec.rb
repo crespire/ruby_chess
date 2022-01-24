@@ -23,28 +23,28 @@ describe Pawn do
 
     context 'when selecting a black pawn at h5' do
       it 'correctly reports 3 moves when asked' do
-        moves = black_p.moves(board, 'h5')
+        moves = black_p.valid_paths(board, 'h5')
         expect(moves).to include(Move).exactly(2).times
       end
     end
 
     context 'when selecting a black pawn at b7' do
-      it 'correctly reports 6 moves when asked' do
-        moves = black_p.moves(board, 'b7')
+      it 'correctly reports 3 moves when asked' do
+        moves = black_p.valid_paths(board, 'b7')
         expect(moves).to include(Move).exactly(3).times
       end
     end
 
     context 'when selecting a white pawn at c3' do
       it 'correctly reports 3 moves when asked' do
-        moves = white_p.moves(board, 'c3')
+        moves = white_p.valid_paths(board, 'c3')
         expect(moves).to include(Move).exactly(3).times
       end
     end
 
     context 'when selecting a white pawn at e2' do
       it 'correctly reports 1 move when asked' do
-        moves = white_p.moves(board, 'e2')
+        moves = white_p.valid_paths(board, 'e2')
         expect(moves).to include(Move).exactly(1).times
       end
     end

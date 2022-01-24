@@ -7,13 +7,22 @@ class Knight < Piece
   OFFSETS = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]].freeze
   STEPS = 1
 
-  def all_moves(board, origin)
+  def all_paths(board, origin)
     moves = []
     OFFSETS.each { |offset| moves << Move.new(board, origin, offset, STEPS) }
     moves
   end
 
+  def valid_paths(board, origin)
+    all_paths(board, origin).reject(&:dead?) # Remove empty/first-cell blocked moves
+  end
+
   def moves(board, origin)
-    all_moves(board, origin).reject(&:dead?) # Remove empty/first-cell blocked moves
+    moves = valid_paths(board, origin)
+    result = []
+    moves.each do |move|
+      result += move.valid
+    end
+    result
   end
 end

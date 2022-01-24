@@ -221,7 +221,7 @@ So, let's think about how we make the moves. Each piece should have the correspo
 A Knight has 8 possible moves.
 ```ruby
 # Inside Knight
-def moves(board, origin)
+def valid_paths(board, origin)
   moves = []
   offsets = [[2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2], [1, 2]] #[file, rank] offset pairs
 
@@ -237,7 +237,7 @@ This allows us to generate 8 moves for the Knight. Let's look at the Rook, which
 
 ```ruby
 # Inside Rook
-def moves(board, origin)
+def valid_paths(board, origin)
   moves = []
   offsets = [[1, 0], [0, -1], [-1, 0], [0, 1]]
   
@@ -253,7 +253,7 @@ The interesting case is the Pawn. Because we're generating psuedo-legal moves, t
 
 ```ruby
 # Inside Pawn
-def moves(board, origin)
+def valid_paths(board, origin)
   moves = []
   rank_dir = white? ? 1 : -1
   offsets = [[0, rank_dir], [1, rank_dir], [-1, rank_dir]]
