@@ -25,4 +25,37 @@ class Movement
     # Returns names.
     names = psuedo.map(&:name).sort
   end
+
+  def get_enemies
+    king = active_king
+    attackers = []
+    enemies = []
+    @board.data.each do |rank|
+      rank.each do |cell|
+        next if cell.empty? || king.friendly?(cell)
+
+        if cell.piece.moves(@board, cell.name).include?(king)
+          attackers << cell
+        else
+          enemies << cell
+        end
+      end
+    end
+    [attackers, enemies]
+  end
+
+  def king_threat_boards
+    king = active_king
+    attackers, enemies = get_enemies
+    # This function should generate two arrays.
+    # The first array should be a list of all the moves enemies can go on. This is the danger zone array.
+    # The second array shoudl be a list of all the valid moves enmies can go on. This is the attacked square array.
+    { 'danger_board' => [], 'attacks_board' => [] }
+  end
+
+  private
+
+  def active_king
+    @game.active == 'w' ? @board.wking : @board.bking
+  end
 end

@@ -32,7 +32,25 @@ describe Movement do
     end
   end
 
-  context '#legal_moves' do
+  context '#get_enemies' do
+    context 'when given a board' do
+      let(:game) { Chess.new }
+      subject(:get_enemies_test) { described_class.new(game) }
+
+      before do
+        game.set_board_state('8/8/8/8/2pkP3/8/4N3/7K b - - 1 2')
+      end
+
+      it 'returns the expected data structure' do
+        expected = get_enemies_test.get_enemies
+        expect(expected).to include(Array).exactly(2).times
+        expect(expected[0]).to include(Cell).exactly(1).times
+        expect(expected[1]).to include(Cell).exactly(2).times
+      end
+    end
+  end
+
+  xcontext '#legal_moves' do
     let(:game) { Chess.new }
     subject(:legal_moves_test) { described_class.new(game) }
 
