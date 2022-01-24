@@ -7,7 +7,7 @@ class Queen < Piece
     moves = []
     # Clockwise from north @ 12
     offsets = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]
-    offsets.each { |offset| moves << Move.new(board, origin, offset) }
+    offsets.each { |offset| moves << Move.new(board, origin, offset, 7) }
     moves.reject(&:dead?) # Remove empty moves
   end
 

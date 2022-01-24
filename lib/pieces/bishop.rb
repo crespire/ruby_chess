@@ -7,7 +7,7 @@ class Bishop < Piece
     moves = []
     # Clockwise from north @ 12
     offsets = [[1, 1], [1, -1], [-1, -1], [-1, 1]]
-    offsets.each { |offset| moves << Move.new(board, origin, offset) }
+    offsets.each { |offset| moves << Move.new(board, origin, offset, 7) }
     moves.reject(&:dead?) # Remove empty moves
   end
 

@@ -17,13 +17,15 @@ class Movement
   def legal_moves(cell)
     return [] if cell.empty?
 
-    # Get possible moves, then remove invalid ones.
-  end
+    piece = cell.piece
+    moves = piece.moves(@board, cell.name)
+    p moves
+    destinations = []
+    moves.each do |move|
+      destinations += move.valid
+    end
 
-  def possible_moves(cell)
-    return [] if cell.empty?
-
-    # Generate all possible moves based on the rules of each piece.
+    destinations.map(&:name).sort
   end
 
   # Start with Knight and King. Those should be the easiest to get working for possible moves.
