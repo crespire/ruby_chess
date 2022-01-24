@@ -52,6 +52,13 @@ class Piece
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end
 
+  ##
+  # Returns a list of Cell objects that are valid capture destinations.
+  # Must be implemented by a subclass.
+  def captures
+    raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
+  end
+
   def slides?
     false
   end
