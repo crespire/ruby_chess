@@ -18,14 +18,11 @@ class Movement
     return [] if cell.empty?
 
     piece = cell.piece
-    moves = piece.moves(@board, cell.name)
-    psuedo = []
-    moves.each do |move|
-      psuedo += move.valid
-    end
+    psuedo = piece.moves(@board, cell.name)
 
     # Psuedo contains cells, so we can actually ask questions about it.
-    # For now, we return all the names.
+
+    # Returns names.
     names = psuedo.map(&:name).sort
   end
 end

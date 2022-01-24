@@ -320,8 +320,30 @@ So, we've updated the structure of Piece and the subclasses to better get all th
 
 Each piece now has three move generation functions: all_paths, valid_paths, and moves.
 
+### Movement rewrite
 Thinking about how to get from psudeo-legal to legal moves, it actually isn't that complicated.
 
-In the case of a Pawn, we remove forward diagonals if there is no capture, and remove the second forward step if not on home rank. For the king, we remove any cells under attack.
+For the following pieces, psuedo-legal moves are also legal moves when there is no check: rook, knight, bishop and queen.
 
-If the king is under attack, then all other piece legal moves are constrained to blocks or captures of the attacking piece.
+legal_moves
+
+1. Grab the active King. And see if there are any direct attackers and generate their moves.
+
+If there are direct attackers
+2. How many attackers?
+3. If more than 1 attacker, only the king has valid moves. If this piece isn't a king, then return empty list.
+4. Generate moves for the current piece.
+5. Are there any valid moves?
+6. Are we pinned?
+7. Can this piece capture the attacking piece?
+8. Can this piece block the check?
+
+If there are no direct attackers
+1. Are there any pins to the king by the enemy?
+2. If there are pins, find the pieces that are pinned.
+  * Pinned pieces are preventing a check, so their legal moves are restricted.
+3. If there are no pins, then
+  * Psuedo-legal moves for rook, knight, bishop and queen.
+
+4. In the case of a Pawn, we remove forward diagonals if there is no capture or en passant.
+5. In the case of the King, we remove any cells that are on an enemy path.
