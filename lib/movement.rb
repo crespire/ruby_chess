@@ -21,13 +21,11 @@ class Movement
 
     # Psuedo contains cells, so we can actually ask questions about it.
     psuedo = piece.moves(@board, cell.name)
-    p psuedo
 
     # Get the active king, and information we need.
     king = piece.is_a?(King) ? cell : active_king
     attackers, enemies = get_enemies(king)
     danger_zone = dangers(king)
-    p danger_zone
 
     if danger_zone.include?(king)
       puts 'Check detected'
@@ -65,7 +63,7 @@ class Movement
       rank.each do |cell|
         next if cell.empty? || king.friendly?(cell)
 
-        # Get capture targets for the given cell.
+        result << cell.piece.captures(@board, cell.name)
       end
     end
 

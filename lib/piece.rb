@@ -56,7 +56,7 @@ class Piece
   # Returns a list of Cell objects that are valid capture destinations.
   # Must be implemented by a subclass.
   def captures(board, origin)
-    moves(board, origin)
+    all_paths(board, origin)
   end
 
   def slides?
