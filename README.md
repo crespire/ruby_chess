@@ -314,3 +314,14 @@ The d3 Bishop has one path obstructed, but the Move object in the south east dir
 These move objects have a `valid` method, but this method only returns valid destinations with respect to their basic movement rules. For example, a pawn will return a forward diagonal as a valid if it is not an obstructed square, even if there is no valid capture there.
 
 The idea behind Move is to report all psuedo-legal moves. We will rely on Movement to do the final filtering to legal moves. The same would be true for a King's moves. We would report all psuedo-legal moves, then filter out moves that would result in a self-check.
+
+### Piece structure update
+So, we've updated the structure of Piece and the subclasses to better get all the information we need.
+
+Each piece now has three move generation functions: all_paths, valid_paths, and moves.
+
+Thinking about how to get from psudeo-legal to legal moves, it actually isn't that complicated.
+
+In the case of a Pawn, we remove forward diagonals if there is no capture, and remove the second forward step if not on home rank. For the king, we remove any cells under attack.
+
+If the king is under attack, then all other piece legal moves are constrained to blocks or captures of the attacking piece.

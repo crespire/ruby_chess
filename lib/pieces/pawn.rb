@@ -20,11 +20,8 @@ class Pawn < Piece
   end
 
   def moves(board, origin)
-    moves = valid_paths(board, origin)
     result = []
-    moves.each do |move|
-      result += move.valid
-    end
+    valid_paths(board, origin).each { |move| result += move.valid }
     result
   end
 end
