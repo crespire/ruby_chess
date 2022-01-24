@@ -128,6 +128,6 @@ class Chess
 
   def pawn_promotion
     selection = @ui.prompt_pawn_promotion(@active)
-    cell.piece
+    cell.piece = Piece::from_fen(selection)
   end
 end

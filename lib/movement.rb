@@ -35,6 +35,7 @@ class Movement
 
       results.map(&:name).sort
     else
+      enemies.length
       psuedo.map(&:name).sort
     end
   end
