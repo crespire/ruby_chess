@@ -18,16 +18,30 @@ class Movement
     return [] if cell.empty?
 
     piece = cell.piece
-    psuedo = piece.moves(@board, cell.name)
 
     # Psuedo contains cells, so we can actually ask questions about it.
+    psuedo = piece.moves(@board, cell.name)
+    p psuedo
 
-    # Returns names.
-    names = psuedo.map(&:name).sort
+    # Get the active king, and information we need.
+    king = piece.is_a?(King) ? cell : active_king
+    attackers, enemies = get_enemies(king)
+    danger_zone = dangers(king)
+    p danger_zone
+
+    if danger_zone.include?(king)
+      puts 'Check detected'
+    else
+      return (psuedo - danger_zone).uniq.map(&:name).sort if piece.is_a?(King)
+
+      psuedo.map(&:name).sort
+    end
+
+    # Return names.
+    # names = psuedo.map(&:name).sort
   end
 
-  def get_enemies
-    king = active_king
+  def get_enemies(king)
     attackers = []
     enemies = []
     @board.data.each do |rank|
@@ -44,13 +58,18 @@ class Movement
     [attackers, enemies]
   end
 
-  def king_threat_boards
-    king = active_king
-    attackers, enemies = get_enemies
-    # This function should generate two arrays.
-    # The first array should be a list of all the moves enemies can go on. This is the danger zone array.
-    # The second array shoudl be a list of all the valid moves enmies can go on. This is the attacked square array.
-    { 'danger_board' => [], 'attacks_board' => [] }
+  def dangers(king)
+    # Should return a list of cells attackers can traverse.
+    result = []
+    @board.data.each do |rank|
+      rank.each do |cell|
+        next if cell.empty? || king.friendly?(cell)
+
+        # Get capture targets for the given cell.
+      end
+    end
+
+    result.flatten.uniq
   end
 
   private

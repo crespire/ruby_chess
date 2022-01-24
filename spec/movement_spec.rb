@@ -33,7 +33,7 @@ describe Movement do
   end
 
   context '#get_enemies' do
-    context 'when given a board' do
+    context 'for given board #1' do
       let(:game) { Chess.new }
       subject(:get_enemies_test) { described_class.new(game) }
 
@@ -42,15 +42,63 @@ describe Movement do
       end
 
       it 'returns the expected data structure' do
-        expected = get_enemies_test.get_enemies
+        expected = get_enemies_test.get_enemies(game.board.bking)
         expect(expected).to include(Array).exactly(2).times
         expect(expected[0]).to include(Cell).exactly(1).times
         expect(expected[1]).to include(Cell).exactly(2).times
       end
     end
+
+    context 'for given board #2' do
+      let(:game) { Chess.new }
+      subject(:get_enemies_test) { described_class.new(game) }
+
+      before do
+        game.set_board_state('rnbqkbnr/pppp1ppp/8/8/2B1Pp2/8/PPPP2PP/RNBQK1NR b KQkq - 1 3')
+      end
+
+      it 'returns the expected data structure' do
+        expected = get_enemies_test.get_enemies(game.board.bking)
+        expect(expected).to include(Array).exactly(2).times
+        expect(expected[0]).to_not include(Cell)
+        expect(expected[1]).to include(Cell).exactly(15).times
+      end
+    end
+
+    context 'for given board #3' do
+      let(:game) { Chess.new }
+      subject(:get_enemies_test) { described_class.new(game) }
+
+      before do
+        game.set_board_state('rnbqkbnr/pppp2pp/8/5p1B/2B1P3/3P4/PPP3PP/RN1QK1NR b KQkq - 1 3')
+      end
+
+      it 'returns the expected data structure' do
+        expected = get_enemies_test.get_enemies(game.board.bking)
+        expect(expected).to include(Array).exactly(2).times
+        expect(expected[0]).to include(Cell).exactly(1).times
+        expect(expected[1]).to include(Cell).exactly(14).times
+      end
+    end
+
+    context 'for given board #4' do
+      let(:game) { Chess.new }
+      subject(:get_enemies_test) { described_class.new(game) }
+
+      before do
+        game.set_board_state('rn1qk1nr/ppp3pp/3pb3/5p2/4P2b/3PB3/PPP3PP/RN1QK1NR w KQkq - 1 3')
+      end
+
+      it 'returns the expected data structure' do
+        expected = get_enemies_test.get_enemies(game.board.wking)
+        expect(expected).to include(Array).exactly(2).times
+        expect(expected[0]).to include(Cell).exactly(1).times
+        expect(expected[1]).to include(Cell).exactly(14).times
+      end
+    end
   end
 
-  xcontext '#legal_moves' do
+  context '#legal_moves' do
     let(:game) { Chess.new }
     subject(:legal_moves_test) { described_class.new(game) }
 

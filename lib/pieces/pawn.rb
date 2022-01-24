@@ -27,12 +27,11 @@ class Pawn < Piece
     result
   end
 
-  def capture_paths(board, origin)
-    home_rank = (white? ? 2 : 7)
-    step = origin.chars[1].to_i == home_rank ? 2 : 1
-    moves = []
-    @offsets.each_with_index { |offset, i| moves << Move.new(board, origin, offset, i.zero? ? step : 1) }
+  def captures(board, origin)
+    moves = all_paths(board, origin)
     moves.shift
-    moves
+    result = []
+    moves.each { |move| result += move.valid }
+    result
   end
 end
