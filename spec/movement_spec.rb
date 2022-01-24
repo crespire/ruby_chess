@@ -143,7 +143,7 @@ describe Movement do
         end
       end
 
-      xcontext 'when there are a limited set of moves' do
+      context 'when there are a limited set of moves, but no check' do
         it 'correctly shows moves that prevent self-checking' do
           game.set_board_state('8/8/8/2k5/3R4/2B5/8/4K3 b - - 1 2')
           cell = game.cell('c5')
@@ -154,14 +154,32 @@ describe Movement do
         it 'correctly shows moves that prevent self-checking' do
           game.set_board_state('8/8/8/8/2pkP3/3B4/8/8 b - - 1 2')
           cell = game.cell('d4')
-          eligible = %w[c3 xd3 e3 c5 e5].sort
+          eligible = %w[c3 d3 e3 c5 e5].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
 
+        it 'correctly shows one move that prevents self-check' do
+          game.set_board_state('7k/8/2r5/8/3b4/8/8/1K6 w - - 0 1')
+          cell = game.cell('b1')
+          eligible = %w[a2]
+          expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+        end
+      end
+
+      context 'when there are a limited set of moves, and we are in single check' do
         it 'correctly shows moves that would get out of a check' do
           game.set_board_state('k1q5/8/3r4/8/8/8/3K4/8 w - - 0 1')
           cell = game.cell('d2')
           eligible = %w[e1 e2 e3].sort
+          expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+        end
+      end
+
+      context 'when there are a limited set of moves, and we are in double check' do
+        it 'correctly shows moves that would get out of a check' do
+          game.set_board_state('k7/8/3r4/8/8/8/q2K4/8 w - - 0 1')
+          cell = game.cell('d2')
+          eligible = %w[c1 c3 e1 e3].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
       end
@@ -190,7 +208,7 @@ describe Movement do
         it 'correctly shows only 3 moves as any other moves would result in a self-check' do
           game.set_board_state('8/8/4k3/4r3/8/8/4R3/K7 b - - 0 1')
           cell = game.cell('e5')
-          eligible = %w[e4 e3 xe2].sort
+          eligible = %w[e4 e3 e2].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
       end
@@ -208,35 +226,35 @@ describe Movement do
         it 'correctly shows only 2 moves as any other moves would result in a self-check' do
           game.set_board_state('8/8/8/3k4/4q3/8/6Q1/K7 b - - 0 1')
           cell = game.cell('e4')
-          eligible = %w[f3 xg2].sort
+          eligible = %w[f3 g2].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
 
         it 'correctly shows only 4 moves as any other moves would result in a self-check' do
           game.set_board_state('8/1k6/2q5/8/8/8/4R1B1/K7 b - - 0 1')
           cell = game.cell('c6')
-          eligible = %w[d5 e4 f3 xg2].sort
+          eligible = %w[d5 e4 f3 g2].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
 
         it 'correctly shows all moves as another friendly piece can prevent a self-check' do
           game.set_board_state('8/1k6/2p5/3q4/8/8/4R1B1/K7 b - - 0 1')
           cell = game.cell('d5')
-          eligible = %w[d8 d7 d6 d4 d3 d2 d1 e6 f7 g8 e5 f5 g5 h5 e4 f3 xg2 c4 b3 a2 a5 b5 c5].sort
+          eligible = %w[d8 d7 d6 d4 d3 d2 d1 e6 f7 g8 e5 f5 g5 h5 e4 f3 g2 c4 b3 a2 a5 b5 c5].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
 
         it 'correctly shows all moves as another friendly piece can prevent a self-check' do
           game.set_board_state('8/1k6/2p5/8/8/5q2/4R1B1/K7 b - - 0 1')
           cell = game.cell('f3')
-          eligible = %w[f1 f2 f4 f5 f6 f7 f8 a3 b3 c3 d3 e3 g3 h3 xe2 xg2 e4 d5 g4 h5].sort
+          eligible = %w[f1 f2 f4 f5 f6 f7 f8 a3 b3 c3 d3 e3 g3 h3 e2 g2 e4 d5 g4 h5].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
 
         it 'correctly shows all moves as another friendly piece can prevent a self-check' do
           game.set_board_state('8/1k6/8/3p4/8/5q2/4R1B1/K7 b - - 0 1')
           cell = game.cell('f3')
-          eligible = %w[f1 f2 f4 f5 f6 f7 f8 a3 b3 c3 d3 e3 g3 h3 xe2 xg2 e4 g4 h5].sort
+          eligible = %w[f1 f2 f4 f5 f6 f7 f8 a3 b3 c3 d3 e3 g3 h3 e2 g2 e4 g4 h5].sort
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
       end
@@ -279,13 +297,13 @@ describe Movement do
 
       it 'when selecting the pawn, correctly shows only one move' do
         cell = game.cell('c7')
-        eligible = %w[xd6]
+        eligible = %w[d6]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
 
       it 'when selecting the Bishop, correctly shows only one move' do
         cell = game.cell('f8')
-        eligible = %w[xd6]
+        eligible = %w[d6]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
     end
@@ -308,7 +326,7 @@ describe Movement do
       it 'correctly shows an available en passant to resolve the check' do
         game.set_board_state('r3k2r/pp1n1ppp/8/2pP1b2/2PK1PqP/1Q2P3/P5P1/2B2B1R w - c6 0 2')
         cell = game.cell('d5')
-        eligible = %w[xc6]
+        eligible = %w[c6]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
 
@@ -324,7 +342,7 @@ describe Movement do
       it 'shows the right moves' do
         game.set_board_state('r3k2r/pp1n1ppp/8/2pP1b2/2PK1PqP/1Q2P3/P5P1/2B2B1R w - c6 0 2')
         cell = game.cell('d5')
-        eligible = %w[xc6]
+        eligible = %w[c6]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
     end

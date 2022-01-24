@@ -29,14 +29,17 @@ class Movement
 
     if danger_zone.include?(king)
       puts 'Check detected'
+
+      if attackers.length > 1
+        return [] unless piece.is_a?(King)
+
+        (psuedo - danger_zone).uniq.map(&:name).sort
+      end
     else
       return (psuedo - danger_zone).uniq.map(&:name).sort if piece.is_a?(King)
 
       psuedo.map(&:name).sort
     end
-
-    # Return names.
-    # names = psuedo.map(&:name).sort
   end
 
   def get_enemies(king)
