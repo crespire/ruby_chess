@@ -343,9 +343,8 @@ If there are no direct attackers
 2. GUARD: If king, remove all attacks from the threat_board and return
 3. Are there any pins to the king by the enemy sliders?
 2. If there are pins, find the pieces that are pinned.
-  * Pinned pieces are preventing a check, so their legal moves are restricted.
+   * Pinned pieces are preventing a check, so their legal moves are restricted.
 3. If there are no pins, then
-  * Psuedo-legal moves for rook, knight, bishop and queen.
-
+    * Psuedo-legal moves for rook, knight, bishop and queen.
 4. In the case of a Pawn, we remove forward diagonals if there is no capture or en passant.
 5. In the case of the King, we remove any cells that are on an enemy path.
