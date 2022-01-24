@@ -10,7 +10,7 @@ class Move
   def_delegators :@cells, :<<, :&, :length, :each, :union, :uniq
   attr_reader :cells
 
-  def initialize(board, origin, offset, steps = 1)
+  def initialize(board, origin, offset, steps)
     @origin = origin.is_a?(Cell) ? origin : board.cell(origin)
     @cells ||= build_move(board, offset, steps)
   end

@@ -25,8 +25,7 @@ class Movement
     end
 
     # Psuedo contains cells, so we can actually ask questions about it.
+    # For now, we return all the names.
     names = psuedo.map(&:name).sort
-
-    
   end
 end
