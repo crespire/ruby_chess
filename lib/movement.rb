@@ -18,26 +18,26 @@ class Movement
     return [] if cell.empty?
 
     piece = cell.piece
-
-    # Psuedo contains cells, so we can actually ask questions about it.
     psuedo = piece.moves(@board, cell.name)
-
-    # Get the active king, and information we need.
     king = piece.is_a?(King) ? cell : active_king
     attackers, enemies = get_enemies(king)
     danger_zone = dangers(king)
+    return (psuedo - danger_zone).uniq.map(&:name).sort if piece.is_a?(King)
 
     if danger_zone.include?(king)
-      puts 'Check detected'
+      return [] if attackers.length > 1 # Double check, only King has moves
 
-      if attackers.length > 1
-        return [] unless piece.is_a?(King)
+      # Single check
+      results = []
+      enemy_cell = @board.find_piece(attackers.pop).select { |find_cell| find_cell.piece == attacker }
 
-        (psuedo - danger_zone).uniq.map(&:name).sort
-      end
+      # Can we capture the piece?
+      results << enemy_cell if psuedo.include?(enemy_cell)
+
+      # Can we block the attack?
+
+      results.map(&:name).sort
     else
-      return (psuedo - danger_zone).uniq.map(&:name).sort if piece.is_a?(King)
-
       psuedo.map(&:name).sort
     end
   end

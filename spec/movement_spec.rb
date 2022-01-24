@@ -260,31 +260,31 @@ describe Movement do
       end
     end
 
-    xcontext 'when provided a black King in a check situation' do
+    context 'when provided a black King in a check situation' do
       before do
         game.set_board_state('2Q3k1/6pp/5r1q/6N1/1P5P/6P1/5P2/6K1 b - - 0 1')
       end
 
-      it 'when selecting the friendly Rook, correctly shows only one blocking move to prevent a check' do
+      xit 'when selecting the friendly Rook, correctly shows only one blocking move to prevent a check' do
         cell = game.cell('f6')
         eligible = %w[f8]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
 
-      it 'when selecting the King, correctly shows only one blocking move to prevent a check' do
+      it 'when selecting the King, correctly shows no available moves' do
         cell = game.cell('g8')
         eligible = %w[]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
 
-      it 'when selecting a friendly pawn, correctly shows no available moves' do
+      xit 'when selecting a friendly pawn, correctly shows no available moves' do
         cell = game.cell('g7')
         eligible = %w[]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
     end
 
-    xcontext 'when provided a black King in check by a white knight on d6' do
+    context 'when provided a black King in check by a white knight on d6' do
       before do
         game.set_board_state('1nbqkbnr/rppp1pp1/p2N4/4p2p/4P2P/8/PPPP1PP1/R1BQKBNR b KQk - 1 5')
       end
@@ -295,27 +295,27 @@ describe Movement do
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
 
-      it 'when selecting the pawn, correctly shows only one move' do
+      xit 'when selecting the pawn, correctly shows only one move' do
         cell = game.cell('c7')
         eligible = %w[d6]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
 
-      it 'when selecting the Bishop, correctly shows only one move' do
+      xit 'when selecting the Bishop, correctly shows only one move' do
         cell = game.cell('f8')
         eligible = %w[d6]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
     end
 
-    xcontext 'when provided a white King in checkmate, there should be no legal moves' do
-      it 'when selecting the pawn at e2, correctly shows no moves' do
+    context 'when provided a white King in checkmate, there should be no legal moves' do
+      xit 'when selecting the pawn at e2, correctly shows no moves' do
         game.set_board_state('r1b1k2r/ppppqppp/2n5/8/1PP2B2/3n1N2/1P1NPPPP/R2QKB1R w KQkq - 1 9')
         cell = game.cell('e2')
         expect(legal_moves_test.legal_moves(cell)).to eq([])
       end
 
-      it 'when selecting the pawn at e3, correctly shows no legal moves' do
+      xit 'when selecting the pawn at e3, correctly shows no legal moves' do
         game.set_board_state('r1b1k2r/ppppqppp/2n5/8/1PP2B2/3nPN2/1P1N1PPP/R2QKB1R w KQkq - 1 9')
         cell = game.cell('e3')
         expect(legal_moves_test.legal_moves(cell)).to eq([])

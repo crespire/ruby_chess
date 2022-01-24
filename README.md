@@ -328,15 +328,15 @@ For the following pieces, psuedo-legal moves are also legal moves when there is 
 legal_moves
 
 1. Grab the active King and build a threat board.
-  * Take all enemies, and mark their psuedo-legal moves.
+    * Take all enemies, and mark their psuedo-legal moves.
 
 If threat board includes the active King's cell:
-2. How many attackers?
-3. GUARD: If more than 1 attacker, only the king has valid moves. If this piece isn't a king, then return empty list.
-4. Generate moves for the current piece.
-5. Are there any valid moves?
-6. Can this piece capture the attacking piece?
-7. Can this piece block the check?
+1. How many attackers?
+2. GUARD: If more than 1 attacker, only the king has valid moves. If this piece isn't a king, then return empty list.
+3. Generate moves for the current piece.
+4. Are there any valid moves?
+5. Can this piece capture the attacking piece?
+6. Can this piece block the check?
 
 If there are no direct attackers
 1. Get this piece's moves
