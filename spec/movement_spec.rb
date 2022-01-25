@@ -449,12 +449,13 @@ describe Movement do
     let(:game) { Chess.new }
     subject(:legal_moves_test) { described_class.new(game) }
 
-    it 'given position 2 without castle rights, should return the right amount of nodes' do
+    it 'given position 2 should return the right amount of moves' do
+      # This test is identical to the source except there are no castle rights,  mostly because I haven't tackled caslting yet.
       game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w - - 0 1')
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
-          next if cell.empty? || cell.piece.ord > 91
+          next if cell.empty? || cell.piece.black?
 
           legal = legal_moves_test.legal_moves(cell)
           puts "moves from #{cell.to_fen}#{cell}: #{legal}"
@@ -465,12 +466,12 @@ describe Movement do
       expect(moves).to eq(46) # missing one legal move, ba6 is a "threat" to the king's f1, but blocked.
     end
 
-    it 'given position 3, should return the right amount of moves' do
+    it 'given position 3 should return the right amount of moves' do
       game.set_board_state('8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1')
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
-          next if cell.empty? || cell.piece.ord > 91
+          next if cell.empty? || cell.piece.black?
 
           legal = legal_moves_test.legal_moves(cell)
           puts "moves from #{cell.to_fen}#{cell}: #{legal}"
@@ -486,7 +487,7 @@ describe Movement do
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
-          next if cell.empty? || cell.piece.ord < 91
+          next if cell.empty? || cell.piece.white?
 
           legal = legal_moves_test.legal_moves(cell)
           puts "moves from #{cell.to_fen}#{cell}: #{legal}"
@@ -502,7 +503,7 @@ describe Movement do
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
-          next if cell.empty? || cell.piece.ord > 91
+          next if cell.empty? || cell.piece.black?
 
           legal = legal_moves_test.legal_moves(cell)
           puts "moves from #{cell.to_fen}#{cell}: #{legal}"

@@ -19,7 +19,7 @@ class Movement
 
     piece = cell.piece
     psuedo = piece.moves(@board, cell.name)
-    king = piece.is_a?(King) ? cell : active_king
+    king = active_king
     attackers, enemies = get_enemies(king)
     danger_zone = dangers(king)
     no_go_zone = attacks(king)
@@ -27,20 +27,7 @@ class Movement
 
     psuedo = pawn_helper(psuedo, cell) if piece.is_a?(Pawn)
     if no_go_zone.include?(king)
-      return [] if attackers.length > 1
-
-      enemy_cell = attackers.pop
-      return [enemy_cell.name] if psuedo.include?(enemy_cell)
-
-      # Test block available?
-      enemy_paths = enemy_cell.piece.valid_paths(@board, enemy_cell)
-      attack_path = enemy_paths.select { |move| move.include?(king) }
-      p attack_path
-      p king
-      puts "#{attack_path.include?(king)}"
-      result = attack_path & psuedo
-
-      result.map(&:name).sort
+      in_check_helper(psuedo, attackers)
     else
       enemies.length
       psuedo.map(&:name).sort
@@ -114,7 +101,7 @@ class Movement
     captures = cell.piece.captures(@board, cell.name).compact
     passant = @game.passant == '-' ? nil : @game.cell(@game.passant)
     captures.each do |target_cell|
-      psuedo.delete(target_cell) if target_cell.empty? || target_cell.friendly?
+      psuedo.delete(target_cell) if target_cell.empty? || cell.friendly?(target_cell)
     end
     psuedo << @game.cell(@game.passant) if passant && captures.include?(passant)
     psuedo.compact
@@ -127,5 +114,16 @@ class Movement
     moves_manager = Movement.new(game)
     attackers, = moves_manager.get_enemies(copy_origin)
     attackers.empty?
+  end
+
+  def in_check_helper(psuedo, attackers)
+    return [] if attackers.length > 1
+
+    enemy_cell = attackers.pop
+    return [enemy_cell.name] if psuedo.include?(enemy_cell)
+
+    enemy_paths = enemy_cell.piece.valid_paths(@board, enemy_cell)
+    attack_path = enemy_paths.select { |move| move.include?(active_king) }.pop
+    (attack_path & psuedo).map(&:name).sort
   end
 end
