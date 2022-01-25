@@ -27,9 +27,17 @@ class Movement
 
     psuedo = pawn_helper(psuedo, cell) if piece.is_a?(Pawn)
     if no_go_zone.include?(king)
-      in_check_helper(psuedo, attackers)
+      to_check = in_check_helper(psuedo, attackers)
+      return to_check if to_check.empty?
+
+      result = []
+      to_check.each do |check_cell|
+        game_deep_copy = Marshal.load(Marshal.dump(@game))
+        legal = move_legal?(game_deep_copy, cell, check_cell)
+        result << check_cell if legal
+      end
+      result.map(&:name).sort
     else
-      enemies.length
       psuedo.map(&:name).sort
     end
   end
@@ -120,12 +128,10 @@ class Movement
     return [] if attackers.length > 1
 
     enemy_cell = attackers.pop
-    return [enemy_cell.name] if psuedo.include?(enemy_cell)
+    return [enemy_cell] if psuedo.include?(enemy_cell)
 
     enemy_paths = enemy_cell.piece.valid_paths(@board, enemy_cell)
     attack_path = enemy_paths.select { |move| move.include?(active_king) }.pop
-    (attack_path & psuedo).map(&:name).sort
-
-    # Test if these moves result in a check from a discovered check.
+    (attack_path & psuedo)
   end
 end

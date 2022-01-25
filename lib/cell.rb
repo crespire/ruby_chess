@@ -19,6 +19,10 @@ class Cell
     @piece.nil?
   end
 
+  def include?(string)
+    @name.include?(string)
+  end
+
   def full?
     !empty?
   end
