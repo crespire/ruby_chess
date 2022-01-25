@@ -125,5 +125,7 @@ class Movement
     enemy_paths = enemy_cell.piece.valid_paths(@board, enemy_cell)
     attack_path = enemy_paths.select { |move| move.include?(active_king) }.pop
     (attack_path & psuedo).map(&:name).sort
+
+    # Test if these moves result in a check from a discovered check.
   end
 end
