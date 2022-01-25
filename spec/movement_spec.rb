@@ -360,13 +360,13 @@ describe Movement do
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
 
-      xit 'when selecting the pawn, correctly shows only one move' do
+      it 'when selecting the pawn, correctly shows only one move' do
         cell = game.cell('c7')
         eligible = %w[d6]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
 
-      xit 'when selecting the Bishop, correctly shows only one move' do
+      it 'when selecting the Bishop, correctly shows only one move' do
         cell = game.cell('f8')
         eligible = %w[d6]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
@@ -374,13 +374,13 @@ describe Movement do
     end
 
     context 'when provided a white King in checkmate, there should be no legal moves' do
-      xit 'when selecting the pawn at e2, correctly shows no moves' do
+      it 'when selecting the pawn at e2, correctly shows no moves' do
         game.set_board_state('r1b1k2r/ppppqppp/2n5/8/1PP2B2/3n1N2/1P1NPPPP/R2QKB1R w KQkq - 1 9')
         cell = game.cell('e2')
         expect(legal_moves_test.legal_moves(cell)).to eq([])
       end
 
-      xit 'when selecting the pawn at e3, correctly shows no legal moves' do
+      it 'when selecting the pawn at e3, correctly shows no legal moves' do
         game.set_board_state('r1b1k2r/ppppqppp/2n5/8/1PP2B2/3nPN2/1P1N1PPP/R2QKB1R w KQkq - 1 9')
         cell = game.cell('e3')
         expect(legal_moves_test.legal_moves(cell)).to eq([])

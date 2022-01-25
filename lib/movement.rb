@@ -99,7 +99,9 @@ class Movement
 
   def pawn_helper(psuedo, cell)
     captures = cell.piece.captures(@board, cell.name).compact
+    p captures
     passant = @game.passant == '-' ? nil : @game.cell(@game.passant)
+    p passant
     captures.each do |target_cell|
       psuedo.delete(target_cell) if target_cell.empty? || cell.friendly?(target_cell)
     end
