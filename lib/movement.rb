@@ -26,17 +26,21 @@ class Movement
     return king_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
 
     psuedo = pawn_helper(psuedo, cell) if piece.is_a?(Pawn)
-
     if no_go_zone.include?(king)
-      return [] if attackers.length > 1 # Double check, only King has moves
+      return [] if attackers.length > 1
 
-      results = []
       enemy_cell = attackers.pop
       return [enemy_cell.name] if psuedo.include?(enemy_cell)
 
       # Test block available?
+      enemy_paths = enemy_cell.piece.valid_paths(@board, enemy_cell)
+      attack_path = enemy_paths.select { |move| move.include?(king) }
+      p attack_path
+      p king
+      puts "#{attack_path.include?(king)}"
+      result = attack_path & psuedo
 
-      results.map(&:name).sort
+      result.map(&:name).sort
     else
       enemies.length
       psuedo.map(&:name).sort
@@ -61,7 +65,6 @@ class Movement
   end
 
   def dangers(king, game = @game)
-    # Based on all_paths
     result = []
     game.board.data.each do |rank|
       rank.each do |cell|
@@ -96,17 +99,14 @@ class Movement
   end
 
   def king_helper(psuedo, origin, danger_zone, no_go_zone)
-    # Find difference between danger_zone and attacks and union with psuedo
     to_test = (danger_zone - no_go_zone) & psuedo
 
-    # Test each move to determine if legal
     to_test.each do |destination|
       game_deep_copy = Marshal.load(Marshal.dump(@game))
       legal = move_legal?(game_deep_copy, origin, destination)
       psuedo.delete_if { |cell| cell.name == destination.name } unless legal
     end
 
-    # Purge all other attacks and return.
     (psuedo - no_go_zone).uniq.map(&:name).sort
   end
 

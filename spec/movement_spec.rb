@@ -324,7 +324,7 @@ describe Movement do
         game.set_board_state('2Q3k1/6pp/5r1q/6N1/1P5P/6P1/5P2/6K1 b - - 0 1')
       end
 
-      xit 'when selecting the friendly Rook, correctly shows only one blocking move to prevent a check' do
+      it 'when selecting the friendly Rook, correctly shows only one blocking move to prevent a check' do
         cell = game.cell('f6')
         eligible = %w[f8]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
