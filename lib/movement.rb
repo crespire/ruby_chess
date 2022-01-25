@@ -22,6 +22,7 @@ class Movement
     king = piece.is_a?(King) ? cell : active_king
     attackers, enemies = get_enemies(king)
     danger_zone = dangers(king)
+    no_go_zone = attacks(king)
     return (psuedo - danger_zone).uniq.map(&:name).sort if piece.is_a?(King)
 
     if danger_zone.include?(king)
@@ -69,6 +70,18 @@ class Movement
     end
 
     result.flatten.uniq
+  end
+
+  def attacks(king)
+    result = []
+    @board.data.each do |rank|
+      rank.each do |cell|
+        next if cell.empty? || king.friendly?(cell)
+
+        to_add = cell.piece.is_a?(Pawn) ? cell.piece.captures(@board, cell.name) : cell.piece.moves(@board, cell.name)
+        result << to_add
+      end
+    end
   end
 
   private
