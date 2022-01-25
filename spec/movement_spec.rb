@@ -198,6 +198,13 @@ describe Movement do
           eligible = %w[a2]
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
+
+        it 'correctly shows two moves available to the king (position 2 of Perft boards)' do
+          game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w - - 0 1')
+          cell = game.cell('e1')
+          eligible = %w[d1 f1]
+          expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+        end
       end
 
       context 'when there are a limited set of moves, and we are in single check' do

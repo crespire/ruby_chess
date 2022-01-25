@@ -22,9 +22,7 @@ class Movement
     king = piece.is_a?(King) ? cell : active_king
     attackers, enemies = get_enemies(king)
     danger_zone = dangers(king)
-    p danger_zone.length
     no_go_zone = attacks(king)
-    p no_go_zone.length
     return king_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
 
     if danger_zone.include?(king)
@@ -96,18 +94,17 @@ class Movement
   end
 
   def king_helper(psuedo, origin, danger_zone, attacks)
-    # Find the difference between danger_zone and attacks
-    to_test = danger_zone - attacks
+    # Find difference between danger_zone and attacks and union with psuedo
+    to_test = (danger_zone - attacks) & psuedo
 
     # Test each move to determine if legal
     to_test.each do |destination|
       game_deep_copy = Marshal.load(Marshal.dump(@game))
       legal = move_legal?(game_deep_copy, origin, destination)
-      puts "Testing #{destination}, legal? #{legal}"
       psuedo.delete_if { |cell| cell.name == destination.name } unless legal
     end
 
-    # Remove other squares under attack.
+    # Purge all other attacks and return.
     (psuedo - attacks).uniq.map(&:name).sort
   end
 
