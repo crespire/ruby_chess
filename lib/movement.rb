@@ -76,4 +76,18 @@ class Movement
   def active_king
     @game.active == 'w' ? @board.wking : @board.bking
   end
+
+  def king_helper(psuedo, cell, danger_zone, attacks)
+    # Find the difference between danger_zone and attacks
+
+    to_test = danger_zone - attacks
+
+    to_test.each do |destination|
+      game_deep_copy = Marshal.load(Marshal.dump(@game))
+      psuedo - destination unless move_legal?(game_deep_copy, cell, destination)
+    end
+
+    # Remove other squares under attack.
+    (psuedo - attacks).uniq.map(&:name).sort
+  end
 end
