@@ -7,7 +7,7 @@ class Move
   include Enumerable
   extend Forwardable
 
-  def_delegators :@cells, :<<, :&, :length, :each, :union, :uniq
+  def_delegators :@cells, :<<, :&, :length, :each, :union, :uniq, :pop, :last
   attr_reader :cells
 
   def initialize(board, origin, offset, steps)

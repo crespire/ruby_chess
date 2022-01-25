@@ -411,6 +411,29 @@ describe Movement do
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
     end
+
+    context 'when provided a white pawn with no special moves available' do
+      it 'shows the right moves for pawn at a2' do
+        game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w - - 0 1')
+        cell = game.cell('a2')
+        eligible = %w[a3 a4]
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
+
+      it 'shows the right moves for pawn at b2' do
+        game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w - - 0 1')
+        cell = game.cell('b2')
+        eligible = %w[b3]
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
+
+      it 'shows the right moves for pawn at c2' do
+        game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w - - 0 1')
+        cell = game.cell('c2')
+        eligible = %w[]
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
+    end
   end
 
   xcontext 'testing with Perft boards from https://www.chessprogramming.org/Perft_Results' do

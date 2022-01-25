@@ -25,7 +25,7 @@ class Movement
     no_go_zone = attacks(king)
     return king_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
 
-    # We should remove invalid pawn captures here.
+    psuedo = pawn_helper(cell, psuedo) if piece.is_a?(Pawn)
 
     if no_go_zone.include?(king)
       return [] if attackers.length > 1 # Double check, only King has moves
@@ -108,6 +108,19 @@ class Movement
 
     # Purge all other attacks and return.
     (psuedo - no_go_zone).uniq.map(&:name).sort
+  end
+
+  def pawn_helper(cell, psuedo)
+    puts "Inside pawn helper"
+    captures = cell.piece.captures(@board, cell.name).compact
+    forward, = cell.piece.valid_paths(@board, cell.name)
+    passant = @game.passant == '-' ? nil : @game.cell(@game.passant)
+    captures.each do |target_cell|
+      next if passant && target_cell.name == passant.name
+
+      psuedo.delete(target_cell) if target_cell.empty? || target_cell.friendly?
+    end
+    psuedo
   end
 
   def move_legal?(game, origin, destination)
