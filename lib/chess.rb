@@ -48,8 +48,8 @@ class Chess
   def move_piece(origin, destination)
     return nil if origin.empty? || destination.empty?
 
-    from = cell(origin)
-    to = cell(destination)
+    from = origin.is_a?(Cell) ? origin : cell(origin)
+    to = destination.is_a?(Cell) ? destination : cell(destination)
     piece = from.piece.dup
     to_before = to.dup
     @board.update_loc(from, to)
