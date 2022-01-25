@@ -28,12 +28,14 @@ class Movement
     psuedo = pawn_helper(psuedo, cell) if piece.is_a?(Pawn)
     if no_go_zone.include?(king)
       to_check = in_check_helper(psuedo, attackers)
+      p to_check
       return to_check if to_check.empty?
 
       result = []
       to_check.each do |check_cell|
         game_deep_copy = Marshal.load(Marshal.dump(@game))
-        legal = move_legal?(game_deep_copy, cell, check_cell)
+        legal = move_legal?(game_deep_copy, active_king, cell, check_cell)
+        puts "Testing move to #{check_cell}, legal?: #{legal}"
         result << check_cell if legal
       end
       result.map(&:name).sort
@@ -98,7 +100,7 @@ class Movement
 
     to_test.each do |destination|
       game_deep_copy = Marshal.load(Marshal.dump(@game))
-      legal = move_legal?(game_deep_copy, origin, destination)
+      legal = move_legal?(game_deep_copy, active_king, origin, destination)
       psuedo.delete_if { |cell| cell.name == destination.name } unless legal
     end
 
@@ -115,12 +117,16 @@ class Movement
     psuedo.compact
   end
 
-  def move_legal?(game, origin, destination)
+  def move_legal?(game, king_to_check, origin, destination)
     copy_origin = game.cell(origin.name)
     copy_destination = game.cell(destination.name)
+    copy_king = game.cell(king_to_check.name)
+    p game.make_fen
     game.move_piece(copy_origin, copy_destination)
+    p game.make_fen
     moves_manager = Movement.new(game)
-    attackers, = moves_manager.get_enemies(copy_origin)
+    attackers, = moves_manager.get_enemies(copy_king, game)
+    p attackers
     attackers.empty?
   end
 
