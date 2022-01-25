@@ -112,12 +112,12 @@ class Movement
 
   def pawn_helper(psuedo, cell)
     captures = cell.piece.captures(@board, cell.name).compact
-    empty_passant = @game.passant == '-'
-    passant_target = @game.cell(@game.passant) unless empty_passant
+    no_passant = @game.passant == '-'
+    passant_target = @game.cell(@game.passant) unless no_passant
     captures.each do |target_cell|
       psuedo.delete(target_cell) if target_cell.empty? || target_cell.friendly?
     end
-    psuedo << @game.cell(@game.passant) if !empty_passant && captures.include?(passant_target)
+    psuedo << @game.cell(@game.passant) if !no_passant && captures.include?(passant_target)
     psuedo.compact
   end
 
