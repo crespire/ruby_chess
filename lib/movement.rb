@@ -25,7 +25,9 @@ class Movement
     no_go_zone = attacks(king)
     return king_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
 
-    if danger_zone.include?(king)
+    # We should remove invalid pawn captures here.
+
+    if no_go_zone.include?(king)
       return [] if attackers.length > 1 # Double check, only King has moves
 
       results = []
@@ -93,9 +95,9 @@ class Movement
     @game.active == 'w' ? @board.wking : @board.bking
   end
 
-  def king_helper(psuedo, origin, danger_zone, attacks)
+  def king_helper(psuedo, origin, danger_zone, no_go_zone)
     # Find difference between danger_zone and attacks and union with psuedo
-    to_test = (danger_zone - attacks) & psuedo
+    to_test = (danger_zone - no_go_zone) & psuedo
 
     # Test each move to determine if legal
     to_test.each do |destination|
@@ -105,7 +107,7 @@ class Movement
     end
 
     # Purge all other attacks and return.
-    (psuedo - attacks).uniq.map(&:name).sort
+    (psuedo - no_go_zone).uniq.map(&:name).sort
   end
 
   def move_legal?(game, origin, destination)
