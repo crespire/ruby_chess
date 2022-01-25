@@ -121,4 +121,8 @@ describe Pawn do
       end
     end
   end
+
+  # given r1b1k2r/ppppqppp/2n5/8/1PP2B2/3nPN2/1P1N1PPP/R2QKB1R w KQkq - 1 9
+  # pawn at e3 should have two basic moves d4 and e4.
+  # this board has a number of pawns we should check.
 end
