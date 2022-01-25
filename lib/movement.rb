@@ -25,7 +25,7 @@ class Movement
     no_go_zone = attacks(king)
     return king_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
 
-    psuedo = pawn_helper(cell, psuedo) if piece.is_a?(Pawn)
+    psuedo = pawn_helper(psuedo, cell) if piece.is_a?(Pawn)
 
     if no_go_zone.include?(king)
       return [] if attackers.length > 1 # Double check, only King has moves
@@ -110,8 +110,7 @@ class Movement
     (psuedo - no_go_zone).uniq.map(&:name).sort
   end
 
-  def pawn_helper(cell, psuedo)
-    puts "Inside pawn helper"
+  def pawn_helper(psuedo, cell)
     captures = cell.piece.captures(@board, cell.name).compact
     forward, = cell.piece.valid_paths(@board, cell.name)
     passant = @game.passant == '-' ? nil : @game.cell(@game.passant)
