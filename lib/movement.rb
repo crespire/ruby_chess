@@ -98,7 +98,6 @@ class Movement
   end
 
   def pawn_helper(psuedo, cell)
-    # see Pawn spec for test to implement. Broken movement test, but need to make sure pawn is returning the right stuff first.
     captures = cell.piece.captures(@board, cell.name).compact
     passant = @game.passant == '-' ? nil : @game.cell(@game.passant)
     captures.each do |target_cell|
