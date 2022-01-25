@@ -98,6 +98,40 @@ describe Movement do
     end
   end
 
+  context '#dangers' do
+    context 'for given board #1' do
+      let(:game) { Chess.new }
+      subject(:danger_test) { described_class.new(game) }
+
+      before do
+        game.set_board_state('8/8/8/8/2pkP3/2N5/8/7K b - - 1 2')
+      end
+
+      it 'returns the expected data structure' do
+        expected = danger_test.dangers(game.board.bking)
+        expect(expected).to be_a(Array)
+        expect(expected).to include(Cell).exactly(12).times
+      end
+    end
+  end
+
+  context '#attacks' do
+    context 'for given board #1' do
+      let(:game) { Chess.new }
+      subject(:attacks_test) { described_class.new(game) }
+
+      before do
+        game.set_board_state('8/8/8/8/2pkP3/2N5/8/7K b - - 1 2')
+      end
+
+      it 'returns the expected data structure' do
+        expected = attacks_test.attacks(game.board.bking)
+        expect(expected).to be_a(Array)
+        expect(expected).to include(Cell).exactly(11).times
+      end
+    end
+  end
+
   context '#legal_moves' do
     let(:game) { Chess.new }
     subject(:legal_moves_test) { described_class.new(game) }

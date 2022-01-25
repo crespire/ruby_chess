@@ -22,7 +22,9 @@ class Movement
     king = piece.is_a?(King) ? cell : active_king
     attackers, enemies = get_enemies(king)
     danger_zone = dangers(king)
+    p danger_zone.length
     no_go_zone = attacks(king)
+    p no_go_zone.length
     return king_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
 
     if danger_zone.include?(king)
@@ -41,14 +43,14 @@ class Movement
     end
   end
 
-  def get_enemies(king)
+  def get_enemies(king, game = @game)
     attackers = []
     enemies = []
-    @board.data.each do |rank|
+    game.board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || king.friendly?(cell)
 
-        if cell.piece.moves(@board, cell.name).include?(king)
+        if cell.piece.moves(game.board, cell.name).include?(king)
           attackers << cell
         else
           enemies << cell
@@ -58,30 +60,33 @@ class Movement
     [attackers, enemies]
   end
 
-  def dangers(king)
+  def dangers(king, game = @game)
     # Based on all_paths
     result = []
-    @board.data.each do |rank|
+    game.board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || king.friendly?(cell)
 
-        result << cell.piece.captures(@board, cell.name)
+        result << cell.piece.captures(game.board, cell.name)
       end
     end
 
     result.flatten.uniq
   end
 
-  def attacks(king)
+  def attacks(king, game = @game)
     result = []
-    @board.data.each do |rank|
+    game.board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || king.friendly?(cell)
 
-        to_add = cell.piece.is_a?(Pawn) ? cell.piece.captures(@board, cell.name) : cell.piece.moves(@board, cell.name)
+        piece = cell.piece
+        to_add = piece.is_a?(Pawn) ? piece.captures(game.board, cell.name) : piece.moves(game.board, cell.name)
         result << to_add
       end
     end
+
+    result.flatten.uniq
   end
 
   private
@@ -97,7 +102,9 @@ class Movement
     # Test each move to determine if legal
     to_test.each do |destination|
       game_deep_copy = Marshal.load(Marshal.dump(@game))
-      psuedo - destination unless move_legal?(game_deep_copy, origin, destination)
+      legal = move_legal?(game_deep_copy, origin, destination)
+      puts "Testing #{destination}, legal? #{legal}"
+      psuedo.delete_if { |cell| cell.name == destination.name } unless legal
     end
 
     # Remove other squares under attack.
@@ -105,9 +112,11 @@ class Movement
   end
 
   def move_legal?(game, origin, destination)
-    moves_manager = new(game)
-    game.move_piece(origin, destination)
-    attackers, = moves_manager.get_enemies(king)
+    copy_origin = game.cell(origin.name)
+    copy_destination = game.cell(destination.name)
+    game.move_piece(copy_origin, copy_destination)
+    moves_manager = Movement.new(game)
+    attackers, = moves_manager.get_enemies(copy_origin)
     attackers.empty?
   end
 end
