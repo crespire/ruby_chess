@@ -23,7 +23,7 @@ class Movement
     attackers, enemies = get_enemies(king)
     danger_zone = dangers(king)
     no_go_zone = attacks(king)
-    return king_helper if piece.is_a?(King)
+    return king_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
 
     if danger_zone.include?(king)
       return [] if attackers.length > 1 # Double check, only King has moves
@@ -105,6 +105,9 @@ class Movement
   end
 
   def move_legal?(game, origin, destination)
+    moves_manager = new(game)
     game.move_piece(origin, destination)
+    attackers, = moves_manager.get_enemies(king)
+    attackers.empty?
   end
 end
