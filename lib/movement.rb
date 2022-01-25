@@ -112,14 +112,13 @@ class Movement
 
   def pawn_helper(psuedo, cell)
     captures = cell.piece.captures(@board, cell.name).compact
-    forward, = cell.piece.valid_paths(@board, cell.name)
-    passant = @game.passant == '-' ? nil : @game.cell(@game.passant)
+    empty_passant = @game.passant == '-'
+    passant_target = @game.cell(@game.passant) unless empty_passant
     captures.each do |target_cell|
-      next if passant && target_cell.name == passant.name
-
       psuedo.delete(target_cell) if target_cell.empty? || target_cell.friendly?
     end
-    psuedo
+    psuedo << @game.cell(@game.passant) if !empty_passant && captures.include?(passant_target)
+    psuedo.compact
   end
 
   def move_legal?(game, origin, destination)

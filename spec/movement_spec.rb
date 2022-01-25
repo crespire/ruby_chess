@@ -434,6 +434,15 @@ describe Movement do
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
     end
+
+    context 'when provided a white pawn with a passant capture available' do
+      it 'shows the right moves for pawn at f5' do
+        game.set_board_state('k7/8/8/5Pp1/8/8/8/K7 w - g6 0 2')
+        cell = game.cell('f5')
+        eligible = %w[f6 g6]
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
+    end
   end
 
   xcontext 'testing with Perft boards from https://www.chessprogramming.org/Perft_Results' do
