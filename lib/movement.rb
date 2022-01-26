@@ -20,7 +20,7 @@ class Movement
     piece = cell.piece
     psuedo = piece.moves(@board, cell.name)
     king = piece.is_a?(King) ? cell : active_king
-    attackers, enemies = get_enemies(king)
+    attackers, = get_enemies(king)
     danger_zone = dangers(king)
     no_go_zone = attacks(king)
     return king_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
@@ -28,7 +28,6 @@ class Movement
     psuedo = pawn_helper(psuedo, cell) if piece.is_a?(Pawn)
     if no_go_zone.include?(king)
       to_check = in_check_helper(psuedo, attackers)
-      p to_check
       return to_check if to_check.empty?
 
       result = []

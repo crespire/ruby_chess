@@ -242,7 +242,7 @@ describe Movement do
       end
     end
 
-    xcontext 'when provided a Knight piece preventing a check' do
+    context 'when provided a Knight piece preventing a check' do
       context 'with other pieces on the board in a position to check' do
         it 'correctly shows 0 moves as any move would result in a self-check' do
           game.set_board_state('8/8/8/4k3/4n3/8/4R3/K7 b - - 0 1')
