@@ -379,4 +379,10 @@ no check
       next unless check_cell.piece.slides?
 
       enemy_slides = check_cell.piece.valid_paths(@board, check_cell)
-      emeny
+      candidates = enemy_slides.select { |move| move.valid_xray.include?(active_king) }
+
+      once we have the selection, we want to get the valid moves, not xrays and union with psuedo for legal moves.
+    end
+  end
+```
+
