@@ -27,13 +27,12 @@ class Movement
 
     psuedo = pawn_helper(psuedo, cell) if piece.is_a?(Pawn)
     if no_go_zone.include?(king)
-      to_check = in_check_helper(psuedo, attackers)
-      return to_check if to_check.empty?
+      to_verify = in_check_helper(psuedo, attackers)
+      return to_verify if to_verify.empty?
 
       result = []
-      to_check.each do |check_cell|
-        legal = move_legal?(@game, king, cell, check_cell)
-        result << check_cell if legal
+      to_verify.each do |verify_cell|
+        result << verify_cell if move_legal?(@game, king, cell, verify_cell)
       end
       result.map(&:name).sort
     else
@@ -55,6 +54,7 @@ class Movement
         end
       end
     end
+
     [attackers, enemies]
   end
 
