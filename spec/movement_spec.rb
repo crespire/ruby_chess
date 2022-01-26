@@ -96,6 +96,22 @@ describe Movement do
         expect(expected[1]).to include(Cell).exactly(14).times
       end
     end
+
+    context 'for given board #5' do
+      let(:game) { Chess.new }
+      subject(:get_enemies_test) { described_class.new(game) }
+
+      before do
+        game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w - - 0 1')
+      end
+
+      it 'returns the expected data structure' do
+        expected = get_enemies_test.get_enemies(game.board.wking)
+        expect(expected).to include(Array).exactly(2).times
+        expect(expected[0]).to include(Cell).exactly(0).times
+        expect(expected[1]).to include(Cell).exactly(16).times
+      end
+    end
   end
 
   context '#dangers' do

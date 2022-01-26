@@ -60,7 +60,7 @@ class Board
   end
 
   def update_loc(origin, destination)
-    return nil if origin.empty? || destination.empty?
+    return nil if origin.empty?
 
     from = origin.is_a?(Cell) ? origin : cell(origin)
     to = destination.is_a?(Cell) ? destination : cell(destination)
