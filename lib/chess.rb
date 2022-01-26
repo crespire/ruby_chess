@@ -52,7 +52,6 @@ class Chess
     to = destination.is_a?(Cell) ? destination : cell(destination)
     piece = from.piece.dup
     to_before = to.dup
-    puts "from: #{from.inspect}, to: #{to.inspect}"
     @board.update_loc(from, to)
 
     if piece.is_a?(Pawn)
@@ -112,7 +111,7 @@ class Chess
       captured_cell = cell(to.name, 0, rank_offset)
       captured_cell.piece = nil
       @passant = '-'
-    elsif @passant.length == 2 && to.name != @passant
+    elsif !@passant == '-' && to.name != @passant
       # Available, not taken: reset
       @passant = '-'
     end
