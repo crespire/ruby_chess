@@ -350,3 +350,33 @@ If there are no direct attackers
 5. In the case of the King, we remove any cells that are on an enemy path.
 
 I added a `captures` method to Piece in order to progress on `Movement`, but I should add unit tests to each piece to confirm it is working as expected. I don't see why it wouldn't be, but better to check than not.
+
+### In-check situations
+I think I have in-check situations completed, as all of my in-check tests are passing. The big one is perft board position 4, which shows the correct 6 legal moves.
+
+### Non-check situations
+Now I have to think about movement in a non-check situation. What do I have to consider and how can I be efficient about it? A king can't move into a check, this is already solved.
+
+**Brute force approach**
+Check every psuedo-legal move and run it through `move_legal?`. If a move is not legal, we can query as to why with a `discovered_check` method that returns the attacker. Once we have the attacker, we can find the attacker move that includes our king, and intersection that with pseudo-legal moves from the piece we're moving.
+
+This approach seems solid, but not all together too smart. We are potentially filtering out a ton of moves this way (ie, with a pinned queen).
+
+**Utilzing valid_xray**
+Another approach might be to utilize the `valid_xray` method we built into `Move`.
+
+We generate the psuedo-legal moves for our piece in question, then query every enemy, and if it slides, grab pieces with a valid_xray that includes our king.
+
+If we have any sliding xrays, valid moves would be the intersections of psuedo-legal and the valid travel squares on the xray path that include king.
+
+So we do something like:
+```
+piece.moves
+no check
+  @board.data.each |rank|
+    rank.each do |check_cell|
+      next if check_cell.empty? || cell.friendly?(check_cell)
+      next unless check_cell.piece.slides?
+
+      enemy_slides = check_cell.piece.valid_paths(@board, check_cell)
+      emeny
