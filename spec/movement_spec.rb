@@ -242,7 +242,7 @@ describe Movement do
       end
     end
 
-    xcontext 'when provided a Knight piece preventing a check' do
+    context 'when provided a Knight piece preventing a check' do
       context 'with other pieces on the board in a position to check' do
         it 'correctly shows 0 moves as any move would result in a self-check' do
           game.set_board_state('8/8/8/4k3/4n3/8/4R3/K7 b - - 0 1')
@@ -449,6 +449,13 @@ describe Movement do
         eligible = %w[]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
+
+      it 'shows the right moves for pawn at g2' do
+        game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w - - 0 1')
+        cell = game.cell('g2')
+        eligible = %w[g3 g4 h3].sort
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
     end
 
     context 'when provided a white pawn with a passant capture available' do
@@ -461,11 +468,11 @@ describe Movement do
     end
   end
 
-  xcontext 'testing with Perft boards from https://www.chessprogramming.org/Perft_Results' do
+  context 'testing with Perft boards from https://www.chessprogramming.org/Perft_Results' do
     let(:game) { Chess.new }
     subject(:legal_moves_test) { described_class.new(game) }
 
-    it 'given position 2 should return the right amount of moves' do
+    xit 'given position 2 should return the right amount of moves' do
       # This test is identical to the source except there are no castle rights,  mostly because I haven't tackled caslting yet.
       game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w - - 0 1')
       moves = 0
@@ -482,7 +489,7 @@ describe Movement do
       expect(moves).to eq(46) # missing one legal move, ba6 is a "threat" to the king's f1, but blocked.
     end
 
-    it 'given position 3 should return the right amount of moves' do
+    xit 'given position 3 should return the right amount of moves' do
       game.set_board_state('8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1')
       moves = 0
       game.board.data.each do |rank|
@@ -514,7 +521,7 @@ describe Movement do
       expect(moves).to eq(6)
     end
 
-    it 'given position 5 should return the right amount of total moves' do
+    xit 'given position 5 should return the right amount of total moves' do
       game.set_board_state('rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8')
       moves = 0
       game.board.data.each do |rank|

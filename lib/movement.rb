@@ -23,18 +23,15 @@ class Movement
     attackers, = get_enemies(king)
     danger_zone = dangers(king)
     no_go_zone = attacks(king)
-    return king_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
+    return king_moves_helper(psuedo, cell, danger_zone, no_go_zone) if piece.is_a?(King)
 
-    psuedo = pawn_helper(psuedo, cell) if piece.is_a?(Pawn)
+    psuedo = pawn_moves_helper(psuedo, cell) if piece.is_a?(Pawn)
     if no_go_zone.include?(king)
-      puts "Inside check logic. Avail. basic moves: #{psuedo}"
       to_verify = check_helper(piece, psuedo, attackers)
-      puts "To verify: #{to_verify}"
       return to_verify if to_verify.empty?
 
       result = []
       to_verify.each do |verify_cell|
-        puts "Checking move to cell #{verify_cell}, legal? #{move_legal?(@game, king, cell, verify_cell)}"
         result << verify_cell if move_legal?(@game, king, cell, verify_cell)
       end
       result.map(&:name).sort
@@ -91,11 +88,15 @@ class Movement
 
   private
 
+  ##
+  # Returns the cell of the active side's King.
   def active_king
     @game.active == 'w' ? @board.wking : @board.bking
   end
 
-  def king_helper(psuedo, origin, danger_zone, no_go_zone)
+  ##
+  # Helper method to filter illegal King moves from their basic moves.
+  def king_moves_helper(psuedo, origin, danger_zone, no_go_zone)
     to_test = (danger_zone - no_go_zone) & psuedo
 
     to_test.each do |destination|
@@ -106,16 +107,20 @@ class Movement
     (psuedo - no_go_zone).uniq.map(&:name).sort
   end
 
-  def pawn_helper(psuedo, cell)
+  ##
+  # Helper method to filter illegal pawn moves from their basic moves.
+  def pawn_moves_helper(psuedo, cell)
     captures = cell.piece.captures(@board, cell.name).compact
-    passant = @game.passant == '-' ? nil : @game.cell(@game.passant)
+    passant = passant_capture(cell.piece)
     captures.each do |target_cell|
       psuedo.delete(target_cell) if target_cell.empty? || (target_cell.full? && cell.friendly?(target_cell))
     end
-    psuedo << @game.cell(@game.passant) if passant && captures.include?(passant)
+    psuedo << passant if passant && captures.include?(passant)
     psuedo.compact
   end
 
+  ##
+  # Tests if the target move will result in a check.
   def move_legal?(game_to_copy, king_to_check, origin, destination)
     game = Marshal.load(Marshal.dump(game_to_copy))
     copy_origin = game.cell(origin.name)
@@ -127,10 +132,13 @@ class Movement
     attackers.empty?
   end
 
+  ##
+  # Runs through the possible conditions of a check to generate moves.
+  # Gotcha: piece will never be King.
   def check_helper(piece, psuedo, attackers)
     return [] if attackers.length > 1
 
-    passant = passant_helper(piece)
+    passant = passant_capture(piece)
     enemy_cell = attackers.pop
     return [passant] if passant && psuedo.include?(passant)
     return [enemy_cell] if psuedo.include?(enemy_cell)
@@ -140,7 +148,9 @@ class Movement
     (attack_path & psuedo)
   end
 
-  def passant_helper(piece)
+  ##
+  # Returns cell if piece is eligible to en passant capture.
+  def passant_capture(piece) 
     passant_capture = piece.is_a?(Pawn) && @game.passant != '-'
     passant_capture ? @board.cell(@game.passant) : nil
   end
