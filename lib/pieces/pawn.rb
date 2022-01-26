@@ -11,7 +11,8 @@ class Pawn < Piece
 
   def all_paths(board, origin)
     home_rank = (white? ? 2 : 7)
-    step = origin.chars[1].to_i == home_rank ? 2 : 1
+    name = origin.is_a?(Cell) ? origin.name : origin
+    step = name.chars[1].to_i == home_rank ? 2 : 1
     moves = []
     @offsets.each_with_index { |offset, i| moves << Move.new(board, origin, offset, i.zero? ? step : 1) }
     moves

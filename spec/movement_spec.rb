@@ -242,7 +242,7 @@ describe Movement do
       end
     end
 
-    context 'when provided a Knight piece preventing a check' do
+    xcontext 'when provided a Knight piece preventing a check' do
       context 'with other pieces on the board in a position to check' do
         it 'correctly shows 0 moves as any move would result in a self-check' do
           game.set_board_state('8/8/8/4k3/4n3/8/4R3/K7 b - - 0 1')
@@ -403,7 +403,7 @@ describe Movement do
       end
     end
 
-    xcontext 'when provided a white pawn with an available passant capture during a check' do
+    context 'when provided a white pawn with an available passant capture during a check' do
       it 'correctly shows an available en passant to resolve the check' do
         game.set_board_state('r3k2r/pp1n1ppp/8/2pP1b2/2PK1PqP/1Q2P3/P5P1/2B2B1R w - c6 0 2')
         cell = game.cell('d5')
@@ -419,7 +419,7 @@ describe Movement do
       end
     end
 
-    xcontext 'when provided a white pawn with an available passant capture during a check' do
+    context 'when provided a white pawn with an available passant capture during a check' do
       it 'shows the right moves' do
         game.set_board_state('r3k2r/pp1n1ppp/8/2pP1b2/2PK1PqP/1Q2P3/P5P1/2B2B1R w - c6 0 2')
         cell = game.cell('d5')

@@ -27,11 +27,14 @@ class Movement
 
     psuedo = pawn_helper(psuedo, cell) if piece.is_a?(Pawn)
     if no_go_zone.include?(king)
-      to_verify = in_check_helper(psuedo, attackers)
+      puts "Inside check logic. Avail. basic moves: #{psuedo}"
+      to_verify = check_helper(piece, psuedo, attackers)
+      puts "To verify: #{to_verify}"
       return to_verify if to_verify.empty?
 
       result = []
       to_verify.each do |verify_cell|
+        puts "Checking move to cell #{verify_cell}, legal? #{move_legal?(@game, king, cell, verify_cell)}"
         result << verify_cell if move_legal?(@game, king, cell, verify_cell)
       end
       result.map(&:name).sort
@@ -107,7 +110,7 @@ class Movement
     captures = cell.piece.captures(@board, cell.name).compact
     passant = @game.passant == '-' ? nil : @game.cell(@game.passant)
     captures.each do |target_cell|
-      psuedo.delete(target_cell) if target_cell.empty? || cell.friendly?(target_cell)
+      psuedo.delete(target_cell) if target_cell.empty? || (target_cell.full? && cell.friendly?(target_cell))
     end
     psuedo << @game.cell(@game.passant) if passant && captures.include?(passant)
     psuedo.compact
@@ -124,14 +127,21 @@ class Movement
     attackers.empty?
   end
 
-  def in_check_helper(psuedo, attackers)
+  def check_helper(piece, psuedo, attackers)
     return [] if attackers.length > 1
 
+    passant = passant_helper(piece)
     enemy_cell = attackers.pop
+    return [passant] if passant && psuedo.include?(passant)
     return [enemy_cell] if psuedo.include?(enemy_cell)
 
     enemy_paths = enemy_cell.piece.valid_paths(@board, enemy_cell)
     attack_path = enemy_paths.select { |move| move.include?(active_king) }.pop
     (attack_path & psuedo)
+  end
+
+  def passant_helper(piece)
+    passant_capture = piece.is_a?(Pawn) && @game.passant != '-'
+    passant_capture ? @board.cell(@game.passant) : nil
   end
 end
