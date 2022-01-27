@@ -8,7 +8,7 @@ class Move
   extend Forwardable
 
   def_delegators :@cells, :<<, :&, :length, :each, :union, :uniq, :pop, :last, :include?
-  attr_reader :cells
+  attr_reader :cells, :origin
 
   def initialize(board, origin, offset, steps)
     @origin = origin.is_a?(Cell) ? origin : board.cell(origin)
@@ -53,6 +53,7 @@ class Move
         found += 1
         break if found == 2
       end
+      break if current_cell.nil?
     end
     result << current_cell
   end

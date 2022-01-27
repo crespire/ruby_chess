@@ -36,7 +36,29 @@ class Movement
       end
       result.map(&:name).sort
     else
-      psuedo.map(&:name).sort
+      result = []
+      candidates = []
+      @board.data.each do |rank|
+        rank.each do |check_cell|
+          next if check_cell.empty? || cell.friendly?(check_cell)
+          next unless check_cell.piece.slides?
+
+          puts "Found enemy slider: #{check_cell.piece}"
+          enemy_slides = check_cell.piece.valid_paths(@board, check_cell)
+          puts "Moves: #{enemy_slides} (#{enemy_slides.length})"
+          candidates = enemy_slides.select do |move|
+            puts "Checking move: #{move}"
+            move.valid_xray.include?(active_king) && move.valid.include?(cell) && move.enemies == 2
+          end
+
+          puts "Candidate pin moves: #{candidates}"
+          candidates.each do |move|
+            result += (move.valid << move.origin) & psuedo
+          end
+        end
+      end
+
+      candidates.empty? ? psuedo.map(&:name).sort : result.flatten.uniq.map(&:name).sort
     end
   end
 
