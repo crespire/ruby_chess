@@ -561,7 +561,7 @@ describe Movement do
       expect(moves).to eq(46)
     end
 
-    context 'boards with castling rights' do
+    xcontext 'boards with castling rights' do
       it 'given position 2 should return the right amount of moves' do
         game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1')
         moves = 0
@@ -577,7 +577,7 @@ describe Movement do
         expect(moves).to eq(48)
       end
 
-      xit 'given position 5 should return the right amount of total moves' do
+      it 'given position 5 should return the right amount of total moves' do
         game.set_board_state('rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8')
         moves = 0
         game.board.data.each do |rank|
