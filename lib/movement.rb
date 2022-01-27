@@ -141,10 +141,10 @@ class Movement
       psuedo.delete(target_cell) if target_cell.empty? || (target_cell.full? && cell.friendly?(target_cell))
     end
     psuedo << passant if passant && captures.include?(passant)
+
     rank_dir = cell.piece.white? ? 1 : -1
     step_one = @board.cell(cell.name, 0, rank_dir)
     step_two = @board.cell(cell.name, 0, (rank_dir * 2))
-
     psuedo.delete(step_one) if step_one && psuedo.include?(step_one) && step_one.full?
     if step_two && psuedo.include?(step_two) && (step_one.full? || (step_one.empty? && step_two.full?))
       psuedo.delete(step_two)
