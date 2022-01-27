@@ -43,13 +43,10 @@ class Movement
           next if check_cell.empty? || cell.friendly?(check_cell)
           next unless check_cell.piece.slides?
 
-          puts "Found enemy slider: #{check_cell.piece}"
           enemy_slides = check_cell.piece.valid_paths(@board, check_cell)
           candidates = enemy_slides.select do |move|
             move.valid_xray.include?(active_king) && move.valid.include?(cell) && move.enemies == 2
           end
-
-          puts "Candidate pin moves: #{candidates}"
           candidates.each do |move|
             result += (move.valid << move.origin) & psuedo
           end
@@ -144,6 +141,15 @@ class Movement
       psuedo.delete(target_cell) if target_cell.empty? || (target_cell.full? && cell.friendly?(target_cell))
     end
     psuedo << passant if passant && captures.include?(passant)
+    rank_dir = cell.piece.white? ? 1 : -1
+    step_one = @board.cell(cell.name, 0, rank_dir)
+    step_two = @board.cell(cell.name, 0, (rank_dir * 2))
+
+    psuedo.delete(step_one) if step_one && psuedo.include?(step_one) && step_one.full?
+    if step_two && psuedo.include?(step_two) && (step_one.full? || (step_one.empty? && step_two.full?))
+      psuedo.delete(step_two)
+    end
+
     psuedo.compact
   end
 
@@ -178,7 +184,7 @@ class Movement
 
   ##
   # Returns cell if piece is eligible to en passant capture.
-  def passant_capture(piece) 
+  def passant_capture(piece)
     passant_capture = piece.is_a?(Pawn) && @game.passant != '-'
     passant_capture ? @board.cell(@game.passant) : nil
   end
