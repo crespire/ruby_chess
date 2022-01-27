@@ -436,9 +436,9 @@ def update_rights(game, piece, cell)
     king_side = piece.white? ? cell.name > 'e' : cell.name < 'e'
     king_side ? rights.delete!(delete_rights[0]) : rights.delete!(delete_rights[1])
   else
-    piece.white? ? rights.delete!(delete_rights) : rights.delete!(delete_rights)
+    rights.delete!(delete_rights)
   end
-  rights = '-' if delete_rights.empty?
+  rights = '-' if rights.empty?
   game.castle = rights
 end
 
