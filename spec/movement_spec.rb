@@ -466,6 +466,15 @@ describe Movement do
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
     end
+
+    context 'when provided a board with pawns locked' do
+      it 'shows the right moves for pawn at c4' do
+        game.set_board_state('k1qn4/8/8/4p3/2p1P3/2P5/8/4QN1K b - - 0 1')
+        cell = game.cell('c4')
+        eligible = []
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
+    end
   end
 
   context 'testing with Perft boards from https://www.chessprogramming.org/Perft_Results' do

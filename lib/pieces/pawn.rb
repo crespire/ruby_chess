@@ -25,10 +25,6 @@ class Pawn < Piece
   def moves(board, origin)
     result = []
     valid_paths(board, origin).each_with_index do |move, i|
-      if i.zero?
-        second_step = move.last
-        move.pop if board.cell(origin).friendly?(second_step) || board.cell(origin).hostile?(second_step)
-      end
       result += move.valid
     end
     result
