@@ -358,11 +358,13 @@ I think I have in-check situations completed, as all of my in-check tests are pa
 Now I have to think about movement in a non-check situation. What do I have to consider and how can I be efficient about it? A king can't move into a check, this is already solved.
 
 **Brute force approach**
+
 Check every psuedo-legal move and run it through `move_legal?`. If a move is not legal, we can query as to why with a `discovered_check` method that returns the attacker. Once we have the attacker, we can find the attacker move that includes our king, and intersection that with pseudo-legal moves from the piece we're moving.
 
 This approach seems solid, but not all together too smart. We are potentially filtering out a ton of moves this way (ie, with a pinned queen).
 
 **Utilzing valid_xray**
+
 Another approach might be to utilize the `valid_xray` method we built into `Move`.
 
 We generate the psuedo-legal moves for our piece in question, then query every enemy, and if it slides, grab pieces with a valid_xray that includes our king.
@@ -386,3 +388,11 @@ no check
   end
 ```
 
+I ended up going with the valid_xray approach, as it seemed to make a little bit more sense to me, as far as pins were concerned. I ended up having to add checks to only include moves with exactly 2 enemies, plus king and cell.
+
+### Finishing movement
+We're so close to finishing movement, I have the bulk of tests passing. Currently, position 2 is failing due to an issue with pawns and enemies right in front of them. I have a test in pawn_spec to capture this bug so we can make sure we don't regress.
+
+One skipped test has castle moves available, which I haven't yet implemented, so that will be the next step.
+
+Once we are done with castling, the plan is to work on UI and all the user interaction portions of the game. Then all that's left is to work on serialization and loading the game from a FEN/file.
