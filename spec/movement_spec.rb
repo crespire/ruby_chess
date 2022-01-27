@@ -494,8 +494,7 @@ describe Movement do
           moves += legal.length
         end
       end
-
-      expect(moves).to eq(46) # currently testing to 47, extra move is captured in failing pawn spec tests right now.
+      expect(moves).to eq(46)
     end
 
     it 'given position 3 should return the right amount of moves' do
@@ -546,8 +545,8 @@ describe Movement do
       expect(moves).to eq(40)
     end
 
-    xit 'given position 5 with KQ castle rights should return the right amount of total moves' do
-      game.set_board_state('rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8')
+    it 'given position 6 should return the right amount of total moves' do
+      game.set_board_state('r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10')
       moves = 0
       game.board.data.each do |rank|
         rank.each do |cell|
@@ -559,7 +558,40 @@ describe Movement do
         end
       end
 
-      expect(moves).to eq(44)
+      expect(moves).to eq(46)
+    end
+
+    context 'boards with castling rights' do
+      it 'given position 2 should return the right amount of moves' do
+        game.set_board_state('r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1')
+        moves = 0
+        game.board.data.each do |rank|
+          rank.each do |cell|
+            next if cell.empty? || cell.piece.black?
+
+            legal = legal_moves_test.legal_moves(cell)
+            puts "moves from #{cell.to_fen}#{cell}: #{legal}"
+            moves += legal.length
+          end
+        end
+        expect(moves).to eq(48)
+      end
+
+      xit 'given position 5 should return the right amount of total moves' do
+        game.set_board_state('rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8')
+        moves = 0
+        game.board.data.each do |rank|
+          rank.each do |cell|
+            next if cell.empty? || cell.piece.black?
+
+            legal = legal_moves_test.legal_moves(cell)
+            puts "moves from #{cell.to_fen}#{cell}: #{legal}"
+            moves += legal.length
+          end
+        end
+
+        expect(moves).to eq(44)
+      end
     end
   end
 end
