@@ -45,9 +45,7 @@ class Movement
 
           puts "Found enemy slider: #{check_cell.piece}"
           enemy_slides = check_cell.piece.valid_paths(@board, check_cell)
-          puts "Moves: #{enemy_slides} (#{enemy_slides.length})"
           candidates = enemy_slides.select do |move|
-            puts "Checking move: #{move}"
             move.valid_xray.include?(active_king) && move.valid.include?(cell) && move.enemies == 2
           end
 

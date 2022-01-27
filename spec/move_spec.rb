@@ -16,6 +16,13 @@ describe Move do
   ##
   # Use all_paths on the pieces to verify all moves are generated, then we can
   # test the filtering, and make sure the right destinations are made.
+  context 'on init' do
+    it 'returns an empty move if initalized with step = 0' do
+      move = Move.new(board, 'a7', [0, -1], 0)
+      p move
+      expect(move.dead?).to be true
+    end
+  end
 
   context 'with single pieces on a starting board' do
     context 'with a Knight at b8' do

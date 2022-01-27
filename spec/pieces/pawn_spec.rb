@@ -11,7 +11,7 @@ describe Pawn do
     expect(Pawn.new('p').slides?).to be false
   end
 
-  context 'with the given board' do
+  context 'with the given board #1' do
     let(:game) { Chess.new }
     let(:board) { game.board }
     let(:white_p) { Pawn.new('P') }
@@ -120,5 +120,35 @@ describe Pawn do
         expect(moves).to eq(expected)
       end
     end
+  end
+
+  context 'with the given board #2' do
+    let(:game) { Chess.new }
+    let(:board) { game.board }
+    let(:white_p) { Pawn.new('P') }
+    let(:black_p) { Pawn.new('p') }
+
+    context 'when selecting a black pawn at e5' do
+      before do
+        game.set_board_state('k1qn4/8/8/4p3/2p1P3/2P5/8/4QN1K b - - 0 1')
+      end
+
+      it 'correctly reports 3 moves when #all_paths' do
+        moves = black_p.all_paths(board, 'e5')
+        expect(moves).to include(Move).exactly(3).times
+      end
+
+      it 'correctly reports 0 moves when #valid_paths' do
+        moves = black_p.valid_paths(board, 'e5')
+        expect(moves).to include(Move).exactly(0).times
+      end
+
+      it 'correctly reports 0 destinations when sending #moves' do
+        moves = black_p.moves(board, 'e5').map(&:name).sort
+        expected = %w[].sort
+        expect(moves).to eq(expected)
+      end
+    end
+
   end
 end
