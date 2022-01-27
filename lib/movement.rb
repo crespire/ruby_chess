@@ -40,6 +40,10 @@ class Movement
     end
   end
 
+  ##
+  # Returns a two element array that partitions enemies.
+  # The first sub-array holds pieces that directly attack the king
+  # The second holds all other active enemy pieces.
   def get_enemies(king, game = @game)
     attackers = []
     enemies = []
@@ -58,6 +62,8 @@ class Movement
     [attackers, enemies]
   end
 
+  ##
+  # Returns a list of all moves enemies can make.
   def dangers(king, game = @game)
     result = []
     game.board.data.each do |rank|
@@ -71,6 +77,8 @@ class Movement
     result.flatten.uniq
   end
 
+  ##
+  # Returns a list of captures that can threaten the given king.
   def attacks(king, game = @game)
     result = []
     game.board.data.each do |rank|
