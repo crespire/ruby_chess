@@ -430,17 +430,15 @@ def update_rights(game, piece, cell)
   return unless piece.is_a?(King) || piece.is_a?(Rook)
 
   rights = game.castle.dup
+  delete_rights = 'KQ'
+  delete_rights.downcase if piece.black?
   if piece.is_a?(Rook)
-    queen_side = piece.white? ? cell.name.chars[0] < 'e' : cell.name.chars[0] > 'e'
-    if piece.white?
-      queen_side ? rights.delete!('Q') : rights.delete!('K')
-    else
-      queen_side ? rights.delete!('q') : rights.delete!('k')
-    end
+    king_side = piece.white? ? cell.name > 'e' : cell.name < 'e'
+    king_side ? rights.delete!(delete_rights[0]) : rights.delete!(delete_rights[1])
   else
-    piece.white? ? rights.delete!('KQ') : rights.delete!('kq')
+    piece.white? ? rights.delete!(delete_rights) : rights.delete!(delete_rights)
   end
-  rights = '-' if rights.empty?
+  rights = '-' if delete_rights.empty?
   game.castle = rights
 end
 
