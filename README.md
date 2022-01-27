@@ -396,3 +396,68 @@ We're so close to finishing movement, I have the bulk of tests passing. Currentl
 One skipped test has castle moves available, which I haven't yet implemented, so that will be the next step.
 
 Once we are done with castling, the plan is to work on UI and all the user interaction portions of the game. Then all that's left is to work on serialization and loading the game from a FEN/file.
+
+### Legal moves, sans castling completed
+I ended up moving the pawn forward move checks out of `Pawn` into `Movement` because the Moves should reflect all moves. I also didn't want to fuck around with Move specifically for Pawn movement, as valid was (incorrectly) reporting a forward move as an eligible space. While this is generally true of pieces, it isn't true for the pawn. Long story short, we filter out the forward moves in Movement#pawn_helper so all the pawn movement modification is in one place. I also moved the pawn_spec test I had added into the Movement_spec tests.
+
+I will note that my approach to move generation in general owes a lot to some folks from The Odin Project discord, as well as the time I spent with the [lichess.org Chess engine](https://lichess.org/editor). My basic approach on the abstractions side was heavily inspired by my conversations on the TOP discord, and the basic psuedo-legal to legal move filtering was inspired by the editor as I was able to see that it generated all basic moves, then removed them in a second pass if they were not valid.
+
+### Castling
+Now, we move to castling. I do think that some of castling will end up being implemented inside `Movement` but I think it will be a simple call to a `CastleManager` class, which then spits out the additional moves that we can make.
+
+I wonder how I will implement the actual move once validating that it is available, but we can cross that bridge when we get there. The first step is to think about how we can validate that castling is available.
+
+Here are the elements involved in validating whether or not a castling move is available:
+* Neither the king, nor the target rook has previously moved. If the King moves, castle rights on both sides are given up. If a rook moves, the K/Q side right is given up respectively.
+* The path between the king and the rook must not be obstructed by a friendly or enemy (ie, all cells should be empty)
+* The king is not currently in check. Castling is not a valid move to get out of a check.
+* The king's path does not cross a square under attack.
+
+A king _can_ castle again if it was previously under check, provided it and the target rook did not move in order to resolve that check.
+
+We should add a `moved` attribute to `King` and `Rook` that initalizes to false. Then we can set up an accessor, and change it inside game in the `move_piece` method. We can also have a call to the CastleManager to update castling rights by passing in the Rook's cell. If the file is less than e, it's queen side, greater than e, king side.
+
+Something like:
+```ruby
+# Inside Game#move_piece
+if piece.is_a?(King) || piece.is_a?(Rook)
+  piece.moved = true
+  CastleManager.update_rights(piece, cell)
+end
+
+# Inside CastleManager
+def update_rights(game, piece, cell)
+  return unless piece.is_a?(King) || piece.is_a?(Rook)
+
+  rights = game.castle.dup
+  if piece.is_a?(Rook)
+    queen_side = piece.white? ? cell.name.chars[0] < 'e' : cell.name.chars[0] > 'e'
+    if piece.white?
+      queen_side ? rights.delete!('Q') : rights.delete!('K')
+    else
+      queen_side ? rights.delete!('q') : rights.delete!('k')
+    end
+  else
+    piece.white? ? rights.delete!('KQ') : rights.delete!('kq')
+  end
+  rights = '-' if rights.empty?
+  game.castle = rights
+end
+
+def castle(game, cell)
+  # Return castle move cells if available so we can add them to the list of moves.
+
+  # Get a copy of the castle rights from game.
+  # Filter the rights for the active side.
+  # If no rights, return []
+  # Is the king under attack? Return [] if so.
+  # Check if the path to the Rooks is clear, if not, remove right from the respective side.
+  # Check if home rank is under attack, get those cells.
+  # If there are any cells, remove the right from the respective side.
+  # If there is still a right left, then we populate the move and return it.
+  # For each right left, add the moves to result []. Then we flatten and return.
+  {'q' => ['g8', 'f8'], 'k' => ['b8'], 'Q' => ['b1', 'c1'], 'K' => ['g1'] }
+end
+```
+
+I think this is a good start and we'll see how it goes as we implement this.
