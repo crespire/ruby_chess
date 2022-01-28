@@ -21,9 +21,9 @@ class Castle
   
     rights = game.castle.dup
     delete_rights = 'KQ'
-    delete_rights.downcase if piece.black?
+    delete_rights = 'kq' if piece.black?
     if piece.is_a?(Rook)
-      king_side = piece.white? ? cell.name > 'e' : cell.name < 'e'
+      king_side = cell.name > 'e'
       king_side ? rights.delete!(delete_rights[0]) : rights.delete!(delete_rights[1])
     else
       rights.delete!(delete_rights)
