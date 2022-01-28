@@ -15,8 +15,8 @@ class Checkmate
     king = find_king
     return nil if king.empty?
 
-    threats = @moves_manager.attacks(king)
-    threats.length.positive?
+    attackers, = @moves_manager.get_enemies(king)
+    attackers.length.positive?
   end
 
   def checkmate?
