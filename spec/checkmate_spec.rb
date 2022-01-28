@@ -7,10 +7,10 @@ require_relative '../lib/board'
 require_relative '../lib/movement'
 require_relative '../lib/chess'
 
-xdescribe Checkmate, pending: "Refactor on Movement" do
+describe Checkmate do
   let(:ui) { double('UI') }
   let(:game) { Chess.new(ui) }
-  
+
   context 'when provided a board in a check situation' do
     subject(:check) { described_class.new(game) }
 
