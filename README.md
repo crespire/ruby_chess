@@ -459,3 +459,5 @@ end
 ```
 
 I think this is a good start and we'll see how it goes as we implement this.
+
+In my excitement to be finished most of legal movement, I totally forgot I had to refactor Checkmate. It's done and passing all tests!
