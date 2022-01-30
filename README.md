@@ -441,8 +441,19 @@ def update_rights(game, piece, cell)
   rights = '-' if rights.empty?
   game.castle = rights
 end
+```
 
-def castle(game, cell)
+I think this is a good start and we'll see how it goes as we implement this.
+
+In my excitement to be finished most of legal movement, I totally forgot I had to refactor Checkmate. It's done and passing all tests!
+
+### Castling
+Implemented `update_rights` and its spec tests, so it is working as expected.
+
+The next step is to figure out how to spit out available castle moves. Castle should only be initiated by the King, so we can start there.
+
+```ruby
+def castle_moves(game, cell)
   # Return castle move cells if available so we can add them to the list of moves.
 
   # Get a copy of the castle rights from game.
@@ -458,6 +469,6 @@ def castle(game, cell)
 end
 ```
 
-I think this is a good start and we'll see how it goes as we implement this.
+Because castling relies on the fact that all involved pieces haven't moved yet, we should be able to hard code the destination values in.
 
-In my excitement to be finished most of legal movement, I totally forgot I had to refactor Checkmate. It's done and passing all tests!
+We assume, inside this `castle_moves` method that the rights from the game manager are correct. We could do a check as well on `piece.moved?` just to be safe.

@@ -7,6 +7,13 @@ class King < Piece
   OFFSETS = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]].freeze
   STEPS = 1
 
+  attr_accessor :moved
+
+  def initialize(fen)
+    super(fen)
+    @moved = false
+  end
+
   def all_paths(board, origin)
     moves = []
     OFFSETS.each { |offset| moves << Move.new(board, origin, offset, STEPS) }

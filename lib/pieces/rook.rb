@@ -7,6 +7,13 @@ class Rook < Piece
   OFFSETS = [[0, 1], [1, 0], [0, -1], [-1, 0]].freeze
   STEPS = 7
 
+  attr_accessor :moved
+
+  def initialize(fen)
+    super(fen)
+    @moved = false
+  end
+
   def all_paths(board, origin)
     moves = []
     OFFSETS.each { |offset| moves << Move.new(board, origin, offset, STEPS) }
