@@ -24,7 +24,7 @@ class Pawn < Piece
 
   def moves(board, origin)
     result = []
-    valid_paths(board, origin).each_with_index do |move, i|
+    valid_paths(board, origin).each do |move|
       result += move.valid
     end
     result
