@@ -7,10 +7,10 @@ require_relative '../lib/chess'
 require_relative '../lib/castle'
 
 describe Castle do
-  context '#update_rights' do
-    let(:game) { Chess.new }
-    subject(:manager) { described_class.new(game) } 
+  let(:game) { Chess.new }
+  subject(:manager) { described_class.new(game) }
 
+  context '#update_rights' do
     context 'with only white castle rights' do
       context 'with white being the active color' do
         before do

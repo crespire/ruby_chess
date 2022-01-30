@@ -497,7 +497,7 @@ describe Movement do
           next if cell.empty? || cell.piece.black?
 
           legal = legal_moves_test.legal_moves(cell)
-          puts "moves from #{cell.to_fen}#{cell}: #{legal}"
+          # puts "moves from #{cell.to_fen}#{cell}: #{legal}"
           moves += legal.length
         end
       end
@@ -512,7 +512,7 @@ describe Movement do
           next if cell.empty? || cell.piece.black?
 
           legal = legal_moves_test.legal_moves(cell)
-          puts "moves from #{cell.to_fen}#{cell}: #{legal}"
+          # puts "moves from #{cell.to_fen}#{cell}: #{legal}"
           moves += legal.length
         end
       end
@@ -528,7 +528,7 @@ describe Movement do
           next if cell.empty? || cell.piece.white?
 
           legal = legal_moves_test.legal_moves(cell)
-          puts "moves from #{cell.to_fen}#{cell}: #{legal}"
+          # puts "moves from #{cell.to_fen}#{cell}: #{legal}"
           moves += legal.length
         end
       end
@@ -544,7 +544,7 @@ describe Movement do
           next if cell.empty? || cell.piece.black?
 
           legal = legal_moves_test.legal_moves(cell)
-          puts "moves from #{cell.to_fen}#{cell}: #{legal}"
+          # puts "moves from #{cell.to_fen}#{cell}: #{legal}"
           moves += legal.length
         end
       end
@@ -560,7 +560,7 @@ describe Movement do
           next if cell.empty? || cell.piece.black?
 
           legal = legal_moves_test.legal_moves(cell)
-          puts "moves from #{cell.to_fen}#{cell}: #{legal}"
+          # puts "moves from #{cell.to_fen}#{cell}: #{legal}"
           moves += legal.length
         end
       end
@@ -577,7 +577,7 @@ describe Movement do
             next if cell.empty? || cell.piece.black?
 
             legal = legal_moves_test.legal_moves(cell)
-            puts "moves from #{cell.to_fen}#{cell}: #{legal}"
+            # puts "moves from #{cell.to_fen}#{cell}: #{legal}"
             moves += legal.length
           end
         end
@@ -592,7 +592,7 @@ describe Movement do
             next if cell.empty? || cell.piece.black?
 
             legal = legal_moves_test.legal_moves(cell)
-            puts "moves from #{cell.to_fen}#{cell}: #{legal}"
+            # puts "moves from #{cell.to_fen}#{cell}: #{legal}"
             moves += legal.length
           end
         end
