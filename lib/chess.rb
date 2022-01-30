@@ -111,7 +111,7 @@ class Chess
       captured_cell = cell(to.name, 0, rank_offset)
       captured_cell.piece = nil
       @passant = '-'
-    elsif @passant.length == 2 && to.name != @passant
+    elsif @passant != '-' && to.name != @passant
       # Available, not taken: reset
       @passant = '-'
     end
