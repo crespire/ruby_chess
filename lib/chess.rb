@@ -2,8 +2,9 @@
 
 # lib/chess.rb
 
-require_relative 'board'
 require_relative 'ui'
+require_relative 'board'
+require_relative 'castle'
 
 class Chess
   attr_accessor :board, :active, :castle, :passant, :half, :full, :ply
@@ -15,6 +16,7 @@ class Chess
     @board = Board.new # Board defaults to starting position
     @active = parts[0]
     @castle = parts[1]
+    @castle_manager = Castle.new(self)
     @passant = parts[2]
     @half = parts[3].to_i
     @full = parts[4].to_i
@@ -98,7 +100,7 @@ class Chess
     if destination.empty?
       piece.is_a?(Pawn) ? reset_half : increment_half
     else
-      destination.hostile?(piece) && !destination.empty? ? reset_half : increment_half
+      destination.hostile?(piece) && destination.full? ? reset_half : increment_half
     end
     increment_full if piece.black?
   end
@@ -107,16 +109,13 @@ class Chess
     rank_offset = @active == 'w' ? -1 : 1
 
     if @passant == to.name
-      # Available and taken
       captured_cell = cell(to.name, 0, rank_offset)
       captured_cell.piece = nil
       @passant = '-'
     elsif @passant != '-' && to.name != @passant
-      # Available, not taken: reset
       @passant = '-'
     end
 
-    # Does this current move give a new passant?
     home_rank = from.name.include?('2') || from.name.include?('7')
     passant_rank = to.name.include?('4') || to.name.include?('5')
     return unless home_rank && passant_rank

@@ -3,11 +3,6 @@
 # spec/cell_spec.rb
 
 require_relative '../lib/movement'
-require_relative '../lib/board'
-require_relative '../lib/chess'
-require_relative '../lib/move'
-require_relative '../lib/piece'
-require_relative '../lib/pieces/all_pieces'
 
 describe Movement do
   context 'on initialize' do

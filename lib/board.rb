@@ -8,7 +8,7 @@ require_relative 'piece'
 require_relative 'pieces/all_pieces'
 
 class Board
-  attr_reader :data, :game
+  attr_reader :data
 
   def initialize(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
     @data = Array.new(8) { Array.new(8, nil) }

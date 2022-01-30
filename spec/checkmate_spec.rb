@@ -2,10 +2,8 @@
 
 # spec/checkmate_spec.rb
 
-require_relative '../lib/checkmate'
-require_relative '../lib/board'
-require_relative '../lib/movement'
 require_relative '../lib/chess'
+require_relative '../lib/checkmate'
 
 describe Checkmate do
   let(:ui) { double('UI') }

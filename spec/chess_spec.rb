@@ -2,9 +2,7 @@
 
 # spec/chess_spec.rb
 
-require_relative '../lib/board'
 require_relative '../lib/chess'
-require_relative '../lib/ui'
 
 describe Chess do
   context 'initialize' do
@@ -17,6 +15,8 @@ describe Chess do
       expect(init.half).to eq(0)
       expect(init.full).to eq(1)
       expect(init.ply).to eq(1)
+      expect(init.board).to be_a(Board)
+      expect(init.instance_variable_get(:@castle_manager)).to be_a(Castle)
     end
   end
 
