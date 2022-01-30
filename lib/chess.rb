@@ -56,14 +56,8 @@ class Chess
     to_before = to.dup
     @board.update_loc(from, to)
 
-    if piece.is_a?(Pawn)
-      last_rank = destination.include?('1') || destination.include?('8')
-      if last_rank
-        pawn_promotion
-      else
-        pawn_passant(from, to)
-      end
-    end
+    pawn_helper(destination, from, to) if piece.is_a?(Pawn)
+    piece.moved = true if piece.is_a?(King) or piece.is_a?(Rook)
 
     update_game_stats(piece, to_before)
   end
@@ -103,6 +97,15 @@ class Chess
       destination.hostile?(piece) && destination.full? ? reset_half : increment_half
     end
     increment_full if piece.black?
+  end
+
+  def pawn_helper(destination, from, to)
+    last_rank = destination.include?('1') || destination.include?('8')
+    if last_rank
+      pawn_promotion
+    else
+      pawn_passant(from, to)
+    end
   end
 
   def pawn_passant(from, to)
