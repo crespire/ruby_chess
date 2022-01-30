@@ -452,11 +452,17 @@ Implemented `update_rights` and its spec tests, so it is working as expected.
 
 The next step is to figure out how to spit out available castle moves. Castle should only be initiated by the King, so we can start there.
 
+Because castling relies on the fact that all involved pieces haven't moved yet, we should be able to hard code the destination values in.
+
+We assume, inside this `castle_moves` method, that the rights from the game manager are correct. We could do a check as well on `piece.moved?` just to be safe.
+
+I think the approach here should be to copy the current rights, and do a check to see if it's actually a legal move (similar to how we filter moves). So if a path to a rook is blocked or the path is under attack, that right is "removed" temporarily. After these legality checks, if a right still exists in our copy, then we can return those related moves as legal.
+
 ```ruby
 def castle_moves(game, cell)
   # Return castle move cells if available so we can add them to the list of moves.
 
-  # Get a copy of the castle rights from game.
+  # Get a copy of the castle rights from game
   # Filter the rights for the active side.
   # If no rights, return []
   # Is the king under attack? Return [] if so.
@@ -469,6 +475,10 @@ def castle_moves(game, cell)
 end
 ```
 
-Because castling relies on the fact that all involved pieces haven't moved yet, we should be able to hard code the destination values in.
+Something like that would be a good approach. The hard coded values are in additional to valid king moves we would get back from `Movement#legal_moves` so we can just tack them on to the King helper in Movement.
 
-We assume, inside this `castle_moves` method that the rights from the game manager are correct. We could do a check as well on `piece.moved?` just to be safe.
+Finally, once we have these moves done, we can have the game call Castle manager to actually execute the Rook move as well. So we can rely on `Chess#move_piece` to move the King, but once we identify a castling move, we have to move the Rook as well.
+
+How do we identify a castle move inside `Chess#move_piece?` that isn't too expensive. Maybe we can generate a range based on the file letters? Problem is range can't be generated backwards, so we'd have to check which side, then make the range based on that.
+
+I wonder if there's another approach we could use.
