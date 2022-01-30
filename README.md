@@ -447,7 +447,7 @@ I think this is a good start and we'll see how it goes as we implement this.
 
 In my excitement to be finished most of legal movement, I totally forgot I had to refactor Checkmate. It's done and passing all tests!
 
-### Castling
+### Castling pt2
 Implemented `update_rights` and its spec tests, so it is working as expected.
 
 The next step is to figure out how to spit out available castle moves. Castle should only be initiated by the King, so we can start there.
