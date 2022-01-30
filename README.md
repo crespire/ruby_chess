@@ -479,6 +479,12 @@ Something like that would be a good approach. The hard coded values are in addit
 
 Finally, once we have these moves done, we can have the game call Castle manager to actually execute the Rook move as well. So we can rely on `Chess#move_piece` to move the King, but once we identify a castling move, we have to move the Rook as well.
 
-How do we identify a castle move inside `Chess#move_piece?` that isn't too expensive. Maybe we can generate a range based on the file letters? Problem is range can't be generated backwards, so we'd have to check which side, then make the range based on that.
+How do we identify a castle move inside `Chess#move_piece?` that isn't too expensive. Maybe we can generate a range based on the file letters? Problem is range can't be generated backwards, so we'd have to check which side, then make the range based on that. Something like this:
+```ruby
+cell1_file = cell1.name.chars[0]
+cell2_file = cell2.name.chars[0]
 
-I wonder if there's another approach we could use.
+range = cell1_file < cell2_file ? (cell1_file...cell2_file) : (cell2_file...cell1_file)
+
+castling_move = range.to_a.length > 1
+```
