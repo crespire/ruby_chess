@@ -16,12 +16,12 @@ class Castle
     @board = game.board
   end
 
-  def update_rights(game, piece, cell)
+  def update_rights(game, cell)
+    piece = cell.piece
     return unless piece.is_a?(King) || piece.is_a?(Rook)
-  
+
     rights = game.castle.dup
-    delete_rights = 'KQ'
-    delete_rights = 'kq' if piece.black?
+    delete_rights = piece.white? ? 'KQ' : 'kq'
     if piece.is_a?(Rook)
       king_side = cell.name > 'e'
       king_side ? rights.delete!(delete_rights[0]) : rights.delete!(delete_rights[1])
