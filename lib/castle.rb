@@ -14,9 +14,8 @@ require_relative 'pieces/all_pieces'
 class Castle
   def initialize(game)
     @game = game
-    @board = game.board
-    @checkmate = Checkmate.new(game)
-    @move_manager = Movement.new(game)
+    @checkmate = game.checkmate
+    @move_manager = game.move_manager
   end
 
   def update_rights(cell)
@@ -51,7 +50,10 @@ class Castle
     available = filter_rook_rights(available, castleable, cell)
     return [] if available.empty?
     
+    puts "Calling move manager inside castle from game id: #{@game.object_id}, board: #{@game.board.object_id}"
+    puts "Move manager id: #{@move_manager.object_id}"
     king_moves = @move_manager.legal_moves(cell)
+    p king_moves
     d_cell = cell.piece.white? ? @game.cell('d1') : @game.cell('d8')
     f_cell = cell.piece.white? ? @game.cell('f1') : @game.cell('f8')
     d_avail = king_moves.include?(d_cell.name)
@@ -80,12 +82,12 @@ class Castle
 
   def safe?(friendly_cell, cell)
     result = []
-    @board.data.each do |rank|
+    @game.board.data.each do |rank|
       rank.each do |check_cell|
         next if check_cell.empty? || friendly_cell.friendly?(check_cell)
 
         piece = check_cell.piece
-        attacks = piece.captures(@board, check_cell.name)
+        attacks = piece.captures(@game.board, check_cell.name)
         attack_to_check = attacks.select { |move| move.include?(cell) }.flatten
         result << attack_to_check if attack_to_check.include?(cell)
       end
@@ -107,7 +109,7 @@ class Castle
 
   def filter_rook_rights(available, castleable, king_cell)
     castleable.each do |rook_cell|
-      moves = rook_cell.piece.valid_paths(@board, rook_cell)
+      moves = rook_cell.piece.valid_paths(@game.board, rook_cell)
       move = moves.select { |move| move.include?(king_cell) }.pop
       king_side = rook_cell.name > 'e'
       steps = move ? move.valid.length : 0

@@ -6,10 +6,11 @@ require_relative 'ui'
 require_relative 'board'
 require_relative 'castle'
 require_relative 'movement'
+require_relative 'checkmate'
 
 class Chess
-  attr_accessor :board, :active, :castle, :passant, :half, :full, :ply
-  attr_reader :move_manager, :castle_manager
+  attr_accessor :active, :castle, :passant, :half, :full, :ply
+  attr_reader :board, :move_manager, :castle_manager, :checkmate
 
   def initialize(ui = UI.new(self))
     partial_fen = 'w KQkq - 0 1'
@@ -18,13 +19,17 @@ class Chess
     @board = Board.new # Board defaults to starting position
     @active = parts[0]
     @castle = parts[1]
-    @castle_manager = Castle.new(self)
     @passant = parts[2]
     @half = parts[3].to_i
     @full = parts[4].to_i
     ply_offset = @active == 'b' ? 1 : 0
     @ply = @full + ply_offset
     @ui = ui
+
+    warn("IDs from Chess: game: #{self.object_id}, board: #{@board.object_id}")
+    @move_manager = Movement.new(self)
+    @castle_manager = Castle.new(self)
+    @checkmate = Checkmate.new(self)
   end
 
   def set_board_state(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')

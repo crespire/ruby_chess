@@ -8,7 +8,7 @@ class Checkmate
   def initialize(game)
     @game = game
     @board = game.board
-    @moves_manager = Movement.new(game)
+    @moves_manager = game.move_manager
   end
 
   def check?

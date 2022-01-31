@@ -5,6 +5,7 @@
 require_relative 'chess'
 require_relative 'board'
 require_relative 'cell'
+require_relative 'castle'
 require_relative 'piece'
 require_relative 'pieces/all_pieces'
 
@@ -12,12 +13,15 @@ class Movement
   def initialize(game)
     @game = game
     @board = game.board
+    @castle = game.castle_manager
   end
 
   def legal_moves(cell)
     return [] if cell.empty?
 
     piece = cell.piece
+    puts "Inside move manager (id: #{self.object_id})"
+    puts "Game: #{@game.object_id} & Board: #{@board.object_id}"
     psuedo = piece.moves(@board, cell.name)
     king = piece.is_a?(King) ? cell : active_king
     attackers, = get_enemies(king)

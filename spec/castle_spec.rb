@@ -183,6 +183,9 @@ describe Castle do
 
       it 'returns the correct available destination cell' do
         cell = game.cell('e1')
+        puts "Inside test, game id: #{game.object_id}"
+        puts "inside test, board id: #{game.board.object_id}"
+        p game.board
         output = manager.castle_moves(cell)
         expect(output.length).to eq(1)
         expect(output.pop).to be_a(Cell).and have_attributes(:name => 'g1')
