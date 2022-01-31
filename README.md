@@ -488,3 +488,13 @@ range = cell1_file < cell2_file ? (cell1_file...cell2_file) : (cell2_file...cell
 
 castling_move = range.to_a.length > 1
 ```
+
+### TODO
+Must add:
+* Complete UI
+* Complete game saving
+* Add draw if half-clock reaches 50.
+* If a board only has two kings, draw.
+
+Considerations
+* Consider implementing a PGN-like game history.

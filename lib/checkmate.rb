@@ -53,6 +53,11 @@ class Checkmate
     moves.zero?
   end
 
+  def draw?
+    #if game has only two kings
+    #if half move clock is 50 or greater
+  end
+
   private
 
   def find_king
