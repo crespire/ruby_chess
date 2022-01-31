@@ -19,7 +19,6 @@ class Chess
     @active = parts[0]
     @castle = parts[1]
     @castle_manager = Castle.new(self)
-    @move_manager = Movement.new(self)
     @passant = parts[2]
     @half = parts[3].to_i
     @full = parts[4].to_i

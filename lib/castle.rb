@@ -16,6 +16,7 @@ class Castle
     @game = game
     @board = game.board
     @checkmate = Checkmate.new(game)
+    @move_manager = Movement.new(game)
   end
 
   def update_rights(cell)
@@ -50,11 +51,11 @@ class Castle
     available = filter_rook_rights(available, castleable, cell)
     return [] if available.empty?
     
-    p @board
-    king_moves = @game.move_manager.legal_moves(cell)
+    king_moves = @move_manager.legal_moves(cell)
     d_cell = cell.piece.white? ? @game.cell('d1') : @game.cell('d8')
     f_cell = cell.piece.white? ? @game.cell('f1') : @game.cell('f8')
-    return [] unless king_moves.include?(d_cell) || king_moves.include?(f_cell)
+    d_avail = king_moves.include?(d_cell.name)
+    f_avail = king_moves.include?(f_cell.name)
 
     moves_map = {
       'q' => @game.cell('c8'),
@@ -69,13 +70,32 @@ class Castle
     # If f is available, g is available if no attackers have g on their moves list.
     cells_available = []
     available.each_char do |right|
-      cells_available << moves_map[right]
+      cell_to_add = moves_map[right]
+      kingside = cell_to_add.name > 'e'
+      safe = safe?(cell, cell_to_add)
+      check_cell = kingside ? f_avail : d_avail
+      cells_available << moves_map[right] if check_cell && safe
     end
 
     cells_available
   end
 
   private
+
+  def safe?(friendly_cell, cell)
+    result = []
+    @board.data.each do |rank|
+      rank.each do |check_cell|
+        next if check_cell.empty? || friendly_cell.friendly?(check_cell)
+
+        piece = check_cell.piece
+        attacks = piece.captures(@board, check_cell.name)
+        attack_to_check = attacks.select { |move| move.include?(cell) }.flatten
+        result << attack_to_check if attack_to_check.include?(cell)
+      end
+    end
+    result.flatten.length.zero?
+  end
   
   def eligible_rooks(available_rights)
     rook_cells = {

@@ -181,9 +181,48 @@ describe Castle do
         game.set_board_state('4k2r/2n5/8/5N2/3r4/8/8/R3K2R w KQk - 0 1')
       end
 
-      it 'returns a cell' do
+      it 'returns the correct available destination cell' do
         cell = game.cell('e1')
-        expect(manager.castle_moves(cell)).to include(Cell).exactly(1).times
+        output = manager.castle_moves(cell)
+        expect(output.length).to eq(1)
+        expect(output.pop).to be_a(Cell).and have_attributes(:name => 'g1')
+      end
+    end
+
+    context 'when only one valid castle is under attack' do
+      before do
+        game.set_board_state('r3k3/2n5/8/5N2/5r2/8/8/R3K2R w KQ - 0 1')
+      end
+
+      it 'returns the available destination cell' do
+        cell = game.cell('e1')
+        output = manager.castle_moves(cell)
+        expect(output.length).to eq(1)
+        expect(output.pop).to be_a(Cell).and have_attributes(:name => 'c1') 
+      end
+    end
+
+    context 'when both castle moves are available, but one is blocked by an attack' do
+      before do
+        game.set_board_state('r3k2r/2n5/7N/8/8/8/8/R3K2R b KQkq - 0 1')
+      end
+
+      it 'returns the correct additional available moves' do
+        cell = game.cell('e8')
+        output = manager.castle_moves(cell)
+        expect(output.length).to eq(1)
+        expect(output.pop).to be_a(Cell).and have_attributes(:name => 'c8') 
+      end
+    end
+
+    context 'when both castle moves are available, but both blocked by attacks' do
+      before do
+        game.set_board_state('r3k2r/8/1n5N/8/2R5/8/8/4K2R b Kkq - 0 1')
+      end
+
+      it 'returns an empty array' do
+        cell = game.cell('e8')
+        expect(manager.castle_moves(cell)).to eq([])
       end
     end
   end

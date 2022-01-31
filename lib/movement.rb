@@ -18,8 +18,6 @@ class Movement
     return [] if cell.empty?
 
     piece = cell.piece
-    puts "Getting psuedo moves in legal_moves: cell: #{cell.inspect}"
-    p @board
     psuedo = piece.moves(@board, cell.name)
     king = piece.is_a?(King) ? cell : active_king
     attackers, = get_enemies(king)
