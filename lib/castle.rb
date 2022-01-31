@@ -56,6 +56,7 @@ class Castle
     f_cell = cell.piece.white? ? @game.cell('f1') : @game.cell('f8')
     d_avail = king_moves.include?(d_cell.name)
     f_avail = king_moves.include?(f_cell.name)
+    return [] unless d_avail || f_avail
 
     moves_map = {
       'q' => @game.cell('c8'),
@@ -64,10 +65,6 @@ class Castle
       'K' => @game.cell('g1')
     }
 
-    # IF we get king moves, and d isn't available, then c isn't available.
-    # Same for f, then g.
-    # If d is available, c is available if no attackers have c on their moves list.
-    # If f is available, g is available if no attackers have g on their moves list.
     cells_available = []
     available.each_char do |right|
       cell_to_add = moves_map[right]
@@ -76,7 +73,6 @@ class Castle
       check_cell = kingside ? f_avail : d_avail
       cells_available << moves_map[right] if check_cell && safe
     end
-
     cells_available
   end
 

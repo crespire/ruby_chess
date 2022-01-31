@@ -225,5 +225,30 @@ describe Castle do
         expect(manager.castle_moves(cell)).to eq([])
       end
     end
+
+
+    context 'when castles are available but king movement is restricted' do
+      before do
+        game.set_board_state('4k3/8/1n6/6N1/8/3r1r2/8/R3K2R w KQ - 0 1')
+      end
+
+      it 'returns an empty array' do
+        cell = game.cell('e1')
+        expect(manager.castle_moves(cell)). to eq([])
+      end
+    end
+
+    context 'when castles are available but king movement is restricted on one side' do
+      before do
+        game.set_board_state('4k2r/8/1n6/6N1/8/3r4/8/R3K2R w KQk - 0 1')
+      end
+
+      it 'returns the correct destination available' do
+        cell = game.cell('e1')
+        output = manager.castle_moves(cell)
+        expect(output.length).to eq(1)
+        expect(output.pop).to be_a(Cell).and have_attributes(:name => 'g1') 
+      end
+    end
   end
 end
