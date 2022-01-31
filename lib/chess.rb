@@ -5,9 +5,11 @@
 require_relative 'ui'
 require_relative 'board'
 require_relative 'castle'
+require_relative 'movement'
 
 class Chess
   attr_accessor :board, :active, :castle, :passant, :half, :full, :ply
+  attr_reader :move_manager, :castle_manager
 
   def initialize(ui = UI.new(self))
     partial_fen = 'w KQkq - 0 1'
@@ -17,6 +19,7 @@ class Chess
     @active = parts[0]
     @castle = parts[1]
     @castle_manager = Castle.new(self)
+    @move_manager = Movement.new(self)
     @passant = parts[2]
     @half = parts[3].to_i
     @full = parts[4].to_i

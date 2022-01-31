@@ -10,14 +10,16 @@ require_relative 'pieces/all_pieces'
 
 class Movement
   def initialize(game)
-    @board = game.board
     @game = game
+    @board = game.board
   end
 
   def legal_moves(cell)
     return [] if cell.empty?
 
     piece = cell.piece
+    puts "Getting psuedo moves in legal_moves: cell: #{cell.inspect}"
+    p @board
     psuedo = piece.moves(@board, cell.name)
     king = piece.is_a?(King) ? cell : active_king
     attackers, = get_enemies(king)
@@ -123,6 +125,7 @@ class Movement
   # Helper method to filter illegal King moves from their basic moves.
   def king_moves_helper(psuedo, origin, danger_zone, no_go_zone)
     to_test = (danger_zone - no_go_zone) & psuedo
+    return (psuedo - no_go_zone).uniq.map(&:name).sort if to_test.empty?
 
     to_test.each do |destination|
       legal = move_legal?(@game, active_king, origin, destination)
