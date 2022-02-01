@@ -512,9 +512,13 @@ How we have to flesh out the game saving and UI, so that we can pull it all toge
 
 Once that is done, we can add serialization and saving, as it should be relatively easy to drop that in once the game is working as we want.
 
+### UI mostly complete
+I have to test pawn promotion to see if it works (remember to put unit tests for that inside the chess_spec), and then finish the UI for that.
+
+After that, we should work on serialization and saving games.
+
 ### TODO
 Must add:
-* Complete UI
 * Complete game saving
 
 Considerations
