@@ -50,11 +50,7 @@ class Castle
     available = filter_rook_rights(available, castleable, cell)
     return [] if available.empty?
     
-    puts "Calling move manager inside castle from game id: #{@game.object_id}, board: #{@game.board.object_id}"
-    puts "Move manager id: #{@move_manager.object_id}"
-    puts @game.board.to_ascii
     king_moves = @move_manager.legal_moves(cell)
-    p king_moves
     d_cell = cell.piece.white? ? @game.cell('d1') : @game.cell('d8')
     f_cell = cell.piece.white? ? @game.cell('f1') : @game.cell('f8')
     d_avail = king_moves.include?(d_cell.name)

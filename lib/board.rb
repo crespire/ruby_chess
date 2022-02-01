@@ -11,7 +11,6 @@ class Board
   attr_reader :data
 
   def initialize(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
-    warn('Made a new board')
     @data = Array.new(8) { Array.new(8, nil) }
 
     pieces = fen.split('/')

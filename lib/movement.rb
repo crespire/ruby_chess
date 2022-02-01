@@ -19,9 +19,6 @@ class Movement
     return [] if cell.empty?
 
     piece = cell.piece
-    puts "Inside move manager (id: #{self.object_id})"
-    puts "Game: #{@game.object_id} & Board: #{@game.board.object_id}"
-    puts @game.board.to_ascii
     psuedo = piece.moves(@game.board, cell.name)
     king = piece.is_a?(King) ? cell : active_king
     attackers, = get_enemies(king)
