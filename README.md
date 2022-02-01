@@ -496,23 +496,26 @@ I am having troubles with that, as what I'd like to do is have everything initia
 
 I think it would make integrating my pieces easier, but I am having trouble with that right now.
 
-### Integration fixes
+### Movement integration fixes
 I think I figured out the problem with my integration. Everywhere I had board as a separate instance variable, I removed it and accessed the board via Chess.board, which seemed to solve my issue of having different instances of the board being referenced.
 
 The challenge now is to add castling moves to Movement legal moves, and validate it there.
 
-### Integration completed
+### Movement integration completed
 Movement spec is now passing all tests.
 
 ### Core logic completed!
 All current RSpec tests are passing! This means we have a reasonably solid base to build the rest of the program on. First, let's add draw functionality to the Checkmate class for half-clock to 50 and only two kings left.
 
+### Home stretch
+How we have to flesh out the game saving and UI, so that we can pull it all together and get a running program. I think it makes the most sense to work on the UI, and then work on actually getting a game going in the command line.
+
+Once that is done, we can add serialization and saving, as it should be relatively easy to drop that in once the game is working as we want.
+
 ### TODO
 Must add:
 * Complete UI
 * Complete game saving
-* Add draw if half-clock reaches 50.
-* If a board only has two kings, draw.
 
 Considerations
 * Consider implementing a PGN-like game history.
