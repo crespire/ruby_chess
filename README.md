@@ -517,9 +517,9 @@ I have to test pawn promotion to see if it works (remember to put unit tests for
 
 After that, we should work on serialization and saving games.
 
-### TODO
-Must add:
-* Complete game saving
+### Final Integration Testing
+The Chess game is more or less complete, with file loading and saving working. I've created a number of integration tests that I think would be nice to confirm that all the rules are working once we have put all the pieces together. All the units are passing, so this should be pretty simple.
 
+### TODO
 Considerations
 * Consider implementing a PGN-like game history.
