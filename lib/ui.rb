@@ -115,9 +115,18 @@ class UI
     end
   end
 
-  def prompt_pawn_promotion
-    puts "Pawn promotion"
-    # Prompt for new piece selection
+  def prompt_pawn_promotion(cell)
+    puts "Congratulations! A #{cell.piece.color == 'w' ? 'white' : 'black'} pawn has made it to promotion."
+    puts 'You can select a (q)ueen, a k(n)ight, (r)ook or (b)ishop.'
+    loop do
+      print 'Enter the promotion you would like: '
+      input = gets.chomp.downcase
+      puts 'Invalid input, try again.' unless %w[q n r b].include?(input)
+      next unless %w[q n r b].include?(input)
+
+      fen = @game.active == 'w' ? input.upcase : input.downcase
+      return fen
+    end
   end
 
   def prompt_play_again
