@@ -58,7 +58,7 @@ class UI
 
   def show_welcome
     puts <<-'WELCOME'
-___      _         
+ ___      _         
 | _ \_  _| |__ _  _ 
 |   / || | '_ \ || |
 |_|_\\_,_|_.__/\_, |
@@ -175,7 +175,7 @@ WELCOME
   end
 
   def clear_console
-    system("clear") || system("cls")
+    system('clear') || system('cls')
   end
 
   private
