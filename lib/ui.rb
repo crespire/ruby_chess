@@ -57,10 +57,31 @@ class UI
   end
 
   def show_welcome
-    puts <<~WELCOME
-          Welcome to Chess! This version of Chess is meant to be played by two players.
-          All the standard rules of Chess apply. Enjoy!
-        WELCOME
+    puts <<-'WELCOME'
+___      _         
+| _ \_  _| |__ _  _ 
+|   / || | '_ \ || |
+|_|_\\_,_|_.__/\_, |
+               |__/
+     ___           ___           ___           ___           ___
+    /\  \         /\  \         /  /\         /  /\         /\  \
+   /::\  \        \:\  \       /  /:/_       /  /::\       /::\  \
+  /:/\:\  \        \:\  \     /  /:/ /\     /  /:/\:\     /:/\ \  \
+ /:/  \:\  \   ___ /::\  \   /  /:/ /:/_   /  /::\ \:\   _\:\~\ \  \ 
+/:/__/ \:\__\ /\  /:/\:\__\ /__/:/ /:/ /\ /__/:/\:\ \:\ /\ \:\ \ \__\
+\:\  \  \/__/ \:\/:/  \/__/ \  \:\/:/ /:/ \  \:\ \:\_\/ \:\ \:\ \/__/
+ \:\  \        \::/__/       \  \::/ /:/   \  \:\ \:\    \:\ \:\__\
+  \:\  \        \:\  \        \  \:\/:/     \  \:\_\/     \:\/:/  /
+   \:\__\        \:\__\        \  \::/       \  \:\        \::/  /
+    \/__/         \/__/         \__\/         \__\/         \/__/
+
+Welcome to Chess! This version of Chess is meant to be played by two players.
+All the standard rules of Chess apply. Enjoy!
+WELCOME
+  end
+
+  def show_fen(fen)
+    puts "Loaded FEN: #{fen}"
   end
 
   def show_gameover
@@ -136,14 +157,15 @@ class UI
 
   def prompt_save
     loop do
+      puts "You can load games via fen.txt in the save directory. You can also 'exit'."
       print 'Would you like to load a game? '
       input = gets.chomp.downcase
+      abort('Bye!') if input == 'exit'
       puts 'Invalid input, try asgain.' unless %w[y n].include?(input)
       next unless %w[y n].include?(input)
 
-      input == 'y' ? 'load' : 'new'
+      return (input == 'y' ? 'load' : 'new')
     end
-    
   end
 
   def prompt_continue

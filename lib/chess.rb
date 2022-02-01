@@ -106,12 +106,15 @@ class Chess
   end
 
   def save
-    Save::save_to_file('fen.txt', make_fen)
+    Save::save_to_file('save/fen.txt', make_fen)
     abort('Bye!')
   end
 
   def load
-    fen = Save::load_from_file('fex.txt')
+    fen = Save::load_from_file('save/fen.txt')
+    return if fen.nil?
+
+    @ui.show_fen(fen)
     set_board_state(fen)
   end
 
