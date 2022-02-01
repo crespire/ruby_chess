@@ -81,7 +81,8 @@ WELCOME
   end
 
   def show_fen(fen)
-    puts "Loaded FEN: #{fen}"
+    msg = fen.nil? ? 'No FEN found... starting default game.' : "Loaded FEN: #{fen}"
+    puts msg
   end
 
   def show_gameover
@@ -158,7 +159,7 @@ WELCOME
   def prompt_save
     loop do
       puts "You can load games via fen.txt in the save directory. You can also 'exit'."
-      print 'Would you like to load a game? '
+      print 'Would you like to load a game? (y/n) '
       input = gets.chomp.downcase
       abort('Bye!') if input == 'exit'
       puts 'Invalid input, try asgain.' unless %w[y n].include?(input)
@@ -169,8 +170,8 @@ WELCOME
   end
 
   def prompt_continue
-    print 'Press any key to continue.'
-    STDIN.getch
+    print 'Press any key to start playing.'
+    STDIN.getc
     clear_console
   end
 

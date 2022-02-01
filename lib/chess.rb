@@ -112,9 +112,9 @@ class Chess
 
   def load
     fen = Save::load_from_file('save/fen.txt')
+    @ui.show_fen(fen)
     return if fen.nil?
 
-    @ui.show_fen(fen)
     set_board_state(fen)
   end
 
