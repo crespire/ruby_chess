@@ -115,6 +115,11 @@ class UI
     end
   end
 
+  def prompt_pawn_promotion
+    puts "Pawn promotion"
+    # Prompt for new piece selection
+  end
+
   def prompt_play_again
     puts "Play again? "
     # Once the game is over, do we want to play again?
