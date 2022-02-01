@@ -35,7 +35,7 @@ class Castle
 
   ##
   # Returns additional moves if a castle is available
-  def castle_moves(cell, psuedo)
+  def castle_moves(cell, king_moves)
     return [] unless cell.piece.is_a?(King)
   
     available = @game.castle.dup
@@ -49,11 +49,10 @@ class Castle
     available = filter_rook_rights(available, castleable, cell)
     return [] if available.empty?
     
-    king_moves = psuedo
     d_cell = cell.piece.white? ? @game.cell('d1') : @game.cell('d8')
     f_cell = cell.piece.white? ? @game.cell('f1') : @game.cell('f8')
-    d_avail = king_moves.include?(d_cell)
-    f_avail = king_moves.include?(f_cell)
+    d_avail = king_moves.include?(d_cell.name)
+    f_avail = king_moves.include?(f_cell.name)
     return [] unless d_avail || f_avail
 
     moves_map = {

@@ -196,6 +196,13 @@ describe Movement do
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
 
+        it 'correctly shows 1 move when in a soft pin' do
+          game.set_board_state('4k3/2n5/8/5N2/3r1r2/8/8/R3K2R w - - 0 1')
+          cell = game.cell('e1')
+          eligible = %w[e2]
+          expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+        end
+
         it 'correctly shows moves that prevent self-checking' do
           game.set_board_state('8/8/8/8/2pkP3/3B4/8/8 b - - 1 2')
           cell = game.cell('d4')
