@@ -14,7 +14,6 @@ require_relative 'pieces/all_pieces'
 class Castle
   def initialize(game)
     @game = game
-    @checkmate = game.checkmate
     @move_manager = game.move_manager
   end
 
@@ -36,12 +35,12 @@ class Castle
 
   ##
   # Returns additional moves if a castle is available
-  def castle_moves(cell)
+  def castle_moves(cell, psuedo)
     return [] unless cell.piece.is_a?(King)
   
     available = @game.castle.dup
     available = (@game.active == 'w' ? available.chars.select { |char| char.ord < 91 } : available.chars.select { |char| char.ord > 91 }).join
-    return [] if available.empty? || @checkmate.check?
+    return [] if available.empty? || @game.checkmate.check?
 
     castleable = eligible_rooks(available)
     castleable.reject! { |cell| cell.piece.moved } # Just in case
@@ -50,11 +49,11 @@ class Castle
     available = filter_rook_rights(available, castleable, cell)
     return [] if available.empty?
     
-    king_moves = @move_manager.legal_moves(cell)
+    king_moves = psuedo
     d_cell = cell.piece.white? ? @game.cell('d1') : @game.cell('d8')
     f_cell = cell.piece.white? ? @game.cell('f1') : @game.cell('f8')
-    d_avail = king_moves.include?(d_cell.name)
-    f_avail = king_moves.include?(f_cell.name)
+    d_avail = king_moves.include?(d_cell)
+    f_avail = king_moves.include?(f_cell)
     return [] unless d_avail || f_avail
 
     moves_map = {
@@ -78,15 +77,15 @@ class Castle
   private
 
   def safe?(friendly_cell, cell)
+    puts "Checking if #{cell} is safe..."
     result = []
     @game.board.data.each do |rank|
       rank.each do |check_cell|
         next if check_cell.empty? || friendly_cell.friendly?(check_cell)
 
         piece = check_cell.piece
-        attacks = piece.captures(@game.board, check_cell.name)
-        attack_to_check = attacks.select { |move| move.include?(cell) }.flatten
-        result << attack_to_check if attack_to_check.include?(cell)
+        enemy_moves = piece.moves(@game.board, check_cell.name)
+        result << enemy_moves if enemy_moves.include?(cell)
       end
     end
     result.flatten.length.zero?

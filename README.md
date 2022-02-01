@@ -496,6 +496,11 @@ I am having troubles with that, as what I'd like to do is have everything initia
 
 I think it would make integrating my pieces easier, but I am having trouble with that right now.
 
+### Integration fixes
+I think I figured out the problem with my integration. Everywhere I had board as a separate instance variable, I removed it and accessed the board via Chess.board, which seemed to solve my issue of having different instances of the board being referenced.
+
+The challenge now is to add castling moves to Movement legal moves, and validate it there.
+
 ### TODO
 Must add:
 * Complete UI

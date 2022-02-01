@@ -12,7 +12,6 @@ require_relative 'pieces/all_pieces'
 class Movement
   def initialize(game)
     @game = game
-    @castle = game.castle_manager
   end
 
   def legal_moves(cell)
@@ -131,7 +130,10 @@ class Movement
       psuedo.delete_if { |cell| cell.name == destination.name } unless legal
     end
 
-    (psuedo - no_go_zone).uniq.map(&:name).sort
+    castle = @game.castle_manager.castle_moves(origin, psuedo)
+
+    interim = (psuedo - no_go_zone).uniq.map(&:name)
+    (interim + castle.map(&:name)).flatten.sort
   end
 
   ##
