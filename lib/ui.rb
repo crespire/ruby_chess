@@ -90,11 +90,11 @@ class UI
   end
 
   def prompt_pick_move(cell, eligible)
-    puts "Available moves for #{cell.piece.class} on #{cell.name}: #{eligible}"
+    puts "Available moves for #{cell.piece.fen}#{cell.name}: #{eligible.join(', ')}"
     loop do
       print 'Please select a move: '
       input = gets.chomp
-      puts 'Not a valid selection' unless eligible.include?(input)
+      puts 'Not a valid selection.' unless eligible.include?(input)
       next unless eligible.include?(input)
 
       return input

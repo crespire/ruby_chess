@@ -113,5 +113,39 @@ describe UI do
         end
       end
     end
+
+    context '#prompt_pick_move' do
+      context 'for a given board' do
+        before do
+          chess.set_board_state('r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4')
+        end
+
+        it 'returns the string if a move is valid' do
+          cell = chess.cell('d1')
+          valid_moves = chess.move_manager.legal_moves(cell)
+          input = 'e2'
+          allow(ui).to receive(:gets).and_return(input)
+          expect(ui.prompt_pick_move(cell, valid_moves)).to eq('e2')
+        end
+
+        it 'returns the string if a move is valid' do
+          cell = chess.cell('f3')
+          valid_moves = chess.move_manager.legal_moves(cell)
+          input = 'g5'
+          allow(ui).to receive(:gets).and_return(input)
+          expect(ui.prompt_pick_move(cell, valid_moves)).to eq('g5')
+        end
+
+        it 'reprompts if a move is not valid' do
+          cell = chess.cell('f3')
+          valid_moves = chess.move_manager.legal_moves(cell)
+          input = 'g5'
+          invalid_input = 'e2'
+          allow(ui).to receive(:gets).and_return(invalid_input, input)
+          expect { ui.prompt_pick_move(cell, valid_moves) }.to output("Available moves for Nf3: d4, e5, g1, g5, h4\nPlease select a move: Not a valid selection.\nPlease select a move: ").to_stdout
+          expect(ui.prompt_pick_move(cell, valid_moves)).to eq('g5')
+        end
+      end
+    end
   end
 end
