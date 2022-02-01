@@ -7,6 +7,7 @@ require_relative 'board'
 require_relative 'castle'
 require_relative 'movement'
 require_relative 'checkmate'
+require_relative 'save'
 
 class Chess
   attr_accessor :active, :castle, :passant, :half, :full, :ply
@@ -102,7 +103,8 @@ class Chess
   end
 
   def save
-    puts 'Saving game...'
+    dump = Save::seralize(self)
+    Save::save_to_file('save', dump)
     abort('Bye!')
   end
 
