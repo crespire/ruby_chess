@@ -166,4 +166,34 @@ describe Checkmate do
       expect(checkmate7.stalemate?).to be false
     end
   end
+
+  context 'when provided a board with a 2 kings only draw condition' do
+    subject(:draw1) { described_class.new(game) }
+
+    before do
+      game.set_board_state('8/6k1/8/8/8/8/8/3K4 w - - 7 1')
+    end
+
+    it 'returns the correct draw status' do
+      expect(draw1.checkmate?).to be false
+      expect(draw1.check?).to be false
+      expect(draw1.stalemate?).to be false
+      expect(draw1.draw?).to be true
+    end
+  end
+
+  context 'when provided a board with a 50 half clock draw condition' do
+    subject(:draw2) { described_class.new(game) }
+
+    before do
+      game.set_board_state('8/6k1/8/8/8/8/2N5/3K4 w - - 50 1')
+    end
+
+    it 'returns the correct draw status' do
+      expect(draw2.checkmate?).to be false
+      expect(draw2.check?).to be false
+      expect(draw2.stalemate?).to be false
+      expect(draw2.draw?).to be true
+    end
+  end
 end

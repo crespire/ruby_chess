@@ -7,8 +7,11 @@ require_relative 'movement'
 class Checkmate
   def initialize(game)
     @game = game
-    @board = game.board
     @moves_manager = game.move_manager
+  end
+
+  def gameover?
+    return checkmate? || stalemate? || draw?
   end
 
   def check?
@@ -26,7 +29,7 @@ class Checkmate
 
     # We are in a potential checkmate situation.
     moves = 0
-    @board.data.each do |rank|
+    @game.board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || king.hostile?(cell.piece)
 
@@ -42,7 +45,7 @@ class Checkmate
     return false if checkmate?
 
     moves = 0
-    @board.data.each do |rank|
+    @game.board.data.each do |rank|
       rank.each do |cell|
         next if cell.empty? || king.hostile?(cell.piece)
 
@@ -61,6 +64,6 @@ class Checkmate
   private
 
   def find_king
-    @game.active == 'w' ? @board.wking : @board.bking
+    @game.active == 'w' ? @game.board.wking : @game.board.bking
   end
 end
