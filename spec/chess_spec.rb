@@ -268,6 +268,33 @@ describe Chess do
       end
     end
 
+    context 'promotes a pawn when eligible' do
+      subject(:promotion) { described_class.new }
+      let(:ui) { promotion.instance_variable_get(:@ui) }
+
+      before do
+        promotion.set_board_state('k7/7P/8/8/6p1/8/8/K7 w - - 0 1')
+      end
+
+      it 'sends the right message to self' do
+        expect(promotion).to receive(:pawn_promotion)
+        promotion.move_piece('h7', 'h8')
+      end
+
+      it 'sends the correct message to UI' do
+        allow(ui).to receive(:prompt_pawn_promotion).and_return('Q')
+        expect(ui).to receive(:prompt_pawn_promotion)
+        promotion.move_piece('h7', 'h8')
+      end
+
+      it 'updates the piece to a Queen' do
+        allow(ui).to receive(:prompt_pawn_promotion).and_return('Q')
+        cell = promotion.cell('h8')
+        expect { promotion.move_piece('h7', 'h8') }.to change { cell.piece }.from(nil).to(Queen)
+        expect(promotion.cell('h7')).to be_empty
+      end
+    end
+
     context 'given a check situation that can be resolved with a passant' do
       subject(:passant_check) { described_class.new }
 
@@ -278,7 +305,7 @@ describe Chess do
       end
     end
   end
-  
+
   context '#cell' do
     subject(:cells) { described_class.new }
 
