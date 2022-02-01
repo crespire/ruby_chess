@@ -74,7 +74,7 @@ class Chess
 
   def play
     @ui.show_welcome
-    load_save = 'load' == @ui.prompt_save
+    load_save = @ui.prompt_save == 'load'
     load if load_save
     @ui.prompt_continue
     until @checkmate.gameover?
