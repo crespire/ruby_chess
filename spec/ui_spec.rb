@@ -48,7 +48,7 @@ describe UI do
 
     context 'when sent #welcome' do
       it 'outputs the welcome message' do
-        expect { ui.show_welcome }.to output("Welcome to Chess! This version of Chess is meant to be played by two players.\nAll the standard rules of Chess apply. Enjoy!\n").to_stdout
+        expect { ui.show_welcome }.to output.to_stdout
       end
     end
 
