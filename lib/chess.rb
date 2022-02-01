@@ -62,7 +62,7 @@ class Chess
     @board.update_loc(from, to)
 
     pawn_helper(from, to) if piece.is_a?(Pawn)
-    piece.moved = true if piece.is_a?(King) or piece.is_a?(Rook)
+    piece.moved = true if piece.is_a?(King) || piece.is_a?(Rook)
 
     update_game_stats(piece, to_before)
   end
