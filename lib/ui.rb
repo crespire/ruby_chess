@@ -90,10 +90,15 @@ class UI
   end
 
   def prompt_pick_move(cell, eligible)
-    # Prompt the active player to pick a move.
-    # We need the cell so we can display the current piece and location info.
-    # Show the current selected piece and the list of moves.
-    # Check that entered information is included in eligible.
+    puts "Available moves for #{cell.piece.class} on #{cell.name}: #{eligible}"
+    loop do
+      print 'Please select a move: '
+      input = gets.chomp
+      puts 'Not a valid selection' unless eligible.include?(input)
+      next unless eligible.include?(input)
+
+      return input
+    end
   end
 
   def prompt_play_again
