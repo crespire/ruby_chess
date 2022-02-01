@@ -149,6 +149,32 @@ describe Board do
     end
   end
 
+  context '#to_ascii' do
+    it 'returns the correct ascii representation of board' do
+      ascii = described_class.new
+      expect { ascii.to_ascii }.to output("rnbqkbnr\npppppppp\n........\n........\n........\n........\nPPPPPPPP\nRNBQKBNR\n").to_stdout
+    end
+
+    it 'returns the correct represntation for specified board' do
+      input = '8/p7/P7/8/8/3k4/3P4/3K4'
+      ascii = described_class.new(input)
+      expect { ascii.to_ascii }.to output("........\np.......\nP.......\n........\n........\n...k....\n...P....\n...K....\n").to_stdout
+    end
+  end
+
+  context '#active_pieces' do
+    it 'returns the correct active pieces for default board' do
+      active = described_class.new
+      expect(active.active_pieces).to eq(32)  
+    end
+
+    it 'returns the correct active pieces for the given board' do
+      input = '8/6k1/8/8/8/8/8/3K4'
+      active = described_class.new(input)
+      expect(active.active_pieces).to eq(2)
+    end
+  end
+
   context '#update_loc' do
     subject(:move) { described_class.new }
 

@@ -88,6 +88,18 @@ class Board
     find_piece('K').pop
   end
 
+  def active_pieces
+    count = 0
+    @data.each do |rank|
+      rank.each do |cell|
+        next if cell.empty?
+
+        count += 1
+      end
+    end
+    count
+  end
+
   def find_piece(fen)
     piece = fen.is_a?(Piece) ? fen : Piece::from_fen(fen)
     matches = []
@@ -119,6 +131,5 @@ class Board
       rank.each { |cell| print cell.empty? ? '.' : cell.piece.fen }
       print "\n"
     end
-    true
   end
 end

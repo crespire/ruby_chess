@@ -54,8 +54,8 @@ class Checkmate
   end
 
   def draw?
-    #if game has only two kings
-    #if half move clock is 50 or greater
+    return true if @game.half >= 50    
+    return true if @game.board.active_pieces == 2 && @game.board.bking && @game.board.wking
   end
 
   private

@@ -504,6 +504,9 @@ The challenge now is to add castling moves to Movement legal moves, and validate
 ### Integration completed
 Movement spec is now passing all tests.
 
+### Core logic completed!
+All current RSpec tests are passing! This means we have a reasonably solid base to build the rest of the program on. First, let's add draw functionality to the Checkmate class for half-clock to 50 and only two kings left.
+
 ### TODO
 Must add:
 * Complete UI
