@@ -11,6 +11,7 @@ class Board
   attr_reader :data
 
   def initialize(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
+    warn('Made a new board')
     @data = Array.new(8) { Array.new(8, nil) }
 
     pieces = fen.split('/')
@@ -112,5 +113,13 @@ class Board
       parsed << (str ? chunk.join : chunk.sum)
     end
     parsed.join
+  end
+
+  def to_ascii
+    @data.each do |rank|
+      rank.each { |cell| print cell.empty? ? '.' : cell.piece.fen }
+      print "\n"
+    end
+    true
   end
 end

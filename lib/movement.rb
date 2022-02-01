@@ -12,7 +12,6 @@ require_relative 'pieces/all_pieces'
 class Movement
   def initialize(game)
     @game = game
-    @board = game.board
     @castle = game.castle_manager
   end
 
@@ -21,8 +20,9 @@ class Movement
 
     piece = cell.piece
     puts "Inside move manager (id: #{self.object_id})"
-    puts "Game: #{@game.object_id} & Board: #{@board.object_id}"
-    psuedo = piece.moves(@board, cell.name)
+    puts "Game: #{@game.object_id} & Board: #{@game.board.object_id}"
+    puts @game.board.to_ascii
+    psuedo = piece.moves(@game.board, cell.name)
     king = piece.is_a?(King) ? cell : active_king
     attackers, = get_enemies(king)
     danger_zone = dangers(king)
@@ -42,12 +42,12 @@ class Movement
     else
       result = []
       candidates = []
-      @board.data.each do |rank|
+      @game.board.data.each do |rank|
         rank.each do |check_cell|
           next if check_cell.empty? || cell.friendly?(check_cell)
           next unless check_cell.piece.slides?
 
-          enemy_slides = check_cell.piece.valid_paths(@board, check_cell)
+          enemy_slides = check_cell.piece.valid_paths(@game.board, check_cell)
           candidates = enemy_slides.select do |move|
             move.valid_xray.include?(active_king) && move.valid.include?(cell) && move.enemies == 2
           end
@@ -120,7 +120,7 @@ class Movement
   ##
   # Returns the cell of the active side's King.
   def active_king
-    @game.active == 'w' ? @board.wking : @board.bking
+    @game.active == 'w' ? @game.board.wking : @game.board.bking
   end
 
   ##
@@ -140,7 +140,7 @@ class Movement
   ##
   # Helper method to filter illegal pawn moves from their basic moves.
   def pawn_moves_helper(psuedo, cell)
-    captures = cell.piece.captures(@board, cell.name).compact
+    captures = cell.piece.captures(@game.board, cell.name).compact
     passant = passant_capture(cell.piece)
     captures.each do |target_cell|
       psuedo.delete(target_cell) if target_cell.empty? || (target_cell.full? && cell.friendly?(target_cell))
@@ -148,8 +148,8 @@ class Movement
     psuedo << passant if passant && captures.include?(passant)
 
     rank_dir = cell.piece.white? ? 1 : -1
-    step_one = @board.cell(cell.name, 0, rank_dir)
-    step_two = @board.cell(cell.name, 0, (rank_dir * 2))
+    step_one = @game.board.cell(cell.name, 0, rank_dir)
+    step_two = @game.board.cell(cell.name, 0, (rank_dir * 2))
     psuedo.delete(step_one) if step_one && psuedo.include?(step_one) && step_one.full?
     if step_two && psuedo.include?(step_two) && (step_one.full? || (step_one.empty? && step_two.full?))
       psuedo.delete(step_two)
@@ -182,7 +182,7 @@ class Movement
     return [passant] if passant && psuedo.include?(passant)
     return [enemy_cell] if psuedo.include?(enemy_cell)
 
-    enemy_paths = enemy_cell.piece.valid_paths(@board, enemy_cell)
+    enemy_paths = enemy_cell.piece.valid_paths(@game.board, enemy_cell)
     attack_path = enemy_paths.select { |move| move.include?(active_king) }.pop
     (attack_path & psuedo)
   end
@@ -191,6 +191,6 @@ class Movement
   # Returns cell if piece is eligible to en passant capture.
   def passant_capture(piece)
     passant_capture = piece.is_a?(Pawn) && @game.passant != '-'
-    passant_capture ? @board.cell(@game.passant) : nil
+    passant_capture ? @game.board.cell(@game.passant) : nil
   end
 end

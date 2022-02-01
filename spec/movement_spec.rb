@@ -10,10 +10,10 @@ describe Movement do
     subject(:move_init) { described_class.new(game) }
 
     it 'stores a reference to the board properly' do
-      board_ref = move_init.instance_variable_get(:@board)
+      game_ref = move_init.instance_variable_get(:@game)
 
-      expect(board_ref.data.flatten.length).to eq(64)
-      board_ref.data.each do |rank|
+      expect(game_ref.board.data.flatten.length).to eq(64)
+      game_ref.board.data.each do |rank|
         rank.each do |cell|
           expect(cell).to be_a(Cell)
         end

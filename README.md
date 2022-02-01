@@ -489,6 +489,13 @@ range = cell1_file < cell2_file ? (cell1_file...cell2_file) : (cell2_file...cell
 castling_move = range.to_a.length > 1
 ```
 
+### Castling complete?
+I have the spec passing tests, but now I have to integrate it into Movement.
+
+I am having troubles with that, as what I'd like to do is have everything initialized inside Chess, and have everything else utliize those managers via Chess.
+
+I think it would make integrating my pieces easier, but I am having trouble with that right now.
+
 ### TODO
 Must add:
 * Complete UI
