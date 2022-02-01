@@ -35,7 +35,7 @@ class UI
       print "#{rank_ind} "
       rank.each do |cell|
         if moves.include?(cell.name) && cell.empty?
-          print colorize_cell_bg(" \e[36m◇\e[0m ", color_track.even?)
+          print colorize_cell_bg("\e[36m ◇ \e[0m", color_track.even?)
         elsif moves.include?(cell.name) && !cell.empty?
           print colorize_cell_bg_capture(" #{PIECE_LOOKUP[cell.to_display]} ")
         else
@@ -43,6 +43,12 @@ class UI
         end
         color_track += 1
       end
+      print "  Active: #{@game.active == 'w' ? 'White' : 'Black'}" if rank_ind == 7
+      print "  Castle: #{@game.castle}" if rank_ind == 6
+      print "  Passant: #{@game.passant}" if rank_ind == 5
+      print "  Half-clock: #{@game.half}" if rank_ind == 4
+      print "  Full-clock: #{@game.full}" if rank_ind == 3
+      print "  Ply: #{@game.ply}" if rank_ind == 2
       print "\n"
       rank_ind -= 1
       color_track += 1
@@ -70,13 +76,19 @@ class UI
 
   def prompt_pick_piece
     active_string = @game.active == 'w' ? 'White' : 'Black'
+    puts "You can enter 'save' to save the current game, or 'exit' to stop the program."
     loop do
-      print "#{active_string}, please pick a piece using Chess notation: "
-      input = gets.chomp
+      print "#{active_string}, pick a piece to play using Chess notation: "
+      input = gets.chomp.downcase
+      return 'save' if input == 'save'
+      return 'exit' if input == 'exit'
+
       cell = @game.cell(input)
-      print "\n"
       puts 'This destination is out of bounds.' if cell.nil?
       next if cell.nil?
+
+      puts 'This destination is empty.' if cell.empty?
+      next if cell.empty?
 
       piece_color = cell.piece.color
       owned = piece_color == @game.active
@@ -92,8 +104,10 @@ class UI
   def prompt_pick_move(cell, eligible)
     puts "Available moves for #{cell.piece.fen}#{cell.name}: #{eligible.join(', ')}"
     loop do
-      print 'Please select a move: '
-      input = gets.chomp
+      print "Enter 'back' to pick another piece, or select a move: "
+      input = gets.chomp.downcase
+      return nil if input == 'back'
+
       puts 'Not a valid selection.' unless eligible.include?(input)
       next unless eligible.include?(input)
 
@@ -102,7 +116,18 @@ class UI
   end
 
   def prompt_play_again
+    puts "Play again? "
     # Once the game is over, do we want to play again?
+  end
+
+  def prompt_continue
+    print 'Press any key to continue.'
+    STDIN.getch
+    clear_console
+  end
+
+  def clear_console
+    system("clear") || system("cls")
   end
 
   private

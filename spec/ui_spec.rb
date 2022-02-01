@@ -85,6 +85,8 @@ describe UI do
         it 'returns the cell that a player has picked if validations pass' do
           input = 'c3'
           allow(ui).to receive(:gets).and_return(input)
+          expect(ui).to receive(:puts).once
+          expect(ui).to receive(:print).once
           expect(ui.prompt_pick_piece).to be_a(Cell).and have_attributes(name: 'c3')
         end
 
@@ -92,7 +94,17 @@ describe UI do
           input = 'c3'
           invalid_input = 'c9'
           allow(ui).to receive(:gets).and_return(invalid_input, input)
-          expect { ui.prompt_pick_piece }.to output("White, please pick a piece using Chess notation: \nThis destination is out of bounds.\nWhite, please pick a piece using Chess notation: \n").to_stdout
+          expect(ui).to receive(:puts).twice
+          expect(ui).to receive(:print).twice
+          expect(ui.prompt_pick_piece).to be_a(Cell).and have_attributes(name: 'c3')
+        end
+
+        it 'reprompts when a player picks an empty cell' do
+          input = 'c3'
+          invalid_input = 'c5'
+          allow(ui).to receive(:gets).and_return(invalid_input, input)
+          expect(ui).to receive(:puts).twice
+          expect(ui).to receive(:print).twice
           expect(ui.prompt_pick_piece).to be_a(Cell).and have_attributes(name: 'c3')
         end
 
@@ -100,7 +112,8 @@ describe UI do
           input = 'c3'
           invalid_input = 'f6'
           allow(ui).to receive(:gets).and_return(invalid_input, input)
-          expect { ui.prompt_pick_piece }.to output("White, please pick a piece using Chess notation: \nThis piece is not yours.\nWhite, please pick a piece using Chess notation: \n").to_stdout
+          expect(ui).to receive(:puts).twice
+          expect(ui).to receive(:print).twice
           expect(ui.prompt_pick_piece).to be_a(Cell).and have_attributes(name: 'c3')
         end
 
@@ -108,7 +121,8 @@ describe UI do
           input = 'c3'
           invalid_input = 'c1'
           allow(ui).to receive(:gets).and_return(invalid_input, input)
-          expect { ui.prompt_pick_piece }.to output("White, please pick a piece using Chess notation: \nThis piece has no legal moves.\nWhite, please pick a piece using Chess notation: \n").to_stdout
+          expect(ui).to receive(:puts).twice
+          expect(ui).to receive(:print).twice
           expect(ui.prompt_pick_piece).to be_a(Cell).and have_attributes(name: 'c3')
         end
       end
@@ -125,6 +139,8 @@ describe UI do
           valid_moves = chess.move_manager.legal_moves(cell)
           input = 'e2'
           allow(ui).to receive(:gets).and_return(input)
+          expect(ui).to receive(:puts).once
+          expect(ui).to receive(:print).once
           expect(ui.prompt_pick_move(cell, valid_moves)).to eq('e2')
         end
 
@@ -133,6 +149,8 @@ describe UI do
           valid_moves = chess.move_manager.legal_moves(cell)
           input = 'g5'
           allow(ui).to receive(:gets).and_return(input)
+          expect(ui).to receive(:puts).once
+          expect(ui).to receive(:print).once
           expect(ui.prompt_pick_move(cell, valid_moves)).to eq('g5')
         end
 
@@ -142,7 +160,8 @@ describe UI do
           input = 'g5'
           invalid_input = 'e2'
           allow(ui).to receive(:gets).and_return(invalid_input, input)
-          expect { ui.prompt_pick_move(cell, valid_moves) }.to output("Available moves for Nf3: d4, e5, g1, g5, h4\nPlease select a move: Not a valid selection.\nPlease select a move: ").to_stdout
+          expect(ui).to receive(:puts).twice
+          expect(ui).to receive(:print).twice
           expect(ui.prompt_pick_move(cell, valid_moves)).to eq('g5')
         end
       end

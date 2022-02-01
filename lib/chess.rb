@@ -71,6 +71,41 @@ class Chess
     @board.cell(piece, file_offset, rank_offset)
   end
 
+  def play
+    @ui.show_welcome
+    @ui.prompt_continue
+    until @checkmate.gameover?
+      destination = nil
+      while destination.nil?
+        @ui.clear_console
+        @ui.show_board
+        selection = @ui.prompt_pick_piece
+        save if selection == 'save'
+        abort('Bye!') if selection == 'exit'
+
+        legal_moves = @move_manager.legal_moves(selection)
+        @ui.clear_console
+        @ui.show_board(legal_moves)
+        destination = @ui.prompt_pick_move(selection, legal_moves)
+      end
+      move_piece(selection, destination)
+      @ui.clear_console
+    end
+    @ui.show_gameover
+    ans = @ui.prompt_play_again
+    if %w[y Y].include?(ans)
+      set_board_state
+      play
+    else
+      abort('Bye!')
+    end
+  end
+
+  def save
+    puts 'Saving game...'
+    abort('Bye!')
+  end
+
   private
 
   def increment_full
