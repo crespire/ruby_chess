@@ -16,10 +16,10 @@ class Save
   end
 
   def self.save_to_file(filename, dump)
-    File.open("#{filename}.yml", 'w') { |f| f.write(dump) }
+    File.open("save/#{filename}", 'w') { |f| f.write(dump) }
   end
 
   def self.load_from_file(filename)
-    YAML.safe_load(File.read("#{filename}.yml"), [Bishop, King, Knight, Pawn, Queen, Rook, Board, Castle, Cell, Checkmate, Chess, Move, Movement, Piece, Save, UI], [], true)
+    File.read("save/#{filename}")
   end
 end

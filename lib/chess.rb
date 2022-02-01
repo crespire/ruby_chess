@@ -74,6 +74,8 @@ class Chess
 
   def play
     @ui.show_welcome
+    load_save = 'load' == @ui.prompt_save
+    load if load_save
     @ui.prompt_continue
     until @checkmate.gameover?
       destination = nil
@@ -81,9 +83,10 @@ class Chess
         @ui.clear_console
         @ui.show_board
         selection = @ui.prompt_pick_piece
-        save if selection == 'save'
-        abort('Bye!') if selection == 'exit'
-
+        unless selection.is_a?(Cell)
+          save if selection == 'save'
+          abort('Bye!') if selection == 'exit'
+        end
         legal_moves = @move_manager.legal_moves(selection)
         @ui.clear_console
         @ui.show_board(legal_moves)
@@ -103,9 +106,13 @@ class Chess
   end
 
   def save
-    dump = Save::seralize(self)
-    Save::save_to_file('save', dump)
+    Save::save_to_file('fen.txt', make_fen)
     abort('Bye!')
+  end
+
+  def load
+    fen = Save::load_from_file('fex.txt')
+    set_board_state(fen)
   end
 
   private

@@ -134,6 +134,18 @@ class UI
     # Once the game is over, do we want to play again?
   end
 
+  def prompt_save
+    loop do
+      print 'Would you like to load a game? '
+      input = gets.chomp.downcase
+      puts 'Invalid input, try asgain.' unless %w[y n].include?(input)
+      next unless %w[y n].include?(input)
+
+      input == 'y' ? 'load' : 'new'
+    end
+    
+  end
+
   def prompt_continue
     print 'Press any key to continue.'
     STDIN.getch
