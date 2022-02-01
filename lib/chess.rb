@@ -107,7 +107,7 @@ class Chess
   def pawn_helper(from, to)
     last_rank = to.include?('1') || to.include?('8')
     if last_rank
-      pawn_promotion
+      pawn_promotion(to)
     else
       pawn_passant(from, to)
     end
@@ -133,7 +133,7 @@ class Chess
     @passant = cell(to.name, 0, rank_offset).name if cell_east || cell_west
   end
 
-  def pawn_promotion
+  def pawn_promotion(cell)
     selection = @ui.prompt_pawn_promotion(@active)
     cell.piece = Piece::from_fen(selection)
   end

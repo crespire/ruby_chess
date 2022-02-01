@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# lib/movement.rb
+# lib/ui.rb
 
 class UI
   PIECE_LOOKUP = {
@@ -20,23 +20,22 @@ class UI
   }.freeze
 
   def initialize(game)
-    @board = game.board
+    @game = game
   end
 
-  def show_board(board: @board, moves: [])
+  def show_board(moves=[])
     color_track = 0
     cols = ('a'..'h').to_a
     print '  '
     cols.each { |char| print " #{char} " }
     print "\n"
-    moves.map! { |move| move.gsub('x', '') }
 
     rank_ind = 8
-    board.data.each do |rank|
+    @game.board.data.each do |rank|
       print "#{rank_ind} "
       rank.each do |cell|
         if moves.include?(cell.name) && cell.empty?
-          print colorize_cell_bg("\e[36m ◇ \e[0m", color_track.even?)
+          print colorize_cell_bg(" \e[36m◇\e[0m ", color_track.even?)
         elsif moves.include?(cell.name) && !cell.empty?
           print colorize_cell_bg_capture(" #{PIECE_LOOKUP[cell.to_display]} ")
         else
@@ -49,6 +48,42 @@ class UI
       color_track += 1
     end
     print "\n"
+  end
+
+  def show_welcome
+    puts <<~WELCOME
+          Welcome to Chess! This version of Chess is meant to be played by two players.
+          All the standard rules of Chess apply. Enjoy!
+        WELCOME
+  end
+
+  def show_gameover
+    return unless @game.checkmate.gameover?
+
+    # Check which player is marked active after making a checkmate move.
+    # It should be the losing color that is active, proceeding on that assumption.
+    winner = @game.active == 'w' ? 'Black' : 'White'
+    checkmate = @game.checkmate.checkmate?
+    draw = @game.checkmate.draw?
+    puts checkmate ? "Congratulations! #{winner} wins this game!" : "The game ended in a #{draw ? 'draw' : 'stalemate'}."
+  end
+
+  def prompt_pick_piece
+    # Prompt the active player to pick piece
+    # Check that the entered destination is valid (ie, we get a cell back from game)
+    # Check that the cell contains a piece that is the same color as the active color.
+    # Return the cell if we pass these conditions
+  end
+
+  def prompt_pick_move(cell, eligible)
+    # Prompt the active player to pick a move.
+    # We need the cell so we can display the current piece and location info.
+    # Show the current selected piece and the list of moves.
+    # Check that entered information is included in eligible.
+  end
+
+  def prompt_play_again
+    # Once the game is over, do we want to play again?
   end
 
   private
