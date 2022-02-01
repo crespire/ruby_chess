@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-# spec/cell_spec.rb
+# spec/ui_spec.rb
 
 require_relative '../lib/ui'
 require_relative '../lib/chess'
 
 describe UI do
-  context 'ui functionality' do
-    let(:chess) { Chess.new }
-    subject(:ui) { described_class.new(chess) }
+  let(:chess) { Chess.new }
+  subject(:ui) { described_class.new(chess) }
 
+  context 'Display functionality' do
     context 'shows #show_board is called without a list of moves to highlight' do
       it 'displays a chess board' do
         expect { ui.show_board }.to output.to_stdout
@@ -71,6 +71,46 @@ describe UI do
       it 'correctly shows draw message when provided a board with two kings only' do
         chess.set_board_state('7k/8/8/8/8/8/8/K7 w - - 0 1')
         expect { ui.show_gameover }.to output("The game ended in a draw.\n").to_stdout
+      end
+    end
+  end
+
+  context 'User Input functionality' do
+    context '#promp_pick_piece' do
+      context 'given a board with white active' do
+        before do
+          chess.set_board_state('r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4')
+        end
+
+        it 'returns the cell that a player has picked if validations pass' do
+          input = 'c3'
+          allow(ui).to receive(:gets).and_return(input)
+          expect(ui.prompt_pick_piece).to be_a(Cell).and have_attributes(name: 'c3')
+        end
+
+        it 'reprompts when a player picks an out of bound destination' do
+          input = 'c3'
+          invalid_input = 'c9'
+          allow(ui).to receive(:gets).and_return(invalid_input, input)
+          expect { ui.prompt_pick_piece }.to output("White, please pick a piece using Chess notation: \nThis destination is out of bounds.\nWhite, please pick a piece using Chess notation: \n").to_stdout
+          expect(ui.prompt_pick_piece).to be_a(Cell).and have_attributes(name: 'c3')
+        end
+
+        it 'reprompts when a player picks a non-owned piece' do
+          input = 'c3'
+          invalid_input = 'f6'
+          allow(ui).to receive(:gets).and_return(invalid_input, input)
+          expect { ui.prompt_pick_piece }.to output("White, please pick a piece using Chess notation: \nThis piece is not yours.\nWhite, please pick a piece using Chess notation: \n").to_stdout
+          expect(ui.prompt_pick_piece).to be_a(Cell).and have_attributes(name: 'c3')
+        end
+
+        it 'reprompts when a player picks a piece with no moves' do
+          input = 'c3'
+          invalid_input = 'c1'
+          allow(ui).to receive(:gets).and_return(invalid_input, input)
+          expect { ui.prompt_pick_piece }.to output("White, please pick a piece using Chess notation: \nThis piece has no legal moves.\nWhite, please pick a piece using Chess notation: \n").to_stdout
+          expect(ui.prompt_pick_piece).to be_a(Cell).and have_attributes(name: 'c3')
+        end
       end
     end
   end

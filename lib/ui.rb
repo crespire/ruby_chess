@@ -69,10 +69,24 @@ class UI
   end
 
   def prompt_pick_piece
-    # Prompt the active player to pick piece
-    # Check that the entered destination is valid (ie, we get a cell back from game)
-    # Check that the cell contains a piece that is the same color as the active color.
-    # Return the cell if we pass these conditions
+    active_string = @game.active == 'w' ? 'White' : 'Black'
+    loop do
+      print "#{active_string}, please pick a piece using Chess notation: "
+      input = gets.chomp
+      cell = @game.cell(input)
+      print "\n"
+      puts 'This destination is out of bounds.' if cell.nil?
+      next if cell.nil?
+
+      piece_color = cell.piece.color
+      owned = piece_color == @game.active
+      puts 'This piece is not yours.' unless owned
+      next unless owned
+
+      avail_moves = @game.move_manager.legal_moves(cell).length
+      puts 'This piece has no legal moves.' unless owned && avail_moves.positive?
+      return cell if owned && avail_moves.positive?
+    end
   end
 
   def prompt_pick_move(cell, eligible)
@@ -96,4 +110,3 @@ class UI
     "\e[41m#{text}\e[0m"
   end
 end
-
