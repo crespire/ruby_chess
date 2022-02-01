@@ -25,8 +25,6 @@ class Chess
     ply_offset = @active == 'b' ? 1 : 0
     @ply = @full + ply_offset
     @ui = ui
-
-    warn("IDs from Chess: game: #{self.object_id}, board: #{@board.object_id}")
     @move_manager = Movement.new(self)
     @castle_manager = Castle.new(self)
     @checkmate = Checkmate.new(self)
