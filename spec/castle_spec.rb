@@ -117,7 +117,7 @@ describe Castle do
 
       it 'returns an empty array when piece is not a King' do
         cell = game.cell('a8')
-        expect(manager.castle_moves(cell, cell.piece.moves)).to eq([])
+        expect(manager.castle_moves(cell, cell.piece.moves(game.board, cell))).to eq([])
       end
     end
 
@@ -128,7 +128,7 @@ describe Castle do
 
       it 'returns an empty array' do
         cell = game.cell('e1')
-        expect(manager.castle_moves(cell, cell.piece.moves)).to eq([])
+        expect(manager.castle_moves(cell, cell.piece.moves(game.board, cell))).to eq([])
       end
     end
 
@@ -139,7 +139,7 @@ describe Castle do
 
       it 'returns an empty array' do
         cell = game.cell('e8')
-        expect(manager.castle_moves(cell, cell.piece.moves)).to eq([])
+        expect(manager.castle_moves(cell, cell.piece.moves(game.board, cell))).to eq([])
       end
     end
 
@@ -150,7 +150,7 @@ describe Castle do
 
       it 'returns an empty array when white is active' do
         cell = game.cell('e1')
-        expect(manager.castle_moves(cell, cell.piece.moves)).to eq([])
+        expect(manager.castle_moves(cell, cell.piece.moves(game.board, cell))).to eq([])
       end
     end
 
@@ -161,7 +161,7 @@ describe Castle do
 
       it 'returns an empty array when black is active' do
         cell = game.cell('e8')
-        expect(manager.castle_moves(cell, cell.piece.moves)).to eq([])
+        expect(manager.castle_moves(cell, cell.piece.moves(game.board, cell))).to eq([])
       end
     end
 
@@ -172,7 +172,7 @@ describe Castle do
 
       it 'returns an empty array when white has no castle options even though right is available' do
         cell = game.cell('e1')
-        expect(manager.castle_moves(cell, cell.piece.moves)).to eq([])
+        expect(manager.castle_moves(cell, cell.piece.moves(game.board, cell))).to eq([])
       end
     end
 
@@ -183,7 +183,7 @@ describe Castle do
 
       it 'returns the correct available destination cell' do
         cell = game.cell('e1')
-        output = manager.castle_moves(cell, cell.piece.moves)
+        output = manager.castle_moves(cell, cell.piece.moves(game.board, cell))
         expect(output.length).to eq(1)
         expect(output.pop).to be_a(Cell).and have_attributes(:name => 'g1')
       end
@@ -196,7 +196,7 @@ describe Castle do
 
       it 'returns the available destination cell' do
         cell = game.cell('e1')
-        output = manager.castle_moves(cell, cell.piece.moves)
+        output = manager.castle_moves(cell, cell.piece.moves(game.board, cell))
         expect(output.length).to eq(1)
         expect(output.pop).to be_a(Cell).and have_attributes(:name => 'c1') 
       end
@@ -209,7 +209,7 @@ describe Castle do
 
       it 'returns the correct additional available moves' do
         cell = game.cell('e8')
-        output = manager.castle_moves(cell, cell.piece.moves)
+        output = manager.castle_moves(cell, cell.piece.moves(game.board, cell))
         expect(output.length).to eq(1)
         expect(output.pop).to be_a(Cell).and have_attributes(:name => 'c8') 
       end
@@ -222,7 +222,7 @@ describe Castle do
 
       it 'returns an empty array' do
         cell = game.cell('e8')
-        expect(manager.castle_moves(cell, cell.piece.moves)).to eq([])
+        expect(manager.castle_moves(cell, cell.piece.moves(game.board, cell))).to eq([])
       end
     end
 
@@ -234,7 +234,7 @@ describe Castle do
 
       it 'returns an empty array' do
         cell = game.cell('e1')
-        expect(manager.castle_moves(cell, cell.piece.moves)). to eq([])
+        expect(manager.castle_moves(cell, cell.piece.moves(game.board, cell))). to eq([])
       end
     end
 
@@ -245,7 +245,7 @@ describe Castle do
 
       it 'returns the correct destination available' do
         cell = game.cell('e1')
-        output = manager.castle_moves(cell, cell.piece.moves)
+        output = manager.castle_moves(cell, cell.piece.moves(game.board, cell))
         expect(output.length).to eq(1)
         expect(output.pop).to be_a(Cell).and have_attributes(:name => 'g1') 
       end

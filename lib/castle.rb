@@ -77,7 +77,6 @@ class Castle
   private
 
   def safe?(friendly_cell, cell)
-    puts "Checking if #{cell} is safe..."
     result = []
     @game.board.data.each do |rank|
       rank.each do |check_cell|

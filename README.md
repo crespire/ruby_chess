@@ -501,6 +501,9 @@ I think I figured out the problem with my integration. Everywhere I had board as
 
 The challenge now is to add castling moves to Movement legal moves, and validate it there.
 
+### Integration completed
+Movement spec is now passing all tests.
+
 ### TODO
 Must add:
 * Complete UI
