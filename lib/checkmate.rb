@@ -11,7 +11,7 @@ class Checkmate
   end
 
   def gameover?
-    return checkmate? || stalemate? || draw?
+    checkmate? || stalemate? || draw?
   end
 
   def check?
@@ -57,7 +57,7 @@ class Checkmate
   end
 
   def draw?
-    return true if @game.half >= 50    
+    return true if @game.half >= 50
     return true if @game.board.active_pieces == 2 && @game.board.bking && @game.board.wking
   end
 

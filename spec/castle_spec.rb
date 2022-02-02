@@ -202,7 +202,7 @@ describe Castle do
         king_moves = game.move_manager.legal_moves(cell)
         output = manager.castle_moves(cell, king_moves)
         expect(output.length).to eq(1)
-        expect(output.pop).to be_a(Cell).and have_attributes(:name => 'c1') 
+        expect(output.pop).to be_a(Cell).and have_attributes(:name => 'c1')
       end
     end
 
