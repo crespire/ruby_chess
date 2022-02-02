@@ -169,7 +169,8 @@ class Movement
   end
 
   def passant_capture(piece)
-    passant_capture = piece.is_a?(Pawn) && @game.passant != '-'
+    eligible = piece.white? ? @game.passant.include?('6') : @game.passant.include?('3')
+    passant_capture = eligible && piece.is_a?(Pawn) && @game.passant != '-'
     passant_capture ? @game.board.cell(@game.passant) : nil
   end
 end
