@@ -108,12 +108,12 @@ class Chess
   end
 
   def save
-    Save::save_to_file('save/fen.txt', make_fen)
+    Save.save_to_file('save/fen.txt', make_fen)
     abort('Bye!')
   end
 
   def load
-    fen = Save::load_from_file('save/fen.txt')
+    fen = Save.load_from_file('save/fen.txt')
     @ui.show_fen(fen)
     return if fen.nil?
 
@@ -184,7 +184,7 @@ class Chess
 
   def pawn_promotion(cell)
     selection = @ui.prompt_pawn_promotion(cell)
-    cell.piece = Piece::from_fen(selection)
+    cell.piece = Piece.from_fen(selection)
   end
 
   def castling_move?(from, to)

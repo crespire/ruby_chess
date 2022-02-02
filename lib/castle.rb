@@ -10,7 +10,6 @@ require_relative 'piece'
 require_relative 'movement'
 require_relative 'pieces/all_pieces'
 
-
 class Castle
   def initialize(game)
     @game = game
@@ -115,13 +114,13 @@ class Castle
   def filter_rook_rights(available, castleable, king_cell)
     castleable.each do |rook_cell|
       moves = rook_cell.piece.valid_paths(@game.board, rook_cell)
-      move = moves.select { |move| move.include?(king_cell) }.pop
+      move = moves.select { |check_move| check_move.include?(king_cell) }.pop
       king_side = rook_cell.name > 'e'
       steps = move ? move.valid.length : 0
       clear = king_side ? steps == 2 : steps == 3
       delete = king_side ? 'K' : 'Q'
       delete = king_side ? 'k' : 'q' if king_cell.piece.black?
-      available.delete!(delete) if !clear
+      available.delete!(delete) unless clear
     end
     available
   end

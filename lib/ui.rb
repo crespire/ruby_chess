@@ -152,8 +152,14 @@ WELCOME
   end
 
   def prompt_play_again
-    puts "Play again? "
-    # Once the game is over, do we want to play again?
+    loop do
+      print 'Play again? (y/n) '
+      input = gets.chomp.downcase
+      puts 'Invalid input, try again.' unless %w[y n].include?(input)
+      next unless %w[y n].include?(input)
+
+      return input
+    end
   end
 
   def prompt_save
@@ -171,7 +177,7 @@ WELCOME
 
   def prompt_continue
     print 'Press any key to start playing.'
-    STDIN.getc
+    $stdin.getc
     clear_console
   end
 
