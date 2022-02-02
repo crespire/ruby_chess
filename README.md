@@ -3,6 +3,7 @@
 This is my repository for the Chess capstone project from the Ruby path of The Odin Project.
 
 Live: https://replit.com/@crespire/rubychess
+
 Repo: https://github.com/crespire/ruby_chess
 
 ### Reflections
