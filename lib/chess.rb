@@ -87,7 +87,7 @@ class Chess
         selection = @ui.prompt_pick_piece
         unless selection.is_a?(Cell)
           save if selection == 'save'
-          abort('Bye!') if selection == 'exit'
+          abort('Thanks for playing!') if selection == 'exit'
         end
         legal_moves = @move_manager.legal_moves(selection)
         @ui.clear_console
@@ -106,13 +106,13 @@ class Chess
       set_board_state
       play
     else
-      abort('Bye!')
+      abort('Thanks for playing!')
     end
   end
 
   def save
     Save.save_to_file('save/fen.txt', make_fen)
-    abort('Bye!')
+    abort('Thanks for playing!')
   end
 
   def load

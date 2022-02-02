@@ -167,7 +167,7 @@ WELCOME
       puts "You can load games via fen.txt in the save directory. You can also 'exit'."
       print 'Would you like to load a game? (y/n) '
       input = gets.chomp.downcase
-      abort('Bye!') if input == 'exit'
+      abort('Thanks for playing!') if input == 'exit'
       puts 'Invalid input, try asgain.' unless %w[y n].include?(input)
       next unless %w[y n].include?(input)
 
