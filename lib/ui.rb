@@ -31,7 +31,6 @@ class UI
     print "\n"
 
     active_king = @game.active == 'w' ? @game.board.wking : @game.board.bking
-    moves << active_king.name if @game.checkmate.check?
 
     rank_ind = 8
     @game.board.data.each do |rank|
@@ -40,6 +39,8 @@ class UI
         if moves.include?(cell.name) && cell.empty?
           print colorize_cell_bg("\e[36m ◇ \e[0m", color_track.even?)
         elsif moves.include?(cell.name) && !cell.empty?
+          print colorize_cell_bg_capture(" #{PIECE_LOOKUP[cell.to_display]} ")
+        elsif @game.checkmate.check? && cell == active_king
           print colorize_cell_bg_capture(" #{PIECE_LOOKUP[cell.to_display]} ")
         else
           print colorize_cell_bg(" #{PIECE_LOOKUP[cell.to_display]} ", color_track.even?)
