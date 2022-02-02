@@ -29,9 +29,7 @@ class UI
     print '  '
     cols.each { |char| print " #{char} " }
     print "\n"
-
     active_king = @game.active == 'w' ? @game.board.wking : @game.board.bking
-
     rank_ind = 8
     @game.board.data.each do |rank|
       print "#{rank_ind} "
