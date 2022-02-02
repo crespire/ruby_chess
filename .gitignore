@@ -2,5 +2,3 @@ spec/examples*
 spec/rspec*
 .rubocop.yml
 scratch.rb
-save
-save/*
