@@ -30,6 +30,9 @@ class UI
     cols.each { |char| print " #{char} " }
     print "\n"
 
+    active_king = @game.active == 'w' ? @game.board.wking : @game.board.bking
+    moves << active_king.name if @game.checkmate.check?
+
     rank_ind = 8
     @game.board.data.each do |rank|
       print "#{rank_ind} "
@@ -99,6 +102,7 @@ WELCOME
   def prompt_pick_piece
     active_string = @game.active == 'w' ? 'White' : 'Black'
     puts "You can enter 'save' to save the current game, or 'exit' to stop the program."
+    puts 'Your king is under attack!' if @game.checkmate.check?
     loop do
       print "#{active_string}, pick a piece to play using Chess notation: "
       input = gets.chomp.downcase
