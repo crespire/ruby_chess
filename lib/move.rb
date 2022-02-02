@@ -47,7 +47,7 @@ class Move
     path = @cells.dup
     current_cell = path.shift
     found = 0
-    loop do # We only care about the first two enemies for xray
+    loop do
       result << current_cell
       current_cell = path.shift
       if @origin.hostile?(current_cell)

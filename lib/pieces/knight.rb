@@ -14,7 +14,7 @@ class Knight < Piece
   end
 
   def valid_paths(board, origin)
-    all_paths(board, origin).reject(&:dead?) # Remove empty/first-cell blocked moves
+    all_paths(board, origin).reject(&:dead?)
   end
 
   def moves(board, origin)

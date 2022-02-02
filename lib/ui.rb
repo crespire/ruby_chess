@@ -91,8 +91,6 @@ WELCOME
   def show_gameover
     return unless @game.checkmate.gameover?
 
-    # Check which player is marked active after making a checkmate move.
-    # It should be the losing color that is active, proceeding on that assumption.
     winner = @game.active == 'w' ? 'Black' : 'White'
     checkmate = @game.checkmate.checkmate?
     draw = @game.checkmate.draw?

@@ -27,7 +27,6 @@ class Checkmate
     return nil if king.empty?
     return false unless check?
 
-    # We are in a potential checkmate situation.
     moves = 0
     @game.board.data.each do |rank|
       rank.each do |cell|
