@@ -476,6 +476,13 @@ describe Movement do
         eligible = %w[f6 g6]
         expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
       end
+
+      it 'correctly ignores a same-side passant move' do
+        game.set_board_state('rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d3 0 1')
+        cell = game.cell('f2')
+        eligible = %w[f3 f4]
+        expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+      end
     end
 
     context 'when provided a board with pawns locked' do
