@@ -60,7 +60,9 @@ class Chess
     to = destination.is_a?(Cell) ? destination : cell(destination)
     piece = from.piece.dup
     to_before = to.dup
+    @castle_manager.execute_castle(to) if piece.is_a?(King) && castling_move?(from, to)
     @board.update_loc(from, to)
+    @castle_manager.update_rights(to)
 
     pawn_helper(from, to) if piece.is_a?(Pawn)
     piece.moved = true if piece.is_a?(King) || piece.is_a?(Rook)
@@ -183,5 +185,14 @@ class Chess
   def pawn_promotion(cell)
     selection = @ui.prompt_pawn_promotion(cell)
     cell.piece = Piece::from_fen(selection)
+  end
+
+  def castling_move?(from, to)
+    cell1_file = from.name.chars[0]
+    cell2_file = to.name.chars[0]
+
+    range = cell1_file < cell2_file ? (cell1_file...cell2_file) : (cell2_file...cell1_file)
+
+    range.to_a.length > 1
   end
 end

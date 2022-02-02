@@ -37,18 +37,18 @@ class Castle
   # Returns additional moves if a castle is available
   def castle_moves(cell, king_moves)
     return [] unless cell.piece.is_a?(King)
-  
+
     available = @game.castle.dup
     available = (@game.active == 'w' ? available.chars.select { |char| char.ord < 91 } : available.chars.select { |char| char.ord > 91 }).join
     return [] if available.empty? || @game.checkmate.check?
 
     castleable = eligible_rooks(available)
-    castleable.reject! { |cell| cell.piece.moved } # Just in case
+    castleable.reject! { |check_cell| check_cell.piece.moved } # Just in case
     return [] if castleable.empty?
 
     available = filter_rook_rights(available, castleable, cell)
     return [] if available.empty?
-    
+
     d_cell = cell.piece.white? ? @game.cell('d1') : @game.cell('d8')
     f_cell = cell.piece.white? ? @game.cell('f1') : @game.cell('f8')
     d_avail = king_moves.include?(d_cell.name)
@@ -73,6 +73,16 @@ class Castle
     cells_available
   end
 
+  def execute_castle(to)
+    home_rank = @game.active == 'w' ? 1 : 8
+    kingside = to.name > 'e'
+    rook_location = kingside ? "h#{home_rank}" : "a#{home_rank}"
+    rook_destination = kingside ? "f#{home_rank}" : "d#{home_rank}"
+    rook_from = @game.cell(rook_location)
+    rook_to = @game.cell(rook_destination)
+    @game.board.update_loc(rook_from, rook_to) # Use board to skip iterating game stats
+  end
+
   private
 
   def safe?(friendly_cell, cell)
@@ -88,7 +98,7 @@ class Castle
     end
     result.flatten.length.zero?
   end
-  
+
   def eligible_rooks(available_rights)
     rook_cells = {
       'q' => @game.cell('a8'),
