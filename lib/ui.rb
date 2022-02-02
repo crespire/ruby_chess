@@ -2,6 +2,8 @@
 
 # lib/ui.rb
 
+require 'io/console'
+
 class UI
   PIECE_LOOKUP = {
     'P' => '♟︎',
@@ -178,7 +180,7 @@ WELCOME
 
   def prompt_continue
     print 'Press any key to start playing.'
-    $stdin.getc
+    $stdin.getch
     clear_console
   end
 
