@@ -80,7 +80,8 @@ class Castle
     rook_destination = kingside ? "f#{home_rank}" : "d#{home_rank}"
     rook_from = @game.cell(rook_location)
     rook_to = @game.cell(rook_destination)
-    @game.board.update_loc(rook_from, rook_to) # Use board to skip iterating game stats
+    # Directly update the board to skip incrementing game stats
+    @game.board.update_loc(rook_from, rook_to)
   end
 
   private
