@@ -97,6 +97,9 @@ class Chess
       move_piece(selection, destination)
       @ui.clear_console
     end
+    losing_king = @active == 'w' ? @board.wking : @board.bking
+    losing_king = [] unless @checkmate.checkmate?
+    @ui.show_board(losing_king)
     @ui.show_gameover
     ans = @ui.prompt_play_again
     if %w[y Y].include?(ans)
