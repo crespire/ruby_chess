@@ -2,9 +2,8 @@
 
 This is my repository for the Chess capstone project from the Ruby path of The Odin Project.
 
-Live: https://replit.com/@crespire/rubychess
-
-Repo: https://github.com/crespire/ruby_chess
+* [Play Chess!](https://replit.com/@crespire/rubychess?lite=1&outputonly=1#README.md)
+* [Github Repository](https://github.com/crespire/ruby_chess)
 
 ### Reflections
 While I have a whole file chronicling the journey of my implementation, I thought I would sum up the experience a little more concisely.
