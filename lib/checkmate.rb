@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# lib/movement.rb
+# lib/checkmate.rb
 
 require_relative 'movement'
 

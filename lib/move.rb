@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # lib/move.rb
+
 require 'forwardable'
 require_relative 'cell'
 

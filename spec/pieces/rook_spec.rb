@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# spec/rook_spec.rb
+# spec/pieces/rook_spec.rb
 
 require_relative '../../lib/chess'
 require_relative '../../lib/piece'
