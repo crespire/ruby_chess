@@ -242,6 +242,15 @@ describe Movement do
           expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
         end
       end
+
+      context 'when there castle is available, but one side is blocked by attack' do
+        it 'returns the correct movements' do
+          game.set_board_state('r3k2r/2n5/7N/8/8/8/8/R3K2R b KQkq - 0 1')
+          cell = game.cell('e8')
+          eligible = %w[f8 d8 c8 e7 d7].sort
+          expect(legal_moves_test.legal_moves(cell)).to eq(eligible)
+        end
+      end
     end
 
     context 'when provided a Knight piece preventing a check' do

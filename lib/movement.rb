@@ -123,7 +123,9 @@ class Movement
   # Helper method to filter illegal King moves from their basic moves.
   def king_moves_helper(psuedo, origin, danger_zone, no_go_zone)
     to_test = (danger_zone - no_go_zone) & psuedo
-    return (psuedo - no_go_zone).uniq.map(&:name).sort if to_test.empty?
+    interim = (psuedo - no_go_zone).uniq.map(&:name)
+    castle = @game.castle_manager.castle_moves(origin, interim)
+    return (psuedo - no_go_zone + castle).uniq.map(&:name).sort if to_test.empty?
 
     to_test.each do |destination|
       legal = move_legal?(@game, active_king, origin, destination)
