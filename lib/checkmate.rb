@@ -15,7 +15,7 @@ class CheckmateManager
   end
 
   def check?
-    king = find_king
+    king = @game.active_king
     return nil if king.nil? || king.empty?
 
     attackers, = @moves_manager.get_enemies(king)
@@ -23,7 +23,7 @@ class CheckmateManager
   end
 
   def checkmate?
-    king = find_king
+    king = @game.active_king
     return nil if king.empty?
     return false unless check?
 
@@ -39,7 +39,7 @@ class CheckmateManager
   end
 
   def stalemate?
-    king = find_king
+    king = @game.active_king
     return nil if king.empty?
     return false if checkmate?
 
@@ -58,11 +58,5 @@ class CheckmateManager
   def draw?
     return true if @game.half >= 50
     return true if @game.board.active_pieces == 2 && @game.board.bking && @game.board.wking
-  end
-
-  private
-
-  def find_king
-    @game.active == :white ? @game.board.wking : @game.board.bking
   end
 end
