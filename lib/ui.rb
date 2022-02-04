@@ -114,7 +114,7 @@ WELCOME
       puts 'This destination is empty.' if cell.empty?
       next if cell.empty?
 
-      piece_color = cell.piece.color == 'w' ? :white : :black
+      piece_color = cell.piece.color
       owned = piece_color == @game.active
       puts 'This piece is not yours.' unless owned
       next unless owned
@@ -140,7 +140,7 @@ WELCOME
   end
 
   def prompt_pawn_promotion(cell)
-    puts "Congratulations! A #{cell.piece.color == 'w' ? 'white' : 'black'} pawn has made it to promotion."
+    puts "Congratulations! A #{cell.piece.color == :white ? 'white' : 'black'} pawn has made it to promotion."
     puts 'You can select a (q)ueen, a k(n)ight, (r)ook or (b)ishop.'
     loop do
       print 'Enter the promotion you would like: '

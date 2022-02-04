@@ -27,7 +27,7 @@ class Piece
   end
 
   def initialize(fen)
-    @color = fen.ord < 91 ? 'w' : 'b'
+    @color = fen.ord < 91 ? :white : :black
     @fen = fen
   end
 
