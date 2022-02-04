@@ -155,7 +155,7 @@ class Chess
     if destination.empty?
       piece.is_a?(Pawn) ? reset_half : increment_half
     else
-      destination.hostile?(piece) && destination.full? ? reset_half : increment_half
+      destination.hostile?(piece) ? reset_half : increment_half
     end
     increment_full if piece.black?
   end
