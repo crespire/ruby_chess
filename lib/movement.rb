@@ -19,7 +19,7 @@ class Movement
 
     piece = cell.piece
     psuedo = piece.moves(@game.board, cell.name)
-    king = piece.is_a?(King) ? cell : active_king
+    king = piece.is_a?(King) ? cell : @game.active_king
     attackers, = get_enemies(king)
     danger_zone = dangers(king)
     no_go_zone = attacks(king)
@@ -45,7 +45,7 @@ class Movement
 
           enemy_slides = check_cell.piece.valid_paths(@game.board, check_cell)
           candidates = enemy_slides.select do |move|
-            move.valid_xray.include?(active_king) && move.valid.include?(cell) && move.enemies == 2
+            move.valid_xray.include?(@game.active_king) && move.valid.include?(cell) && move.enemies == 2
           end
           candidates.each do |move|
             result += (move.valid << move.origin) & psuedo
@@ -105,10 +105,6 @@ class Movement
 
   private
 
-  def active_king
-    @game.active == :white ? @game.board.wking : @game.board.bking
-  end
-
   def king_moves_helper(psuedo, origin, danger_zone, no_go_zone)
     to_test = (danger_zone - no_go_zone) & psuedo
     interim = (psuedo - no_go_zone).uniq.map(&:name)
@@ -116,7 +112,7 @@ class Movement
     return (psuedo - no_go_zone + castle).uniq.map(&:name).sort if to_test.empty?
 
     to_test.each do |destination|
-      legal = move_legal?(@game, active_king, origin, destination)
+      legal = move_legal?(@game, @game.active_king, origin, destination)
       psuedo.delete_if { |cell| cell.name == destination.name } unless legal
     end
 
@@ -164,7 +160,7 @@ class Movement
     return [enemy_cell] if psuedo.include?(enemy_cell)
 
     enemy_paths = enemy_cell.piece.valid_paths(@game.board, enemy_cell)
-    attack_path = enemy_paths.select { |move| move.include?(active_king) }.pop
+    attack_path = enemy_paths.select { |move| move.include?(@game.active_king) }.pop
     (attack_path & psuedo)
   end
 
