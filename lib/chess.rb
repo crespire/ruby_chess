@@ -28,7 +28,7 @@ class Chess
     @ui = ui
     @move_manager = MovementManager.new(self)
     @castle_manager = CastleManager.new(self)
-    @checkmate = Checkmate.new(self)
+    @checkmate = CheckmateManager.new(self)
   end
 
   def set_board_state(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')

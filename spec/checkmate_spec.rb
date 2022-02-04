@@ -5,7 +5,7 @@
 require_relative '../lib/chess'
 require_relative '../lib/checkmate'
 
-describe Checkmate do
+describe CheckmateManager do
   let(:ui) { double('UI') }
   let(:game) { Chess.new(ui) }
 

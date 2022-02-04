@@ -4,7 +4,7 @@
 
 require_relative 'movement'
 
-class Checkmate
+class CheckmateManager
   def initialize(game)
     @game = game
     @moves_manager = game.move_manager
