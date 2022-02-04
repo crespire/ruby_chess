@@ -98,7 +98,7 @@ class Chess
       @ui.clear_console
     end
     losing_king = @active == :white ? @board.wking : @board.bking
-    losing_king = [] unless @checkmate_manager.checkmate_manager?
+    losing_king = [] unless @checkmate_manager.checkmate?
     @ui.show_board(losing_king)
     @ui.show_gameover
     ans = @ui.prompt_play_again
