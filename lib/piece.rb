@@ -38,7 +38,7 @@ class Piece
   end
 
   ##
-  # Returns a list of Move objects that are not dead.
+  # Returns a list of Move objects that are not dead or empty.
   def valid_paths
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}'"
   end

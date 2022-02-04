@@ -4,7 +4,7 @@
 
 require_relative '../lib/movement'
 
-describe Movement do
+describe MovementManager do
   context 'on initialize' do
     let(:game) { Chess.new }
     subject(:move_init) { described_class.new(game) }

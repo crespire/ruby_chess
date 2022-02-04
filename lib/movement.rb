@@ -9,7 +9,7 @@ require_relative 'castle'
 require_relative 'piece'
 require_relative 'pieces/all_pieces'
 
-class Movement
+class MovementManager
   def initialize(game)
     @game = game
   end
@@ -146,7 +146,7 @@ class Movement
     copy_destination = game.cell(destination.name)
     copy_king = origin == king_to_check ? game.cell(destination.name) : game.cell(king_to_check.name)
     game.move_piece(copy_origin, copy_destination)
-    moves_manager = Movement.new(game)
+    moves_manager = MovementManager.new(game)
     attackers, = moves_manager.get_enemies(copy_king, game)
     attackers.empty?
   end

@@ -26,7 +26,7 @@ class Chess
     ply_offset = @active == :black ? 1 : 0
     @ply = @full + ply_offset
     @ui = ui
-    @move_manager = Movement.new(self)
+    @move_manager = MovementManager.new(self)
     @castle_manager = Castle.new(self)
     @checkmate = Checkmate.new(self)
   end
