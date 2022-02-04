@@ -37,8 +37,8 @@ class Castle
   def castle_moves(cell, king_moves)
     return [] unless cell.piece.is_a?(King)
 
-    available = @game.castle.dup
-    available = (@game.active == 'w' ? available.chars.select { |char| char.ord < 91 } : available.chars.select { |char| char.ord > 91 }).join
+    available = @game.castle.dup.chars
+    available = (@game.active == 'w' ? available.grep(/[[:upper:]]/) : available.grep(/[[:lower:]]/)).join
     return [] if available.empty? || @game.checkmate.check?
 
     castleable = eligible_rooks(available)
