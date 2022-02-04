@@ -39,7 +39,7 @@ class UI
           print colorize_cell_bg("\e[36m ◇ \e[0m", color_track.even?)
         elsif moves.include?(cell.name) && !cell.empty?
           print colorize_cell_bg_capture(" #{PIECE_LOOKUP[cell.to_display]} ")
-        elsif @game.checkmate.check? && cell == @game.active_king
+        elsif @game.checkmate_manager.check? && cell == @game.active_king
           print colorize_cell_bg_capture(" #{PIECE_LOOKUP[cell.to_display]} ")
         else
           print colorize_cell_bg(" #{PIECE_LOOKUP[cell.to_display]} ", color_track.even?)
@@ -89,18 +89,18 @@ WELCOME
   end
 
   def show_gameover
-    return unless @game.checkmate.gameover?
+    return unless @game.checkmate_manager.gameover?
 
     winner = @game.active == :white ? 'Black' : 'White'
-    checkmate = @game.checkmate.checkmate?
-    draw = @game.checkmate.draw?
+    checkmate = @game.checkmate_manager.checkmate?
+    draw = @game.checkmate_manager.draw?
     puts checkmate ? "Congratulations! #{winner} wins this game!" : "The game ended in a #{draw ? 'draw' : 'stalemate'}."
   end
 
   def prompt_pick_piece
     active_string = @game.active == :white ? 'White' : 'Black'
     puts "You can enter 'save' to save the current game, or 'exit' to stop the program."
-    puts 'Your king is under attack!' if @game.checkmate.check?
+    puts 'Your king is under attack!' if @game.checkmate_manager.check?
     loop do
       print "#{active_string}, pick a piece to play using Chess notation: "
       input = gets.chomp.downcase

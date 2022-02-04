@@ -11,7 +11,7 @@ require_relative 'save'
 
 class Chess
   attr_accessor :active, :castle, :passant, :half, :full, :ply
-  attr_reader :board, :move_manager, :castle_manager, :checkmate
+  attr_reader :board, :move_manager, :castle_manager, :checkmate_manager
 
   def initialize(ui = UI.new(self))
     partial_fen = 'w KQkq - 0 1'
@@ -28,7 +28,7 @@ class Chess
     @ui = ui
     @move_manager = MovementManager.new(self)
     @castle_manager = CastleManager.new(self)
-    @checkmate = CheckmateManager.new(self)
+    @checkmate_manager = CheckmateManager.new(self)
   end
 
   def set_board_state(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
@@ -79,7 +79,7 @@ class Chess
     load_save = @ui.prompt_save == 'load'
     load if load_save
     @ui.prompt_continue
-    until @checkmate.gameover?
+    until @checkmate_manager.gameover?
       destination = nil
       while destination.nil?
         @ui.clear_console
@@ -98,7 +98,7 @@ class Chess
       @ui.clear_console
     end
     losing_king = @active == :white ? @board.wking : @board.bking
-    losing_king = [] unless @checkmate.checkmate?
+    losing_king = [] unless @checkmate_manager.checkmate_manager?
     @ui.show_board(losing_king)
     @ui.show_gameover
     ans = @ui.prompt_play_again

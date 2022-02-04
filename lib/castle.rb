@@ -39,7 +39,7 @@ class CastleManager
 
     available = @game.castle.dup.chars
     available = (@game.active == :white ? available.grep(/[[:upper:]]/) : available.grep(/[[:lower:]]/)).join
-    return [] if available.empty? || @game.checkmate.check?
+    return [] if available.empty? || @game.checkmate_manager.check?
 
     castleable = eligible_rooks(available)
     castleable.reject! { |check_cell| check_cell.piece.moved } # Just in case
