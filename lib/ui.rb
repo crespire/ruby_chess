@@ -47,7 +47,7 @@ class UI
         color_track += 1
       end
       print "  Active: #{@game.active == :white ? 'White' : 'Black'}" if rank_ind == 7
-      print "  Castle: #{@game.castle}" if rank_ind == 6
+      print "  CastleManager: #{@game.castle}" if rank_ind == 6
       print "  Passant: #{@game.passant}" if rank_ind == 5
       print "  Half-clock: #{@game.half}" if rank_ind == 4
       print "  Full-clock: #{@game.full}" if rank_ind == 3

@@ -4,7 +4,7 @@
 
 require_relative '../lib/castle'
 
-describe Castle do
+describe CastleManager do
   let(:game) { Chess.new }
   subject(:manager) { described_class.new(game) }
 

@@ -27,7 +27,7 @@ class Chess
     @ply = @full + ply_offset
     @ui = ui
     @move_manager = MovementManager.new(self)
-    @castle_manager = Castle.new(self)
+    @castle_manager = CastleManager.new(self)
     @checkmate = Checkmate.new(self)
   end
 

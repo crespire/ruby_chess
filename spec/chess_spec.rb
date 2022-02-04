@@ -16,7 +16,7 @@ describe Chess do
       expect(init.full).to eq(1)
       expect(init.ply).to eq(1)
       expect(init.board).to be_a(Board)
-      expect(init.instance_variable_get(:@castle_manager)).to be_a(Castle)
+      expect(init.instance_variable_get(:@castle_manager)).to be_a(CastleManager)
     end
   end
 

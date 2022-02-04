@@ -10,7 +10,7 @@ require_relative 'piece'
 require_relative 'movement'
 require_relative 'pieces/all_pieces'
 
-class Castle
+class CastleManager
   def initialize(game)
     @game = game
     @move_manager = game.move_manager
