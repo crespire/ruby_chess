@@ -31,7 +31,7 @@ class UI
     print '  '
     cols.each { |char| print " #{char} " }
     print "\n"
-    active_king = @game.active == 'w' ? @game.board.wking : @game.board.bking
+    active_king = @game.active == :white ? @game.board.wking : @game.board.bking
     rank_ind = 8
     @game.board.data.each do |rank|
       print "#{rank_ind} "
@@ -47,7 +47,7 @@ class UI
         end
         color_track += 1
       end
-      print "  Active: #{@game.active == 'w' ? 'White' : 'Black'}" if rank_ind == 7
+      print "  Active: #{@game.active == :white ? 'White' : 'Black'}" if rank_ind == 7
       print "  Castle: #{@game.castle}" if rank_ind == 6
       print "  Passant: #{@game.passant}" if rank_ind == 5
       print "  Half-clock: #{@game.half}" if rank_ind == 4
@@ -92,14 +92,14 @@ WELCOME
   def show_gameover
     return unless @game.checkmate.gameover?
 
-    winner = @game.active == 'w' ? 'Black' : 'White'
+    winner = @game.active == :white ? 'Black' : 'White'
     checkmate = @game.checkmate.checkmate?
     draw = @game.checkmate.draw?
     puts checkmate ? "Congratulations! #{winner} wins this game!" : "The game ended in a #{draw ? 'draw' : 'stalemate'}."
   end
 
   def prompt_pick_piece
-    active_string = @game.active == 'w' ? 'White' : 'Black'
+    active_string = @game.active == :white ? 'White' : 'Black'
     puts "You can enter 'save' to save the current game, or 'exit' to stop the program."
     puts 'Your king is under attack!' if @game.checkmate.check?
     loop do
@@ -115,7 +115,7 @@ WELCOME
       puts 'This destination is empty.' if cell.empty?
       next if cell.empty?
 
-      piece_color = cell.piece.color
+      piece_color = cell.piece.color == 'w' ? :white : :black
       owned = piece_color == @game.active
       puts 'This piece is not yours.' unless owned
       next unless owned
@@ -149,7 +149,7 @@ WELCOME
       puts 'Invalid input, try again.' unless %w[q n r b].include?(input)
       next unless %w[q n r b].include?(input)
 
-      fen = @game.active == 'w' ? input.upcase : input.downcase
+      fen = @game.active == :white ? input.upcase : input.downcase
       return fen
     end
   end

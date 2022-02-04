@@ -63,6 +63,6 @@ class Checkmate
   private
 
   def find_king
-    @game.active == 'w' ? @game.board.wking : @game.board.bking
+    @game.active == :white ? @game.board.wking : @game.board.bking
   end
 end

@@ -38,7 +38,7 @@ class Castle
     return [] unless cell.piece.is_a?(King)
 
     available = @game.castle.dup.chars
-    available = (@game.active == 'w' ? available.grep(/[[:upper:]]/) : available.grep(/[[:lower:]]/)).join
+    available = (@game.active == :white ? available.grep(/[[:upper:]]/) : available.grep(/[[:lower:]]/)).join
     return [] if available.empty? || @game.checkmate.check?
 
     castleable = eligible_rooks(available)
@@ -73,7 +73,7 @@ class Castle
   end
 
   def execute_castle(to)
-    home_rank = @game.active == 'w' ? 1 : 8
+    home_rank = @game.active == :white ? 1 : 8
     kingside = to.name > 'e'
     rook_location = kingside ? "h#{home_rank}" : "a#{home_rank}"
     rook_destination = kingside ? "f#{home_rank}" : "d#{home_rank}"

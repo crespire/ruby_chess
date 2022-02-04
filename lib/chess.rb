@@ -18,12 +18,12 @@ class Chess
     parts = partial_fen.split(' ')
 
     @board = Board.new # Board defaults to starting position
-    @active = parts[0]
+    @active = parts[0] == 'w' ? :white : :black
     @castle = parts[1]
     @passant = parts[2]
     @half = parts[3].to_i
     @full = parts[4].to_i
-    ply_offset = @active == 'b' ? 1 : 0
+    ply_offset = @active == :black ? 1 : 0
     @ply = @full + ply_offset
     @ui = ui
     @move_manager = Movement.new(self)
@@ -39,18 +39,18 @@ class Chess
     pieces_check = pieces.split('/').length
     raise ArgumentError, "Invalid FEN provided, found #{pieces_check} ranks." unless pieces_check == 8
 
-    @active = parts[1]
+    @active = parts[1] == 'w' ? :white : :black
     @castle = parts[2]
     @passant = parts[3]
     @half = parts[4].to_i
     @full = parts[5].to_i
-    ply_offset = @active == 'b' ? 1 : 0
+    ply_offset = @active == :black ? 1 : 0
     @ply = @full + ply_offset
     @board = Board.new(pieces)
   end
 
   def make_fen
-    [@board.to_fen, @active, @castle, @passant, @half, @full].join(' ')
+    [@board.to_fen, (@active == :white ? 'w' : 'b'), @castle, @passant, @half, @full].join(' ')
   end
 
   def move_piece(origin, destination)
@@ -97,7 +97,7 @@ class Chess
       move_piece(selection, destination)
       @ui.clear_console
     end
-    losing_king = @active == 'w' ? @board.wking : @board.bking
+    losing_king = @active == :white ? @board.wking : @board.bking
     losing_king = [] unless @checkmate.checkmate?
     @ui.show_board(losing_king)
     @ui.show_gameover
@@ -123,6 +123,10 @@ class Chess
     set_board_state(fen)
   end
 
+  def active_king
+    @active == :white ? @board.wking : @board.bking
+  end
+
   private
 
   def increment_full
@@ -142,7 +146,7 @@ class Chess
   end
 
   def update_active(piece)
-    @active = piece.white? ? 'b' : 'w'
+    @active = piece.white? ? :black : :white
   end
 
   def update_game_stats(piece, destination)
@@ -166,7 +170,7 @@ class Chess
   end
 
   def pawn_passant(from, to)
-    rank_offset = @active == 'w' ? -1 : 1
+    rank_offset = @active == :white ? -1 : 1
 
     if @passant == to.name
       captured_cell = cell(to.name, 0, rank_offset)

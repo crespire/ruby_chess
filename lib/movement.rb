@@ -106,7 +106,7 @@ class Movement
   private
 
   def active_king
-    @game.active == 'w' ? @game.board.wking : @game.board.bking
+    @game.active == :white ? @game.board.wking : @game.board.bking
   end
 
   def king_moves_helper(psuedo, origin, danger_zone, no_go_zone)

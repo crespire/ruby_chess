@@ -9,7 +9,7 @@ describe Chess do
     subject(:init) { described_class.new }
 
     it 'sets all game info values to default' do
-      expect(init.active).to eq('w')
+      expect(init.active).to eq(:white)
       expect(init.castle).to eq('KQkq')
       expect(init.passant).to eq('-')
       expect(init.half).to eq(0)
@@ -58,7 +58,7 @@ describe Chess do
 
         expect(full).to eq(1)
         expect(half).to eq(0)
-        expect(active).to eq('w')
+        expect(active).to eq(:white)
       end
 
       it 'for a board with pieces moved correctly' do
@@ -80,7 +80,7 @@ describe Chess do
         expect(board.data[4][5]).to be_empty
 
         expect(full).to eq(2)
-        expect(active).to eq('b')
+        expect(active).to eq(:black)
       end
     end
   end
@@ -135,7 +135,7 @@ describe Chess do
         end
 
         it 'sets the active to black' do
-          expect { move.move_piece('a2', 'a4') }.to change { move.instance_variable_get(:@active) }.to('b')
+          expect { move.move_piece('a2', 'a4') }.to change { move.instance_variable_get(:@active) }.to(:black)
         end
       end
 
@@ -157,7 +157,7 @@ describe Chess do
         end
 
         it 'sets the active to white' do
-          expect { move.move_piece('a7', 'a6') }.to change { move.instance_variable_get(:@active) }.to('w')
+          expect { move.move_piece('a7', 'a6') }.to change { move.instance_variable_get(:@active) }.to(:white)
         end
       end
 
