@@ -58,11 +58,11 @@ class Piece
   end
 
   def white?
-    @color == 'w'
+    @color == :white
   end
 
   def black?
-    @color == 'b'
+    @color == :black
   end
 
   def to_s
