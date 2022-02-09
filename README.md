@@ -1,6 +1,6 @@
 ![Ruby Chess](https://i.vgy.me/s5WWgm.png)
 
-This is my repository for the Chess capstone project from the Ruby path of The Odin Project.
+This is my repository for the Chess capstone project from the Ruby path of [The Odin Project](https://theodinproject.com/).
 
 * [Play Chess!](https://replit.com/@crespire/rubychess?lite=1&outputonly=1#README.md) If you're already on replit.com, just hit "Run" at the top.
 * [Github Repository](https://github.com/crespire/ruby_chess)
