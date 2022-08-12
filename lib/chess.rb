@@ -48,7 +48,7 @@ class Chess
     ply_offset = @active == :black ? 1 : 0
     @ply = @full + ply_offset
     @board = Board.new(pieces)
-    @fen_history << fen.split('-')[0].strip!
+    @fen_history = [fen.split('-')[0].strip!]
   end
 
   def make_fen

@@ -14,3 +14,4 @@ This project was an excellent challenge. At this point in my development journey
 
 # Future Opportunities
 * Consider implementing a PGN-like game history inside the `Chess` class.
+* Three fold repetition implementation starts with "import state" and is only accurate while the game is in progress. If a game is imported from FEN, previous positions are not tracked as part of the current three fold repetition implementation.

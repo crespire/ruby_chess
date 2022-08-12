@@ -66,6 +66,14 @@ class CheckmateManager
   def insufficient_materials?
     return true if @game.board.active_pieces == 2 && @game.board.bking && @game.board.wking
 
+    w_bishop = @game.board.find_piece('B')
+    b_bishop = @game.board.find_piece('b')
+    return true if @game.board.active_pieces == 3 && @game.board.bking && @game.board.wking && (w_bishop || b_bishop)
+
+    w_knight = @game.board.find_piece('N')
+    b_knight = @game.board.find_piece('n')
+    return true if @game.board.active_pieces == 3 && @game.board.bking && @game.board.whink && (w_knight || b_knight)
+
     false
   end
 

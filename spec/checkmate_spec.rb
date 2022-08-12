@@ -167,19 +167,76 @@ describe CheckmateManager do
     end
   end
 
-  context 'when provided a board with a 2 kings only draw condition' do
+  context 'when provided a board with an insufficent materials draw condition' do
     subject(:draw1) { described_class.new(game) }
 
-    before do
-      game.set_board_state('8/6k1/8/8/8/8/8/3K4 w - - 7 1')
+    context 'when only two kings are on the board' do
+      before do
+        game.set_board_state('8/6k1/8/8/8/8/8/3K4 w - - 7 1')
+      end
+
+      it 'returns the correct draw status' do
+        expect(draw1.checkmate?).to be false
+        expect(draw1.check?).to be false
+        expect(draw1.stalemate?).to be false
+        expect(draw1.draw?).to be true
+      end
     end
 
-    it 'returns the correct draw status' do
-      expect(draw1.checkmate?).to be false
-      expect(draw1.check?).to be false
-      expect(draw1.stalemate?).to be false
-      expect(draw1.draw?).to be true
+    context 'when only two kings and a black knight are on the board' do
+      before do
+        game.set_board_state('8/6k1/8/8/8/7n/8/3K4 w - - 7 1')
+      end
+
+      it 'returns the correct draw status' do
+        expect(draw1.checkmate?).to be false
+        expect(draw1.check?).to be false
+        expect(draw1.stalemate?).to be false
+        expect(draw1.draw?).to be true
+      end
     end
+
+    context 'when only two kings and a white knight are on the board' do
+      before do
+        game.set_board_state('8/6k1/8/8/8/7N/8/3K4 w - - 7 1')
+      end
+
+      it 'returns the correct draw status' do
+        expect(draw1.checkmate?).to be false
+        expect(draw1.check?).to be false
+        expect(draw1.stalemate?).to be false
+        expect(draw1.draw?).to be true
+      end
+    end
+
+    context 'when only two kings and a white Bishop are on the board' do
+      before do
+        game.set_board_state('8/6k1/8/8/8/7B/8/3K4 w - - 7 1')
+      end
+
+      it 'returns the correct draw status' do
+        expect(draw1.checkmate?).to be false
+        expect(draw1.check?).to be false
+        expect(draw1.stalemate?).to be false
+        expect(draw1.draw?).to be true
+      end
+    end
+
+    context 'when only two kings and a black Bishop are on the board' do
+      before do
+        game.set_board_state('8/6k1/8/8/8/7b/8/3K4 w - - 7 1')
+      end
+
+      it 'returns the correct draw status' do
+        expect(draw1.checkmate?).to be false
+        expect(draw1.check?).to be false
+        expect(draw1.stalemate?).to be false
+        expect(draw1.draw?).to be true
+      end
+    end
+  end
+
+  context 'when provided a board with a 2 kings and knight only draw condition' do
   end
 
   context 'when provided a board with a 50 half clock draw condition' do
