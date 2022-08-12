@@ -55,8 +55,21 @@ class CheckmateManager
     moves.zero?
   end
 
-  def draw?
-    return true if @game.half >= 50
+  def three_fold?
+    @game.fen_history.tally.value?(3)
+  end
+
+  def too_many_moves?
+    @game.half >= 50
+  end
+
+  def insufficient_materials?
     return true if @game.board.active_pieces == 2 && @game.board.bking && @game.board.wking
+
+    false
+  end
+
+  def draw?
+    three_fold? || too_many_moves? || insufficient_materials?
   end
 end

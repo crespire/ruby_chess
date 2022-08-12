@@ -10,7 +10,7 @@ require_relative 'checkmate'
 require_relative 'save'
 
 class Chess
-  attr_accessor :active, :castle, :passant, :half, :full, :ply
+  attr_accessor :active, :castle, :passant, :half, :full, :ply, :fen_history
   attr_reader :board, :move_manager, :castle_manager, :checkmate_manager
 
   def initialize(ui = UI.new(self))
@@ -29,6 +29,7 @@ class Chess
     @move_manager = MovementManager.new(self)
     @castle_manager = CastleManager.new(self)
     @checkmate_manager = CheckmateManager.new(self)
+    @fen_history = [];
   end
 
   def set_board_state(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
@@ -47,6 +48,7 @@ class Chess
     ply_offset = @active == :black ? 1 : 0
     @ply = @full + ply_offset
     @board = Board.new(pieces)
+    @fen_history << fen.split('-')[0].strip!
   end
 
   def make_fen
@@ -68,6 +70,7 @@ class Chess
     piece.moved = true if piece.is_a?(King) || piece.is_a?(Rook)
 
     update_game_stats(piece, to_before)
+    @fen_history << make_fen.split('-')[0].strip!
   end
 
   def cell(piece, file_offset = 0, rank_offset = 0)

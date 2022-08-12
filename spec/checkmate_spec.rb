@@ -196,4 +196,43 @@ describe CheckmateManager do
       expect(draw2.draw?).to be true
     end
   end
+
+  context 'when provided a board approaching three fold repetition', :focus do
+    subject(:draw3) { described_class.new(game) }
+
+    before do
+      game.set_board_state('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+    end
+
+    it 'returns false the first time' do
+      expect(draw3.three_fold?).to be false
+    end
+
+    it 'returns false the second time' do
+      # Moves off of starting position
+      game.move_piece('g1', 'f3')
+      game.move_piece('g8', 'h3')
+
+      # Second occurence of start position
+      game.move_piece('f3', 'g1')
+      game.move_piece('h3', 'g8')
+
+      expect(draw3.three_fold?).to be false
+    end
+
+    it 'returns true the third time' do
+      2.times do
+        # Moves off of starting position
+        game.move_piece('g1', 'f3')
+        game.move_piece('g8', 'h3')
+  
+        # Second occurence of start position
+        game.move_piece('f3', 'g1')
+        game.move_piece('h3', 'g8')
+      end
+
+      expect(draw3.three_fold?).to be true
+      expect(draw3.draw?).to be true
+    end
+  end
 end
