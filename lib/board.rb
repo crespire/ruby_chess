@@ -14,9 +14,8 @@ class Board
     @data = Array.new(8) { Array.new(8, nil) }
 
     pieces = fen.split('/')
-    rank_ind = 0
     col = ('a'..'h').to_a
-    pieces.each do |rank|
+    pieces.each_with_index do |rank, rank_ind|
       col_ind = 0
       rank.each_char do |char|
         case char
@@ -36,7 +35,6 @@ class Board
         col_ind += 1
         raise ArgumentError, "Invalid FEN: Rank #{rank_ind + 1} does not have the correct amount of entries." unless @data[rank_ind].length == 8
       end
-      rank_ind += 1
     end
   end
 
