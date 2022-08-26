@@ -125,7 +125,7 @@ This change has also impacted `Movement` as I use an empty board to determine so
 ### Chess object completed
 Having finished the Chess class and all the refactoring to get the other classes ready, I've turned my thoughts to how I might implement *en passant*.
 
-I already tried to implement it directly into `Movement` and `Chess` but I got rid of that work because I felt like it was getting too complicated and I was having to really entagle a lot of objects together in order to make it happen.
+I already tried to implement it directly into `Movement` and `Chess` but I got rid of that work because I felt like it was getting too complicated and I was having to really entangle a lot of objects together in order to make it happen.
 
 Looking over my code, I actually think I can fit *en passant* movement inside the `Chess` metadata class, as I think I have all the information I'd need to implement it there without a helper class. Just to think it through a little:
 ```ruby
@@ -165,18 +165,18 @@ Up next, I was going initally tackle castling, but I think I'll work on fleshing
 ### Issues with legal move generation
 I came across some performance test boards that allow me to verify how many legal moves my program *should* come up with for any given FEN for the next move.
 
-Given how I've implemented `Movement` at the moment, it is badly failing some of these more complicated situations, and I am heavily considering re-wrtiting the whole class.
+Given how I've implemented `Movement` at the moment, it is badly failing some of these more complicated situations, and I am heavily considering re-writing the whole class.
 
 After working on trying to address a number of edge cases introduced by using the Perft boards, I realize that I think it would be much more productive to re-write the `Movement` class.
 
-I have many functions that break single responsiblity and are extremely brittle. The result is that trying to fix an edge case in one function introduces many problems in other areas of the code. This seems to me to signal that a refactor is in order.
+I have many functions that break single responsibility and are extremely brittle. The result is that trying to fix an edge case in one function introduces many problems in other areas of the code. This seems to me to signal that a refactor is in order.
 
 ### Movement Re-write
 I have decided to commit to a rewrite of my Movement generation class, as I think I need to take more care in how I am setting it up so that it is easier for me to work with the results.
 
-I think my approach will focus on initially generating psuedo-legal moves and then filter them later.
+I think my approach will focus on initially generating pseudo-legal moves and then filter them later.
 
-Psuedo-legal moves are all the locations a piece can go to either by sliding/moving or capturing.
+Pseudo-legal moves are all the locations a piece can go to either by sliding/moving or capturing.
 
 * Knights have 8 options around them with no obstructions, either empty or capture.
 * Kings, have 8 options around them unless obstructed, either empty or capture.
@@ -184,7 +184,7 @@ Psuedo-legal moves are all the locations a piece can go to either by sliding/mov
 * Queen combines the rook and bishop.
 * Pawns are a little more complicated.
   * Pawns have 4 options. Two forward and 1 on each forward diagonal.
-  * We can call the foward moves moves and the diagonals captures.
+  * We can call the forward moves moves and the diagonals captures.
   * Pawn can move forward unless obstructed.
   * Pawn can capture if target square has a hostile, otherwise not eligible.
   * Pawn can only move two forward if not obstructed and on starting rank.
@@ -238,7 +238,7 @@ def valid_paths(board, origin)
   moves = []
   offsets = [[1, 0], [0, -1], [-1, 0], [0, 1]]
   
-  offsets.each do |offest|
+  offsets.each do |offset|
     moves << Move.new(board, origin, offset, 7) # board, origin, offset values, steps
   end
 
@@ -246,7 +246,7 @@ def valid_paths(board, origin)
 end
 ```
 
-The interesting case is the Pawn. Because we're generating psuedo-legal moves, the pawn should always generate 3 moves with 4 squares (2 forward, and 1 each forward diagonal). As far as the pawn is concerned, these are all moves it can make. `#valid_moves` should filter out captures if the cells are empty, so it wouldn't be a valid move.
+The interesting case is the Pawn. Because we're generating pseudo-legal moves, the pawn should always generate 3 moves with 4 squares (2 forward, and 1 each forward diagonal). As far as the pawn is concerned, these are all moves it can make. `#valid_moves` should filter out captures if the cells are empty, so it wouldn't be a valid move.
 
 ```ruby
 # Inside Pawn
@@ -265,7 +265,7 @@ So, if these are the requirements for `Move`, then what does Move look like inte
 
 * Move.obstructed? - Are there any friendlies on the move?
 * Move.capture? - Are there any captures on the move?
-* Move.valid_moves - Return a list of Cells that piece can actually traverse to in a psuedo-legal way. We don't care, at this point, about legal moves, just moves we can actually make.
+* Move.valid_moves - Return a list of Cells that piece can actually traverse to in a pseudo-legal way. We don't care, at this point, about legal moves, just moves we can actually make.
 
 So, the `Move` should contain all reachable cells on the board, then we can use these predicates and `possible_moves` to filter out squares that are blocked, not eligible etc.
 
@@ -310,7 +310,7 @@ The d3 Bishop has one path obstructed, but the Move object in the south east dir
 
 These move objects have a `valid` method, but this method only returns valid destinations with respect to their basic movement rules. For example, a pawn will return a forward diagonal as a valid if it is not an obstructed square, even if there is no valid capture there.
 
-The idea behind Move is to report all psuedo-legal moves. We will rely on Movement to do the final filtering to legal moves. The same would be true for a King's moves. We would report all psuedo-legal moves, then filter out moves that would result in a self-check.
+The idea behind Move is to report all pseudo-legal moves. We will rely on Movement to do the final filtering to legal moves. The same would be true for a King's moves. We would report all pseudo-legal moves, then filter out moves that would result in a self-check.
 
 ### Piece structure update
 So, we've updated the structure of Piece and the subclasses to better get all the information we need.
@@ -318,14 +318,14 @@ So, we've updated the structure of Piece and the subclasses to better get all th
 Each piece now has three move generation functions: all_paths, valid_paths, and moves.
 
 ### Movement rewrite
-Thinking about how to get from psudeo-legal to legal moves, it actually isn't that complicated.
+Thinking about how to get from pseudo-legal to legal moves, it actually isn't that complicated.
 
-For the following pieces, psuedo-legal moves are also legal moves when there is no check: rook, knight, bishop and queen.
+For the following pieces, pseudo-legal moves are also legal moves when there is no check: rook, knight, bishop and queen.
 
 legal_moves
 
 1. Grab the active King and build a threat board.
-    * Take all enemies, and mark their psuedo-legal moves.
+    * Take all enemies, and mark their pseudo-legal moves.
 
 If threat board includes the active King's cell:
 1. How many attackers?
@@ -342,7 +342,7 @@ If there are no direct attackers
 2. If there are pins, find the pieces that are pinned.
    * Pinned pieces are preventing a check, so their legal moves are restricted.
 3. If there are no pins, then
-    * Psuedo-legal moves for rook, knight, bishop and queen.
+    * Pseudo-legal moves for rook, knight, bishop and queen.
 4. In the case of a Pawn, we remove forward diagonals if there is no capture or en passant.
 5. In the case of the King, we remove any cells that are on an enemy path.
 
@@ -356,7 +356,7 @@ Now I have to think about movement in a non-check situation. What do I have to c
 
 **Brute force approach**
 
-Check every psuedo-legal move and run it through `move_legal?`. If a move is not legal, we can query as to why with a `discovered_check` method that returns the attacker. Once we have the attacker, we can find the attacker move that includes our king, and intersection that with pseudo-legal moves from the piece we're moving.
+Check every pseudo-legal move and run it through `move_legal?`. If a move is not legal, we can query as to why with a `discovered_check` method that returns the attacker. Once we have the attacker, we can find the attacker move that includes our king, and intersection that with pseudo-legal moves from the piece we're moving.
 
 This approach seems solid, but not all together too smart. We are potentially filtering out a ton of moves this way (ie, with a pinned queen).
 
@@ -364,9 +364,9 @@ This approach seems solid, but not all together too smart. We are potentially fi
 
 Another approach might be to utilize the `valid_xray` method we built into `Move`.
 
-We generate the psuedo-legal moves for our piece in question, then query every enemy, and if it slides, grab pieces with a valid_xray that includes our king.
+We generate the pseudo-legal moves for our piece in question, then query every enemy, and if it slides, grab pieces with a valid_xray that includes our king.
 
-If we have any sliding xrays, valid moves would be the intersections of psuedo-legal and the valid travel squares on the xray path that include king.
+If we have any sliding xrays, valid moves would be the intersections of pseudo-legal and the valid travel squares on the xray path that include king.
 
 So we do something like:
 ```
@@ -397,7 +397,7 @@ Once we are done with castling, the plan is to work on UI and all the user inter
 ### Legal moves, sans castling completed
 I ended up moving the pawn forward move checks out of `Pawn` into `Movement` because the Moves should reflect all moves. I also didn't want to fuck around with Move specifically for Pawn movement, as valid was (incorrectly) reporting a forward move as an eligible space. While this is generally true of pieces, it isn't true for the pawn. Long story short, we filter out the forward moves in Movement#pawn_helper so all the pawn movement modification is in one place. I also moved the pawn_spec test I had added into the Movement_spec tests.
 
-I will note that my approach to move generation in general owes a lot to some folks from The Odin Project discord, as well as the time I spent with the [lichess.org Chess engine](https://lichess.org/editor). My basic approach on the abstractions side was heavily inspired by my conversations on the TOP discord, and the basic psuedo-legal to legal move filtering was inspired by the editor as I was able to see that it generated all basic moves, then removed them in a second pass if they were not valid.
+I will note that my approach to move generation in general owes a lot to some folks from The Odin Project discord, as well as the time I spent with the [lichess.org Chess engine](https://lichess.org/editor). My basic approach on the abstractions side was heavily inspired by my conversations on the TOP discord, and the basic pseudo-legal to legal move filtering was inspired by the lichess board editor implementation as I was able to see that it generated all basic moves, then removed them in a second pass if they were not valid.
 
 ### Castling
 Now, we move to castling. I do think that some of castling will end up being implemented inside `Movement` but I think it will be a simple call to a `CastleManager` class, which then spits out the additional moves that we can make.

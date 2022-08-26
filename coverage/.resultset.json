@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/home/crespire/the_odin_project/ruby_chess/spec/board_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/board_spec.rb": {
         "lines": [
           null,
           null,
@@ -195,7 +195,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/chess.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/chess.rb": {
         "lines": [
           null,
           null,
@@ -407,7 +407,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/ui.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/ui.rb": {
         "lines": [
           null,
           null,
@@ -610,7 +610,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/board.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/board.rb": {
         "lines": [
           null,
           null,
@@ -747,7 +747,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/cell.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/cell.rb": {
         "lines": [
           null,
           null,
@@ -812,7 +812,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/piece.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/piece.rb": {
         "lines": [
           null,
           null,
@@ -891,7 +891,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/move.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/move.rb": {
         "lines": [
           null,
           null,
@@ -1029,7 +1029,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/pieces/all_pieces.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/pieces/all_pieces.rb": {
         "lines": [
           null,
           null,
@@ -1043,7 +1043,7 @@
           1
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/pieces/bishop.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/pieces/bishop.rb": {
         "lines": [
           null,
           null,
@@ -1076,7 +1076,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/pieces/king.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/pieces/king.rb": {
         "lines": [
           null,
           null,
@@ -1112,7 +1112,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/pieces/knight.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/pieces/knight.rb": {
         "lines": [
           null,
           null,
@@ -1141,7 +1141,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/pieces/pawn.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/pieces/pawn.rb": {
         "lines": [
           null,
           null,
@@ -1185,7 +1185,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/pieces/queen.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/pieces/queen.rb": {
         "lines": [
           null,
           null,
@@ -1218,7 +1218,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/pieces/rook.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/pieces/rook.rb": {
         "lines": [
           null,
           null,
@@ -1258,7 +1258,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/castle.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/castle.rb": {
         "lines": [
           null,
           null,
@@ -1389,7 +1389,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/checkmate.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/checkmate.rb": {
         "lines": [
           null,
           null,
@@ -1476,7 +1476,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/movement.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/movement.rb": {
         "lines": [
           null,
           null,
@@ -1652,7 +1652,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/lib/save.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/lib/save.rb": {
         "lines": [
           null,
           null,
@@ -1673,7 +1673,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/castle_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/castle_spec.rb": {
         "lines": [
           null,
           null,
@@ -1938,7 +1938,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/cell_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/cell_spec.rb": {
         "lines": [
           null,
           null,
@@ -1998,7 +1998,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/checkmate_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/checkmate_spec.rb": {
         "lines": [
           null,
           null,
@@ -2297,7 +2297,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/chess_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/chess_spec.rb": {
         "lines": [
           null,
           null,
@@ -2660,7 +2660,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/move_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/move_spec.rb": {
         "lines": [
           null,
           null,
@@ -2855,7 +2855,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/movement_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/movement_spec.rb": {
         "lines": [
           null,
           null,
@@ -3479,7 +3479,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/piece_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/piece_spec.rb": {
         "lines": [
           null,
           null,
@@ -3533,7 +3533,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/pieces/bishop_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/pieces/bishop_spec.rb": {
         "lines": [
           null,
           null,
@@ -3584,7 +3584,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/pieces/king_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/pieces/king_spec.rb": {
         "lines": [
           null,
           null,
@@ -3635,7 +3635,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/pieces/knight_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/pieces/knight_spec.rb": {
         "lines": [
           null,
           null,
@@ -3675,7 +3675,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/pieces/pawn_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/pieces/pawn_spec.rb": {
         "lines": [
           null,
           null,
@@ -3803,7 +3803,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/pieces/queen_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/pieces/queen_spec.rb": {
         "lines": [
           null,
           null,
@@ -3857,7 +3857,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/pieces/rook_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/pieces/rook_spec.rb": {
         "lines": [
           null,
           null,
@@ -3896,7 +3896,7 @@
           null
         ]
       },
-      "/home/crespire/the_odin_project/ruby_chess/spec/ui_spec.rb": {
+      "/home/crespire/repos/the_odin_project/ruby_chess/spec/ui_spec.rb": {
         "lines": [
           null,
           null,
@@ -4071,6 +4071,6 @@
         ]
       }
     },
-    "timestamp": 1661356936
+    "timestamp": 1661450755
   }
 }
