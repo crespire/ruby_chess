@@ -1,2 +1,2 @@
 # Add coverage/ as vendored to not mess up language detection
-coverage/ -linguist-vendored
+coverage/ linguist-generated
