@@ -516,3 +516,6 @@ After that, we should work on serialization and saving games.
 
 ### Final Integration Testing
 The Chess game is more or less complete, with file loading and saving working. I've created a number of integration tests that I think would be nice to confirm that all the rules are working once we have put all the pieces together. All the units are passing, so this should be pretty simple.
+
+### Post Project Review
+With the benefit of 6 months of hindsight (while polishing things up for a job search), I have come to realize that my initial implementation problems with my movement manager and moves in general was actually a code smell: primitive obsession. I was so jazzed about making FEN serialization and deserialization work, that I thought I could just use strings to represent the pieces. This then led to representing moves as simple arrays of strings, which compounded my problems as I was trying to solve the harder problems in this domain. I think I was so hooked on the "progress" I was making to solving the problem, I didn't think about the bigger picture. The solution (unsurprisingly) was to replace these primitive data types with classes that represented the abstractions.
