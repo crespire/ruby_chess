@@ -29,7 +29,7 @@ class Chess
     @move_manager = MovementManager.new(self)
     @castle_manager = CastleManager.new(self)
     @checkmate_manager = CheckmateManager.new(self)
-    @fen_history = [];
+    @fen_history = []
   end
 
   def set_board_state(fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
