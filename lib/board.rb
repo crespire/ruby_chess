@@ -22,17 +22,16 @@ class Board
         when /[[:alpha:]]/
           piece = Piece::from_fen(char)
           @data[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", piece)
+          col_ind += 1
         when /[[:digit:]]/
           times = char.to_i
           times.times do
             @data[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", nil)
             col_ind += 1
           end
-          col_ind -= 1
         else
           raise ArgumentError, "Unexpected character in piece notation: #{char}"
         end
-        col_ind += 1
         raise ArgumentError, "Invalid FEN: Rank #{rank_ind + 1} does not have the correct amount of entries." unless @data[rank_ind].length == 8
       end
     end
