@@ -17,20 +17,20 @@ class Board
     col = ('a'..'h').to_a
     pieces.each_with_index do |rank, rank_ind|
       col_ind = 0
-      rank.each_char do |char|
-        case char
-        when /[[:alpha:]]/
-          piece = Piece::from_fen(char)
+      rank.each_char do |piece_or_digit|
+        case piece_or_digit
+        when /^[rnbqkp]$/i
+          piece = Piece::from_fen(piece_or_digit)
           @data[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", piece)
           col_ind += 1
-        when /[[:digit:]]/
-          times = char.to_i
-          times.times do
+        when /^[1-8]$/
+          digit = piece_or_digit.to_i
+          digit.times do
             @data[rank_ind][col_ind] = Cell.new("#{col[col_ind]}#{8 - rank_ind}", nil)
             col_ind += 1
           end
         else
-          raise ArgumentError, "Unexpected character in piece notation: #{char}"
+          raise ArgumentError, "Unexpected character in piece notation: #{piece_or_digit}"
         end
         raise ArgumentError, "Invalid FEN: Rank #{rank_ind + 1} does not have the correct amount of entries." unless @data[rank_ind].length == 8
       end
